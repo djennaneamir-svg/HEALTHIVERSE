@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="doc-stars">★ ${d.rating}</span>
             <span>${d.reviews} avis</span>
           </div>
-          <a href="#" class="doc-btn">Prendre rendez-vous</a>
+          <a href="profil.html" class="doc-btn">Prendre rendez-vous</a>
         </div>`;
       doctorsGrid.appendChild(card);
     });

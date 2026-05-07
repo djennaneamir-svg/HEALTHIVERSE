@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dr. Sarah Martin – Cardiologue à Paris | Healthiverse</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- LEAFLET MAPS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    .profile-page { padding-top: 140px; background: #f8fafc; }
+    .profile-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 32px; margin-bottom: 80px; }
+    
+    /* Left Column */
+    .profile-main-card { background: var(--card); border-radius: 24px; padding: 40px; border: 1px solid var(--brd); box-shadow: var(--shadow); margin-bottom: 32px; }
+    .p-header { display: flex; gap: 32px; align-items: center; margin-bottom: 32px; }
+    .p-av { width: 140px; height: 140px; border-radius: 24px; background: linear-gradient(135deg, var(--teal), var(--em)); display: flex; align-items: center; justify-content: center; font-size: 3rem; color: #fff; font-weight: 800; flex-shrink: 0; }
+    .p-title h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
+    .p-spec { color: var(--teal); font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+    .p-stars { color: #f59e0b; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    
+    .p-bio { margin-bottom: 40px; line-height: 1.8; color: var(--txt2); }
+    .p-section { border-top: 1px solid var(--brd); padding-top: 32px; margin-top: 32px; }
+    .p-section h3 { margin-bottom: 20px; font-size: 1.2rem; font-weight: 800; }
+    
+    .info-list { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .info-item { display: flex; gap: 12px; }
+    .info-ico { font-size: 1.2rem; width: 32px; }
+    .info-text strong { display: block; font-size: 0.9rem; }
+    .info-text span { font-size: 0.85rem; color: var(--txt2); }
+
+    /* Right Column: Booking Widget */
+    .booking-widget { background: var(--card); border-radius: 24px; padding: 32px; border: 1px solid var(--brd); box-shadow: var(--shadow); position: sticky; top: 120px; }
+    .booking-header { margin-bottom: 24px; }
+    .booking-header h3 { font-size: 1.1rem; margin-bottom: 4px; }
+    .booking-price { font-size: 1.5rem; font-weight: 800; color: var(--txt); }
+    
+    .cal-days { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .cal-day { padding: 12px; border: 1px solid var(--brd); border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.3s; }
+    .cal-day.active { border-color: var(--teal); background: #f0fdfa; }
+    .cal-day strong { display: block; font-size: 0.9rem; }
+    .cal-day span { font-size: 0.75rem; color: var(--txt2); }
+    
+    .slots { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+    .slot { padding: 10px; border-radius: 8px; background: #f1f5f9; text-align: center; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .slot:hover { background: var(--teal); color: #fff; }
+    .slot.taken { opacity: 0.4; pointer-events: none; text-decoration: line-through; }
+    
+    .btn-book-final { width: 100%; padding: 16px; border-radius: 12px; background: var(--teal); color: #fff; border: none; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s; }
+    .btn-book-final:hover { background: var(--teal-d); transform: translateY(-2px); }
+
+    .mini-map { height: 200px; border-radius: 16px; margin-top: 20px; border: 1px solid var(--brd); }
+
+    @media (max-width: 900px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .booking-widget { position: static; margin-top: 32px; }
+      .p-header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-left"><span class="pulse-icon"></span> En direct : 5 420 utilisateurs</div>
+      <div class="top-right">
+        <a href="soutenir.html" class="top-btn btn-sup">💖 Soutenir</a>
+        <a href="investisseurs.html" class="top-btn btn-inv">📈 Investir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 13.5 23C14.5 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <span>Healthiverse</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#specialites">Spécialités</a></li>
+        <li><a href="index.html#medecins">Médecins</a></li>
+        <li><a href="recherche.html">Recherche</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-login">Connexion</a>
+        <a href="inscription.html" class="btn-register" style="background:var(--teal);color:#fff">S'inscrire</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="profile-page container">
+    <div class="profile-grid">
+      <!-- Left: Content -->
+      <div class="profile-left">
+        <div class="profile-main-card">
+          <div class="p-header">
+            <div class="p-av">SM</div>
+            <div class="p-title">
+              <h1>Dr. Sarah Martin</h1>
+              <div class="p-spec">Cardiologue · Hypertension & Insuffisance Cardiaque</div>
+              <div class="p-stars">★★★★★ 4.9 <span>(312 avis vérifiés)</span></div>
+            </div>
+          </div>
+          
+          <div class="p-bio">
+            <p>Le Dr Sarah Martin vous accueille dans son cabinet de Paris 8e. Spécialisée en cardiologie clinique, elle assure le suivi des patients souffrant d'hypertension artérielle, de troubles du rythme ou de pathologies valvulaires. Elle pratique également l'échographie cardiaque et le dépistage des maladies cardiovasculaires.</p>
+          </div>
+
+          <div class="p-section">
+            <h3>Informations pratiques</h3>
+            <div class="info-list">
+              <div class="info-item">
+                <div class="info-ico">📍</div>
+                <div class="info-text"><strong>Adresse</strong><span>12 Avenue des Champs-Élysées, 75008 Paris</span></div>
+              </div>
+              <div class="info-item">
+                <div class="info-ico">💳</div>
+                <div class="info-text"><strong>Tarifs & Paiement</strong><span>60€ - 120€ · CB, Chèques, Espèces</span></div>
+              </div>
+              <div class="info-item">
+                <div class="info-ico">🛡️</div>
+                <div class="info-text"><strong>Convention</strong><span>Secteur 2 · Tiers payant accepté</span></div>
+              </div>
+              <div class="info-item">
+                <div class="info-ico">🌍</div>
+                <div class="info-text"><strong>Langues</strong><span>Français, Anglais, Arabe</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-section">
+            <h3>Expertises & Diplômes</h3>
+            <ul style="list-style: disc; margin-left: 20px; color: var(--txt2);">
+              <li>Diplôme d'État de docteur en médecine - Université Paris-Cité</li>
+              <li>D.E.S. Cardiologie et maladies vasculaires</li>
+              <li>Ancien Chef de Clinique des Hôpitaux de Paris</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="profile-main-card">
+          <h3>📍 Localisation</h3>
+          <p class="res-loc" style="margin-bottom: 20px;">Accès : Métro Franklin D. Roosevelt (Ligne 1 & 9)</p>
+          <div id="miniMap" class="mini-map"></div>
+        </div>
+      </div>
+
+      <!-- Right: Booking -->
+      <aside class="profile-right">
+        <div class="booking-widget">
+          <div class="booking-header">
+            <h3>Prendre rendez-vous en ligne</h3>
+            <div class="booking-price">Consultation : 80€</div>
+          </div>
+
+          <div class="cal-days">
+            <div class="cal-day active"><strong>JEU</strong><span>07 Mai</span></div>
+            <div class="cal-day"><strong>VEN</strong><span>08 Mai</span></div>
+            <div class="cal-day"><strong>SAM</strong><span>09 Mai</span></div>
+          </div>
+
+          <div class="slots">
+            <div class="slot">09:00</div>
+            <div class="slot">09:30</div>
+            <div class="slot taken">10:00</div>
+            <div class="slot">10:30</div>
+            <div class="slot">14:00</div>
+            <div class="slot">14:30</div>
+            <div class="slot">15:00</div>
+            <div class="slot">16:30</div>
+          </div>
+
+          <button class="btn-book-final" id="btnBookNow">Confirmer le rendez-vous</button>
+          
+          <p style="text-align: center; font-size: 0.75rem; color: var(--txt2); margin-top: 16px;">
+            ✓ Confirmation immédiate · Gratuit
+          </p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bot">
+        <p>© 2026 Healthiverse. Tous droits réservés.</p>
+        <div class="f-links"><a href="#">Confidentialité</a><a href="#">CGU</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Map initialization
+      const map = L.map('miniMap').setView([48.8698, 2.3075], 15);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      L.marker([48.8698, 2.3075]).addTo(map).bindPopup("Cabinet du Dr. Sarah Martin").openPopup();
+
+      // Booking button logic
+      document.getElementById('btnBookNow').addEventListener('click', () => {
+        alert("Votre demande de rendez-vous a été envoyée ! Vous allez recevoir un SMS de confirmation.");
+      });
+
+      // Slot selection
+      document.querySelectorAll('.slot:not(.taken)').forEach(slot => {
+        slot.addEventListener('click', () => {
+          document.querySelectorAll('.slot').forEach(s => s.style.background = '');
+          slot.style.background = 'var(--teal)';
+          slot.style.color = '#fff';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
