@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Résultats de recherche – Healthiverse</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    .results-page { padding-top: 160px; padding-bottom: 80px; min-height: 80vh; }
+    .results-header { margin-bottom: 40px; }
+    .results-container { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
+    .filters-sidebar { background: var(--card); padding: 24px; border-radius: 20px; border: 1px solid var(--brd); height: fit-content; position: sticky; top: 100px; }
+    .filter-group { margin-bottom: 24px; }
+    .filter-group h4 { margin-bottom: 12px; font-size: 0.95rem; }
+    .results-list { display: flex; flex-direction: column; gap: 20px; }
+    .result-card { background: var(--card); border-radius: 20px; border: 1px solid var(--brd); padding: 24px; display: flex; gap: 24px; transition: all 0.3s; }
+    .result-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--teal); }
+    .res-av { width: 100px; height: 100px; border-radius: 16px; background: linear-gradient(135deg, var(--teal), var(--em)); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #fff; font-weight: 800; }
+    .res-info { flex: 1; }
+    .res-top { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .res-name { font-size: 1.2rem; font-weight: 800; }
+    .res-rating { color: #f59e0b; font-weight: 700; }
+    .res-spec { color: var(--teal); font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+    .res-loc { color: var(--txt2); font-size: 0.85rem; margin-bottom: 12px; }
+    .res-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .res-tag { background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; color: var(--txt2); }
+    .res-actions { display: flex; flex-direction: column; gap: 10px; min-width: 180px; }
+    .btn-res { display: block; text-align: center; padding: 12px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; transition: all 0.3s; }
+    .btn-book { background: var(--teal); color: #fff; }
+    .btn-book:hover { background: var(--teal-d); }
+    .btn-profile { background: #f0fdfa; color: var(--teal-d); }
+    
+    @media (max-width: 900px) {
+      .results-container { grid-template-columns: 1fr; }
+      .filters-sidebar { display: none; }
+    }
+    @media (max-width: 600px) {
+      .result-card { flex-direction: column; text-align: center; align-items: center; }
+      .res-av { width: 80px; height: 80px; }
+      .res-top { flex-direction: column; gap: 4px; }
+      .res-actions { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <div class="top-left"><span class="pulse-icon"></span> En direct : 5 420 utilisateurs</div>
+      <div class="top-right">
+        <a href="soutenir.html" class="top-btn btn-sup">💖 Soutenir</a>
+        <a href="investisseurs.html" class="top-btn btn-inv">📈 Investir</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon"><svg width="26" height="26" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 13.5 23C14.5 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <span>Healthiverse</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html#specialites">Spécialités</a></li>
+        <li><a href="index.html#medecins">Médecins</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn-login">Connexion</a>
+        <a href="inscription.html" class="btn-register" style="background:var(--teal);color:#fff">S'inscrire</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="results-page container">
+    <div class="results-header">
+      <h2 id="resultsTitle">Résultats pour votre recherche</h2>
+      <p id="resultsCount">Chargement des meilleurs professionnels...</p>
+    </div>
+
+    <div class="results-container">
+      <aside class="filters-sidebar">
+        <div class="filter-group">
+          <h4>Disponibilité</h4>
+          <label class="check-item"><input type="checkbox"> Aujourd'hui</label><br>
+          <label class="check-item"><input type="checkbox"> Demain</label><br>
+          <label class="check-item"><input type="checkbox"> Samedi</label>
+        </div>
+        <div class="filter-group">
+          <h4>Type de consultation</h4>
+          <label class="check-item"><input type="checkbox"> Au cabinet</label><br>
+          <label class="check-item"><input type="checkbox"> Vidéo consultation</label>
+        </div>
+        <div class="filter-group">
+          <h4>Langues parlées</h4>
+          <label class="check-item"><input type="checkbox"> Français</label><br>
+          <label class="check-item"><input type="checkbox"> Anglais</label><br>
+          <label class="check-item"><input type="checkbox"> Arabe</label>
+        </div>
+      </aside>
+
+      <section class="results-list" id="resultsList">
+        <!-- Results will be injected here -->
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bot">
+        <p>© 2026 Healthiverse. Tous droits réservés.</p>
+        <div class="f-links"><a href="#">Confidentialité</a><a href="#">CGU</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const spec = params.get('spec') || 'Spécialiste';
+      const loc = params.get('loc') || 'France';
+      
+      document.getElementById('resultsTitle').innerHTML = `Résultats pour <strong>${spec}</strong> à <strong>${loc}</strong>`;
+      
+      const doctors = [
+        { name: 'Dr. Sarah Martin', spec: spec, city: loc, rating: 4.9, reviews: 312, initials: 'SM' },
+        { name: 'Dr. Thomas Petit', spec: spec, city: loc, rating: 4.8, reviews: 245, initials: 'TP' },
+        { name: 'Dr. Claire Dubois', spec: spec, city: loc, rating: 4.9, reviews: 189, initials: 'CD' },
+        { name: 'Dr. Marc Laurent', spec: spec, city: loc, rating: 4.7, reviews: 276, initials: 'ML' }
+      ];
+
+      document.getElementById('resultsCount').textContent = `${doctors.length} professionnels trouvés à proximité`;
+
+      const list = document.getElementById('resultsList');
+      doctors.forEach((d, i) => {
+        const card = document.createElement('div');
+        card.className = 'result-card fade-in';
+        card.style.animationDelay = `${i * 0.1}s`;
+        card.innerHTML = `
+          <div class="res-av">${d.initials}</div>
+          <div class="res-info">
+            <div class="res-top">
+              <div class="res-name">${d.name}</div>
+              <div class="res-rating">★ ${d.rating} (${d.reviews} avis)</div>
+            </div>
+            <div class="res-spec">${d.spec}</div>
+            <div class="res-loc">📍 ${d.city} · Cabinet médical</div>
+            <div class="res-tags">
+              <span class="res-tag">Conventionné Secteur 1</span>
+              <span class="res-tag">Carte Vitale acceptée</span>
+              <span class="res-tag">Tiers payant</span>
+            </div>
+          </div>
+          <div class="res-actions">
+            <a href="#" class="btn-res btn-book">Prendre RDV</a>
+            <a href="#" class="btn-res btn-profile">Voir le profil</a>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>

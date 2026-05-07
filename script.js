@@ -516,49 +516,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const loc = document.getElementById('searchLoc').value;
     
     if (spec || loc || directToMap) {
-      const btn = document.getElementById('searchBtn');
-      const originalHtml = btn.innerHTML;
-      btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Recherche...';
-      
-      setTimeout(() => {
-        btn.innerHTML = originalHtml;
+      if (directToMap) {
+        // STAY ON PAGE AND GO TO MAP
+        const btn = document.getElementById('viewOnMapBtn');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span>';
         
-        // Scroll to map
-        const mapSection = document.getElementById('carte');
-        if (mapSection) {
-          mapSection.scrollIntoView({ behavior: 'smooth' });
-          
-          // Mock geocoding and map update
-          if (mainMap && loc) {
-            const cityCoords = {
-              'paris': [48.8566, 2.3522],
-              'lyon': [45.7640, 4.8357],
-              'marseille': [43.2965, 5.3698],
-              'bordeaux': [44.8378, -0.5792],
-              'alger': [36.7538, 3.0588],
-              'casablanca': [33.5731, -7.5898]
-            };
+        setTimeout(() => {
+          btn.innerHTML = originalHtml;
+          const mapSection = document.getElementById('carte');
+          if (mapSection) {
+            mapSection.scrollIntoView({ behavior: 'smooth' });
             
-            const city = loc.toLowerCase();
-            let found = false;
-            for (let key in cityCoords) {
-              if (city.includes(key)) {
-                mainMap.setView(cityCoords[key], 13);
-                L.marker(cityCoords[key]).addTo(mainMap).bindPopup(`Recherche pour <strong>${spec || 'Santé'}</strong> à <strong>${loc}</strong>`).openPopup();
-                found = true;
-                break;
+            if (mainMap && loc) {
+              const cityCoords = {
+                'paris': [48.8566, 2.3522],
+                'lyon': [45.7640, 4.8357],
+                'marseille': [43.2965, 5.3698],
+                'bordeaux': [44.8378, -0.5792],
+                'alger': [36.7538, 3.0588],
+                'casablanca': [33.5731, -7.5898]
+              };
+              
+              const city = loc.toLowerCase();
+              let found = false;
+              for (let key in cityCoords) {
+                if (city.includes(key)) {
+                  mainMap.setView(cityCoords[key], 13);
+                  L.marker(cityCoords[key]).addTo(mainMap).bindPopup(`Recherche pour <strong>${spec || 'Santé'}</strong> à <strong>${loc}</strong>`).openPopup();
+                  found = true;
+                  break;
+                }
+              }
+              if (!found && spec) {
+                  L.popup().setLatLng(mainMap.getCenter()).setContent(`Résultats pour <strong>${spec}</strong>.`).openOn(mainMap);
               }
             }
-            if (!found && spec) {
-                // If city not found but spec is there, just point to current view with a message
-                L.popup()
-                    .setLatLng(mainMap.getCenter())
-                    .setContent(`Affichage des résultats pour <strong>${spec}</strong> dans cette zone.`)
-                    .openOn(mainMap);
-            }
           }
-        }
-      }, directToMap ? 100 : 800);
+        }, 300);
+      } else {
+        // REDIRECT TO RESULTS PAGE
+        const btn = document.getElementById('searchBtn');
+        btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Recherche...';
+        
+        setTimeout(() => {
+          window.location.href = `recherche.html?spec=${encodeURIComponent(spec)}&loc=${encodeURIComponent(loc)}`;
+        }, 800);
+      }
     }
   }
 });
