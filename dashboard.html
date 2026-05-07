@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthiverse Pro - Dashboard Praticien</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Chart.js pour les graphiques premium -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 28 28" fill="none">
+              <path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/>
+              <path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span>Healthiverse Pro</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active"><a href="#"><span class="nav-ico">📊</span> Vue d'ensemble</a></li>
+          <li><a href="#"><span class="nav-ico">📅</span> Agenda & RDV</a></li>
+          <li><a href="#"><span class="nav-ico">👥</span> Mes Patients</a></li>
+          <li><a href="#"><span class="nav-ico">⭐</span> Avis & Réputation</a></li>
+          <li><a href="#"><span class="nav-ico">💬</span> Messages</a></li>
+          <li><a href="#"><span class="nav-ico">📈</span> Statistiques</a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-av">DR</div>
+          <div class="user-text">
+            <span class="user-name">Dr. Sarah Martin</span>
+            <span class="user-plan">Plan PRO</span>
+          </div>
+        </div>
+        <a href="index.html" class="btn-logout">Déconnexion</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-left">
+          <h1>Tableau de bord</h1>
+          <p>Bonjour Dr. Martin, voici votre activité pour aujourd'hui.</p>
+        </div>
+        <div class="header-right">
+          <button class="btn-primary">+ Nouveau RDV</button>
+          <div class="notif-badge">🔔<span class="dot"></span></div>
+        </div>
+      </header>
+
+      <!-- STATS GRID -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="sc-label">Vues du profil</div>
+          <div class="sc-value">1 284</div>
+          <div class="sc-trend up">+12.5%</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-label">Rendez-vous pris</div>
+          <div class="sc-value">42</div>
+          <div class="sc-trend up">+8.2%</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-label">Note moyenne</div>
+          <div class="sc-value">4.9/5</div>
+          <div class="sc-stars">★★★★★</div>
+        </div>
+        <div class="stat-card">
+          <div class="sc-label">Chiffre d'affaires</div>
+          <div class="sc-value">2 450€</div>
+          <div class="sc-trend down">-2.1%</div>
+        </div>
+      </section>
+
+      <!-- CHARTS & LISTS -->
+      <div class="dashboard-grid">
+        <!-- CHART CARD -->
+        <div class="card chart-card">
+          <div class="card-header">
+            <h3>Fréquentation du profil</h3>
+            <select class="card-select">
+              <option>7 derniers jours</option>
+              <option>30 derniers jours</option>
+            </select>
+          </div>
+          <div class="chart-container">
+            <canvas id="viewChart"></canvas>
+          </div>
+        </div>
+
+        <!-- RECENT APPOINTMENTS -->
+        <div class="card list-card">
+          <div class="card-header">
+            <h3>Prochains rendez-vous</h3>
+            <a href="#" class="view-all">Tout voir</a>
+          </div>
+          <div class="rdv-list">
+            <div class="rdv-item">
+              <div class="rdv-time">09:00</div>
+              <div class="rdv-patient">
+                <div class="p-name"><a href="patient.html" style="color: inherit; text-decoration: none;">Jean Dupont</a></div>
+                <div class="p-type">Consultation initiale</div>
+              </div>
+              <div class="rdv-status active">Confirmé</div>
+            </div>
+            <div class="rdv-item">
+              <div class="rdv-time">10:30</div>
+              <div class="rdv-patient">
+                <div class="p-name">Marie Curie</div>
+                <div class="p-type">Suivi cardiologique</div>
+              </div>
+              <div class="rdv-status active">Confirmé</div>
+            </div>
+            <div class="rdv-item">
+              <div class="rdv-time">11:15</div>
+              <div class="rdv-patient">
+                <div class="p-name">Pierre Alain</div>
+                <div class="p-type">Urgence</div>
+              </div>
+              <div class="rdv-status waiting">En attente</div>
+            </div>
+            <div class="rdv-item">
+              <div class="rdv-time">14:00</div>
+              <div class="rdv-patient">
+                <div class="p-name">Lucie Bernard</div>
+                <div class="p-type">Téléconsultation</div>
+              </div>
+              <div class="rdv-status active">Confirmé</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECENT REVIEWS -->
+        <div class="card list-card">
+          <div class="card-header">
+            <h3>Derniers avis patients</h3>
+            <div class="avg-note">Note: 4.9/5</div>
+          </div>
+          <div class="review-list">
+            <div class="review-item">
+              <div class="rev-stars">★★★★★</div>
+              <div class="rev-text">"Médecin très à l'écoute et rassurante. Je recommande vivement."</div>
+              <div class="rev-meta">Par Marc S. - Il y a 2h</div>
+            </div>
+            <div class="review-item">
+              <div class="rev-stars">★★★★☆</div>
+              <div class="rev-text">"Peu d'attente, cabinet très propre. Très professionnelle."</div>
+              <div class="rev-meta">Par Sophie L. - Hier</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REVENUE GOAL -->
+        <div class="card mini-card">
+          <h3>Objectif mensuel</h3>
+          <div class="progress-container">
+            <div class="progress-bar" style="width: 75%"></div>
+          </div>
+          <div class="progress-text">75% atteint (3 000€ / 4 000€)</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

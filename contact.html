@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact & Support - Healthiverse</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="contact.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="contact-body">
+
+  <div class="beta-scrolling-banner">
+    <div class="marquee-content">
+      <span>🚀 BIENVENUE SUR HEALTHIVERSE BETA v0.9 — SITE EN COURS DE DÉVELOPPEMENT — VOTRE SOUTIEN EST PRÉCIEUX — MERCI DE NOUS AIDER À RÉVOLUTIONNER LA SANTÉ ! 🚀</span>
+    </div>
+  </div>
+
+  <header class="navbar scrolled" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <span>Healthiverse</span>
+      </a>
+      <a href="index.html" class="btn-outline">← Retour à l'accueil</a>
+    </div>
+  </header>
+
+  <main class="contact-main">
+    <section class="section contact-hero">
+      <div class="container">
+        <h1>Besoin d'aide ? <span class="text-teal">Contactez-nous</span></h1>
+        <p>Une question technique, un partenariat ou une suggestion ? Notre équipe vous répond sous 24h.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="contact-grid">
+          <!-- FORM -->
+          <div class="contact-form-box reveal">
+            <h3>Envoyez-nous un message</h3>
+            <form id="contactForm" class="c-form">
+              <div class="f-row">
+                <input type="text" placeholder="Prénom" required>
+                <input type="text" placeholder="Nom" required>
+              </div>
+              <input type="email" placeholder="Votre email" required>
+              <select required>
+                <option value="" disabled selected>Sujet de votre demande</option>
+                <option>Support Technique</option>
+                <option>Devenir Partenaire</option>
+                <option>Presse & Media</option>
+                <option>Autre</option>
+              </select>
+              <textarea placeholder="Comment pouvons-nous vous aider ?" rows="5" required></textarea>
+              <button type="submit" class="btn-send">Envoyer le message</button>
+            </form>
+          </div>
+
+          <!-- INFO & FAQ -->
+          <div class="contact-sidebar">
+            <div class="info-card reveal">
+              <h4>Nos coordonnées</h4>
+              <p>📍 15 Rue de l'Innovation, 75008 Paris</p>
+              <p>📞 +33 (0)1 23 45 67 89</p>
+              <p>✉️ support@healthiverse.com</p>
+            </div>
+
+            <div class="faq-mini reveal">
+              <h4>Questions Fréquentes</h4>
+              <div class="faq-item">
+                <strong>Comment prendre RDV ?</strong>
+                <p>Utilisez la barre de recherche sur l'accueil, choisissez un médecin et cliquez sur "Prendre RDV".</p>
+              </div>
+              <div class="faq-item">
+                <strong>Est-ce gratuit ?</strong>
+                <p>Oui, l'utilisation de Healthiverse pour trouver des médecins est 100% gratuite.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 Healthiverse. Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

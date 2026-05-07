@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration Healthiverse - Pilotage de la Plateforme</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="admin-body">
+
+  <div class="admin-wrapper">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar">
+      <div class="admin-logo">
+        <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <span>Admin Panel</span>
+      </div>
+      <nav class="admin-nav">
+        <a href="#" class="active">📊 Tableau de bord</a>
+        <a href="#">📩 Suggestions (<span id="suggestCount">3</span>)</a>
+        <a href="#">👨‍⚕️ Validation Pros</a>
+        <a href="#">📢 Campagnes Pubs</a>
+        <a href="#">💰 Finances & USDT</a>
+        <a href="index.html" class="nav-exit">← Quitter</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <h2>Vue d'ensemble</h2>
+        <div class="admin-user">
+          <span>Admin Principal</span>
+          <div class="admin-avatar">A</div>
+        </div>
+      </header>
+
+      <!-- STATS GRID -->
+      <div class="admin-stats-grid">
+        <div class="a-stat-card">
+          <div class="a-stat-info">
+            <span class="a-stat-label">Utilisateurs Totaux</span>
+            <span class="a-stat-val">12,450</span>
+          </div>
+          <div class="a-stat-chart"><canvas id="miniChart1"></canvas></div>
+        </div>
+        <div class="a-stat-card">
+          <div class="a-stat-info">
+            <span class="a-stat-label">Revenus (Mensuels)</span>
+            <span class="a-stat-val">$4,250</span>
+          </div>
+          <div class="a-stat-chart"><canvas id="miniChart2"></canvas></div>
+        </div>
+        <div class="a-stat-card">
+          <div class="a-stat-info">
+            <span class="a-stat-label">Dons Crypto</span>
+            <span class="a-stat-val">850 USDT</span>
+          </div>
+          <div class="a-stat-chart"><canvas id="miniChart3"></canvas></div>
+        </div>
+      </div>
+
+      <!-- SUGGESTIONS TABLE -->
+      <section class="admin-section">
+        <div class="sec-head">
+          <h3>Dernières suggestions de domaines</h3>
+          <button class="btn-sm">Voir tout</button>
+        </div>
+        <div class="admin-table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Domaine Proposé</th>
+                <th>Email de l'utilisateur</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Aujourd'hui</td>
+                <td><strong>Vétérinaire de nuit</strong></td>
+                <td>sarah.d@email.com</td>
+                <td><span class="tag-pending">En attente</span></td>
+                <td>
+                  <button class="btn-check">✅</button>
+                  <button class="btn-reject">❌</button>
+                </td>
+              </tr>
+              <tr>
+                <td>Hier</td>
+                <td><strong>Cryothérapie</strong></td>
+                <td>marc.v@web.fr</td>
+                <td><span class="tag-pending">En attente</span></td>
+                <td>
+                  <button class="btn-check">✅</button>
+                  <button class="btn-reject">❌</button>
+                </td>
+              </tr>
+              <tr>
+                <td>05 Mai</td>
+                <td><strong>Infirmier itinérant</strong></td>
+                <td>contact@soins.pro</td>
+                <td><span class="tag-approved">Validé</span></td>
+                <td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- AD CAMPAIGN PREVIEW -->
+      <section class="admin-section">
+        <h3>Gestion de la publicité</h3>
+        <div class="ad-admin-card">
+          <div class="ad-preview">
+            <span class="ad-label">Sponsorisé</span>
+            <h4>Mutuelle Innov' : -20% sur vos soins</h4>
+            <p>CTR : 4.2% · Affichages : 24,500</p>
+          </div>
+          <div class="ad-controls">
+            <button class="btn-outline">Modifier l'annonce</button>
+            <button class="btn-danger">Désactiver</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

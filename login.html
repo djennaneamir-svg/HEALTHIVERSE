@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion - Healthiverse</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { background: var(--bg); display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: 'Inter', sans-serif; }
+    .login-container { background: var(--card); padding: 40px; border-radius: 24px; width: 100%; max-width: 450px; box-shadow: var(--shadow); border: 1px solid var(--brd); }
+    .login-head { text-align: center; margin-bottom: 32px; }
+    .login-head h2 { font-size: 1.8rem; margin-bottom: 8px; font-family: 'Plus Jakarta Sans', sans-serif; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
+    input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--brd); background: var(--bg); color: var(--txt); outline: none; }
+    .btn-auth { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--teal); color: white; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    .auth-footer { text-align: center; margin-top: 24px; font-size: 0.85rem; color: var(--txt2); }
+    .auth-footer a { color: var(--teal); font-weight: 700; text-decoration: none; }
+    .error-msg { color: #ef4444; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
+  </style>
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-head">
+      <div class="logo-icon" style="margin: 0 auto 16px; width: 40px; height: 40px; background: var(--teal); border-radius: 12px; display: flex; align-items: center; justify-content: center;"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      <h2>Heureux de vous revoir</h2>
+      <p>Connectez-vous pour gérer votre santé</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="votre@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" id="pass" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-auth">Se connecter</button>
+      <div id="loginError" class="error-msg">Identifiants invalides.</div>
+    </form>
+
+    <div class="auth-footer">
+      <p>Pas encore de compte ? <a href="inscription.html">S'inscrire</a></p>
+      <p style="margin-top: 10px;"><a href="#">Mot de passe oublié ?</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const pass = document.getElementById('pass').value;
+      const error = document.getElementById('loginError');
+
+      // Simulation simple (user / user123)
+      if (email === 'user@healthiverse.com' && pass === 'user123') {
+        localStorage.setItem('userAuth', 'true');
+        localStorage.setItem('userType', 'patient');
+        window.location.href = 'index.html'; // Redirige vers l'accueil une fois connecté
+      } else if (email === 'pro@healthiverse.com' && pass === 'pro123') {
+        localStorage.setItem('userAuth', 'true');
+        localStorage.setItem('userType', 'pro');
+        window.location.href = 'dashboard.html';
+      } else {
+        error.style.display = 'block';
+        setTimeout(() => error.style.display = 'none', 3000);
+      }
+    });
+  </script>
+</body>
+</html>

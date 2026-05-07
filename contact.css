@@ -1,0 +1,81 @@
+/* CONTACT PAGE STYLES */
+
+.contact-body { background: var(--bg); }
+.contact-main { padding-top: 100px; }
+
+.contact-hero { text-align: center; padding: 60px 0; }
+.contact-hero h1 { font-size: 3rem; margin-bottom: 16px; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.contact-form-box {
+  background: var(--card);
+  padding: 40px;
+  border-radius: 24px;
+  border: 1px solid var(--brd);
+  box-shadow: var(--shadow);
+}
+
+.c-form { display: flex; flex-direction: column; gap: 20px; }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.c-form input, .c-form select, .c-form textarea {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--brd);
+  background: var(--bg);
+  color: var(--txt);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.c-form input:focus, .c-form textarea:focus { border-color: var(--teal); }
+
+.btn-send {
+  background: var(--teal);
+  color: white;
+  border: none;
+  padding: 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-send:hover { background: var(--teal-d); transform: translateY(-2px); }
+
+/* SIDEBAR */
+.info-card {
+  background: var(--teal);
+  color: white;
+  padding: 30px;
+  border-radius: 24px;
+  margin-bottom: 24px;
+}
+
+.info-card h4 { margin-bottom: 20px; font-size: 1.2rem; }
+.info-card p { margin-bottom: 12px; font-size: 0.95rem; opacity: 0.9; }
+
+.faq-mini {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 24px;
+  border: 1px solid var(--brd);
+}
+
+.faq-mini h4 { margin-bottom: 20px; }
+.faq-item { margin-bottom: 20px; }
+.faq-item strong { display: block; margin-bottom: 8px; color: var(--teal); font-size: 0.9rem; }
+.faq-item p { font-size: 0.85rem; color: var(--txt2); }
+
+@media (max-width: 992px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .f-row { grid-template-columns: 1fr; }
+}

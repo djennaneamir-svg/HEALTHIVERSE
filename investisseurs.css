@@ -1,0 +1,266 @@
+/* INVESTOR PAGE STYLES */
+
+:root {
+  --invest-bg: #030712;
+  --invest-accent: #6366f1;
+  --invest-gold: #f59e0b;
+}
+
+body {
+  background-color: var(--invest-bg);
+  color: #fff;
+}
+
+.text-gradient {
+  background: linear-gradient(90deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.invest-header {
+  padding: 24px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.nav-invest {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invest-tag {
+  background: var(--invest-gold);
+  color: #000;
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.btn-exit {
+  color: #94a3b8;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+/* HERO INVEST */
+.invest-hero {
+  padding: 120px 0 80px;
+  text-align: center;
+}
+
+.hero-label {
+  color: var(--invest-accent);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 24px;
+}
+
+.invest-hero h1 {
+  font-size: 3.5rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  max-width: 800px;
+  margin: 0 auto 32px;
+  line-height: 1.1;
+}
+
+.invest-hero p {
+  font-size: 1.2rem;
+  color: #94a3b8;
+  max-width: 650px;
+  margin: 0 auto 48px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn-premium {
+  background: linear-gradient(135deg, #4f46e5, #818cf8);
+  color: #fff;
+  border: none;
+  padding: 18px 36px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+  transition: transform 0.3s;
+}
+
+.btn-premium:hover {
+  transform: translateY(-5px);
+}
+
+/* STATS */
+.invest-stats {
+  padding: 60px 0;
+  background: rgba(255,255,255,0.02);
+}
+
+.stats-grid-invest {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.kpi-card {
+  background: rgba(255,255,255,0.05);
+  padding: 32px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+}
+
+.kpi-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.kpi-label {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+/* MARKET SECTION */
+.invest-market {
+  padding: 100px 0;
+}
+
+.market-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.market-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 24px;
+}
+
+.market-list {
+  margin-top: 32px;
+  list-style: none;
+}
+
+.market-list li {
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+}
+
+.text-teal { color: #2dd4bf; }
+
+/* CIRCLE CHART VISUAL */
+.market-visual {
+  display: flex;
+  justify-content: center;
+}
+
+.circle-chart {
+  position: relative;
+  width: 300px;
+  height: 300px;
+}
+
+.circle {
+  border-radius: 50%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.c-tam { width: 300px; height: 300px; background: rgba(56, 189, 248, 0.1); }
+.c-sam { width: 200px; height: 200px; background: rgba(56, 189, 248, 0.2); top: 50px; left: 50px; }
+.c-som { width: 100px; height: 100px; background: rgba(56, 189, 248, 0.4); top: 100px; left: 100px; border-color: var(--invest-accent); }
+
+/* ROADMAP */
+.invest-roadmap {
+  padding: 80px 0;
+}
+
+.roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 60px;
+  position: relative;
+}
+
+.road-item {
+  padding: 32px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.road-item.active {
+  border-color: var(--invest-accent);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+.road-date {
+  font-weight: 800;
+  color: var(--invest-accent);
+  margin-bottom: 16px;
+}
+
+/* CTA BOX */
+.invest-cta {
+  padding: 100px 0;
+}
+
+.cta-box {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  padding: 60px;
+  border-radius: 30px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.cta-box h2 { font-size: 2.2rem; margin-bottom: 16px; }
+
+.invest-form {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.invest-form input {
+  padding: 16px 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  width: 300px;
+}
+
+.invest-form button {
+  padding: 16px 32px;
+  border-radius: 12px;
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.invest-footer {
+  padding: 40px 0;
+  text-align: center;
+  color: #475569;
+  font-size: 0.8rem;
+}

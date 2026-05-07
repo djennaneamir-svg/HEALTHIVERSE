@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soutenir Healthiverse - Ensemble pour une santé accessible</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="soutenir.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- HEADER SIMPLE -->
+  <header class="support-header">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+        <span>Healthiverse <span class="heart-tag">❤</span></span>
+      </a>
+    </div>
+  </header>
+
+  <!-- HERO SUPPORT -->
+  <section class="support-hero">
+    <div class="container">
+      <h1>Soutenez une santé <span class="text-pink">plus humaine</span></h1>
+      <p>Healthiverse est un projet indépendant. Votre soutien nous permet de rester sans publicité et de développer des outils gratuits pour ceux qui en ont le plus besoin.</p>
+    </div>
+  </section>
+
+  <!-- IMPACT CARDS -->
+  <section class="impact-section">
+    <div class="container">
+      <div class="impact-grid">
+        <div class="impact-card">
+          <div class="impact-ico">☕</div>
+          <h3>Un café pour l'équipe</h3>
+          <div class="impact-price">$5</div>
+          <p>Aidez-nous à rester éveillés pour corriger les bugs et améliorer l'interface.</p>
+          <button class="btn-donate">Choisir ce don</button>
+        </div>
+        <div class="impact-card featured">
+          <div class="impact-ico">🚀</div>
+          <h3>Propulser l'IA</h3>
+          <div class="impact-price">$20</div>
+          <p>Financez 1 heure de calcul pour notre futur assistant d'orientation médicale.</p>
+          <button class="btn-donate-solid">Choisir ce don</button>
+        </div>
+        <div class="impact-card">
+          <div class="impact-ico">🌍</div>
+          <h3>Serveur Solidaire</h3>
+          <div class="impact-price">$50</div>
+          <p>Garantissez l'accès à Healthiverse pour une région entière pendant un mois.</p>
+          <button class="btn-donate">Choisir ce don</button>
+        </div>
+        <!-- RANDOM / CUSTOM DONATION -->
+        <div class="impact-card random-card">
+          <div class="impact-ico">🎁</div>
+          <h3>Montant Libre</h3>
+          <div class="custom-input-box">
+            <span class="currency-pre">$</span>
+            <input type="number" id="customAmount" placeholder="0.00">
+          </div>
+          <p>Choisissez le montant que vous souhaitez offrir au projet.</p>
+          <button class="btn-donate-solid" onclick="processCustomDonation()">Soutenir maintenant</button>
+        </div>
+        <!-- CARD PAYMENT -->
+        <div class="impact-card">
+          <div class="impact-ico">💳</div>
+          <h3>Carte Bancaire</h3>
+          <div class="impact-price">Visa / Master</div>
+          <p>Don ponctuel ou mensuel via notre partenaire sécurisé Stripe.</p>
+          <button class="btn-donate-solid">Soutenir par Carte</button>
+        </div>
+        <!-- PAYPAL -->
+        <div class="impact-card">
+          <div class="impact-ico">🅿️</div>
+          <h3>PayPal</h3>
+          <div class="impact-price">Rapide</div>
+          <p>Utilisez votre compte PayPal pour un soutien en un clic.</p>
+          <button class="btn-donate">Payer via PayPal</button>
+        </div>
+        <!-- USDT OPTION -->
+        <div class="impact-card crypto-card featured">
+          <div class="impact-ico">₿</div>
+          <h3>Soutien Crypto</h3>
+          <div class="impact-price">USDT / BTC / ETH</div>
+          <p>Soutenez-nous de manière décentralisée (TRC-20, ERC-20, Native).</p>
+          <button class="btn-donate-solid" onclick="openPaymentFlow('USDT')">Démarrer la transaction</button>
+        </div>
+      </div>
+
+      <!-- TRANSACTION MODAL (SIMULATED) -->
+      <div id="paymentModal" class="payment-modal-overlay" style="display:none">
+        <div class="payment-modal">
+          <div class="pm-head">
+            <h3 id="pmTitle">Transaction USDT</h3>
+            <button class="close-pm" onclick="closePaymentFlow()">×</button>
+          </div>
+          <div class="pm-body">
+            <div class="qr-placeholder">
+              <!-- Placeholder pour QR Code -->
+              <svg width="150" height="150" viewBox="0 0 100 100" fill="var(--teal)"><rect width="10" height="10" x="10" y="10"/><rect width="10" height="10" x="30" y="10"/><rect width="10" height="10" x="10" y="30"/><rect width="10" height="10" x="30" y="30"/><rect width="10" height="10" x="60" y="10"/><rect width="10" height="10" x="80" y="10"/><rect width="10" height="10" x="60" y="30"/><rect width="10" height="10" x="80" y="30"/><rect width="10" height="10" x="10" y="60"/><rect width="10" height="10" x="30" y="60"/><rect width="10" height="10" x="10" y="80"/><rect width="10" height="10" x="30" y="80"/></svg>
+            </div>
+            <p class="pm-instr">Veuillez envoyer votre don à l'adresse ci-dessous :</p>
+            <div class="pm-address-box">
+              <code id="pmAddr">T7xR9...y2zPqL5vA8sK9mN3xQ1zW8vR</code>
+              <button onclick="copyWallet('T7xR9...y2zPqL5vA8sK9mN3xQ1zW8vR', this)">Copier</button>
+            </div>
+            <div class="pm-network">Réseau : <strong id="pmNet">TRC-20</strong></div>
+            <p class="pm-status">⌛ En attente de détection sur la blockchain...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSPARENCY SECTION -->
+  <section class="transparency">
+    <div class="container">
+      <div class="goal-box">
+        <h3>Objectif : Serveur haute performance</h3>
+        <div class="progress-container">
+          <div class="progress-bar" style="width: 65%"></div>
+        </div>
+        <p class="progress-text"><strong>$650</strong> collectés sur un objectif de <strong>$1 000</strong></p>
+      </div>
+
+      <div class="donors-wall">
+        <h3>Derniers donateurs 💖</h3>
+        <div class="donors-list">
+          <div class="donor-item"><strong>Sarah M.</strong> a donné 10€ - "Bravo pour ce projet !"</div>
+          <div class="donor-item"><strong>Anonyme</strong> a donné 50€ - "Indispensable aujourd'hui."</div>
+          <div class="donor-item"><strong>Dr. Lefebvre</strong> a donné 20€ - "Utile pour mes patients."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CUSTOM DONATION -->
+  <section class="custom-donate">
+    <div class="container">
+      <div class="custom-box">
+        <h3>Montant libre</h3>
+        <div class="input-group">
+          <input type="number" placeholder="Montant en €">
+          <button>Soutenir</button>
+        </div>
+        <p class="secure-text">🔒 Paiement 100% sécurisé via Stripe</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="support-footer">
+    <div class="container">
+      <a href="index.html">← Retour à l'accueil</a>
+    </div>
+  </footer>
+
+  <script>
+    function openPaymentFlow(asset) {
+      const modal = document.getElementById('paymentModal');
+      const title = document.getElementById('pmTitle');
+      const addr = document.getElementById('pmAddr');
+      const net = document.getElementById('pmNet');
+      
+      const config = {
+        'USDT': { a: 'T7xR9...y2zPqL5vA8sK9mN3xQ1zW8vR', n: 'TRC-20' },
+        'BTC': { a: 'bc1qxy2kg...4k58a36v9y', n: 'Bitcoin Native' },
+        'ETH': { a: '0x71C765...657C71', n: 'ERC-20' }
+      };
+
+      const selected = config[asset] || config['USDT'];
+      title.innerText = `Transaction ${asset}`;
+      addr.innerText = selected.a;
+      net.innerText = selected.n;
+      
+      modal.style.display = 'flex';
+    }
+
+    function closePaymentFlow() {
+      document.getElementById('paymentModal').style.display = 'none';
+    }
+
+    function copyWallet(addr, btn) {
+      navigator.clipboard.writeText(addr).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "Copié !";
+        btn.style.background = "#10b981";
+        setTimeout(() => { btn.innerText = originalText; btn.style.background = "#0d9488"; }, 2000);
+      });
+    }
+
+    function processCustomDonation() {
+      const amount = document.getElementById('customAmount').value;
+      if (!amount || amount <= 0) {
+        alert("Veuillez entrer un montant valide supérieur à 0$.");
+        return;
+      }
+      alert(`Merci infiniment ! Votre don personnalisé de ${amount}$ est en cours de traitement vers notre passerelle sécurisée.`);
+    }
+
+    document.querySelectorAll('.btn-donate, .btn-donate-solid').forEach(btn => {
+      if (btn.getAttribute('onclick')) return;
+      btn.addEventListener('click', () => {
+        const parent = btn.closest('.impact-card');
+        const price = parent ? parent.querySelector('.impact-price').innerText : 'votre choix';
+        alert(`Merci infiniment ! Votre don de ${price} est en cours de traitement vers notre passerelle sécurisée.`);
+      });
+    });
+  </script>
+</body>
+</html>

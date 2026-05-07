@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Healthiverse – Trouvez les meilleurs médecins, cliniques et spécialistes. Avis patients vérifiés, rendez-vous en ligne."/>
+  <title>Healthiverse – Votre guide santé de confiance</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- LEAFLET MAPS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+</head>
+<body>
+  <!-- SCROLLING BETA BANNER -->
+  <div class="beta-scrolling-banner">
+    <div class="marquee-content">
+      <span>🚀 BIENVENUE SUR HEALTHIVERSE BETA v0.9 — SITE EN COURS DE DÉVELOPPEMENT — VOTRE SOUTIEN EST PRÉCIEUX (DONS USDT / CB) — PROPOSEZ VOS IDÉES EN BAS DE PAGE — MERCI DE NOUS AIDER À RÉVOLUTIONNER LA SANTÉ ! 🚀</span>
+    </div>
+  </div>
+
+<!-- TOP BAR (Donations & Investors) -->
+<div class="top-bar">
+  <div class="container top-bar-inner">
+    <div class="top-left">
+      <span class="pulse-icon"></span> En direct : 5 420 utilisateurs en ligne
+    </div>
+    <div class="top-right">
+      <a href="soutenir.html" class="top-btn btn-sup">💖 Soutenir le projet</a>
+      <a href="investisseurs.html" class="top-btn btn-inv">📈 Espace Investisseurs</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <div class="logo-icon">
+        <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+          <path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 13.5 23C14 23 14.5 23 14.5 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/>
+          <path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span>Healthiverse</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#specialites">Spécialités</a></li>
+      <li><a href="#medecins">Médecins</a></li>
+      <li><a href="#cliniques">Cliniques</a></li>
+      <li><a href="#fonctionnement">Comment ça marche</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="lang-selector" id="langSelector">
+        <button class="lang-btn" id="langBtn">🌍 FR ▾</button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-opt active" data-lang="fr">🇫🇷 Français</button>
+          <button class="lang-opt" data-lang="en">🇬🇧 English</button>
+          <button class="lang-opt" data-lang="ar">🇸🇦 العربية</button>
+          <button class="lang-opt" data-lang="es">🇪🇸 Español</button>
+          <button class="lang-opt" data-lang="de">🇩🇪 Deutsch</button>
+          <button class="lang-opt" data-lang="pt">🇵🇹 Português</button>
+          <button class="lang-opt" data-lang="zh">🇨🇳 中文</button>
+          <button class="lang-opt" data-lang="tr">🇹🇷 Türkçe</button>
+        </div>
+      </div>
+      <a href="login.html" class="btn-login">Connexion</a>
+      <a href="inscription.html" class="btn-register">S'inscrire</a>
+      <button id="darkModeToggle" class="btn-theme-toggle">🌙</button>
+    </div>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge"><span class="badge-dot"></span>+50 000 professionnels de santé référencés</div>
+    <h1 class="hero-title">Trouvez le bon médecin,<br/><span class="hero-gradient">au bon moment</span></h1>
+    <p class="hero-sub">Avis patients vérifiés · Comparaison de spécialistes · Rendez-vous en ligne 24h/24</p>
+    <div class="search-card">
+      <div class="search-tabs">
+        <button class="stab active" data-tab="medecin">Médecin</button>
+        <button class="stab" data-tab="clinique">Clinique</button>
+        <button class="stab" data-tab="pharmacie">Pharmacie</button>
+      </div>
+      <div class="search-row">
+        <div class="s-field" style="position:relative">
+          <svg class="s-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchSpec" placeholder="Spécialité, médecin, symptôme…" class="s-input" autocomplete="off"/>
+          <div class="autocomplete-dropdown" id="autoDropdown"></div>
+        </div>
+        <div class="s-sep"></div>
+        <div class="s-field">
+          <svg class="s-ico" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <input type="text" id="searchLoc" placeholder="Ville, code postal…" class="s-input"/>
+        </div>
+        <button class="search-btn" id="searchBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          Rechercher
+        </button>
+      </div>
+
+      <!-- FILTRES AVANCÉS (C) -->
+      <div class="advanced-filters fade-in" style="transition-delay: 300ms">
+        <label class="check-item"><input type="checkbox"> <span>📹 Vidéo</span></label>
+        <label class="check-item"><input type="checkbox"> <span>⚡ Dispo</span></label>
+        <label class="check-item"><input type="checkbox"> <span>💎 Tiers payant</span></label>
+        <select class="mini-select">
+          <option>Toutes les langues</option>
+          <option>Français</option>
+          <option>Anglais</option>
+          <option>Arabe</option>
+        </select>
+      </div>
+      <div class="search-tags">
+        <span>Populaire :</span>
+        <button class="stag">Médecin généraliste</button>
+        <button class="stag">Dermatologue</button>
+        <button class="stag">Cardiologue</button>
+        <button class="stag">Pédiatre</button>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><span class="h-num" data-target="50000">0</span><span>+</span><span class="h-lbl">Professionnels</span></div>
+      <div class="h-sep"></div>
+      <div class="h-stat"><span class="h-num" data-target="2000000">0</span><span>+</span><span class="h-lbl">Avis vérifiés</span></div>
+      <div class="h-sep"></div>
+      <div class="h-stat"><span class="h-num" data-target="98">0</span><span>%</span><span class="h-lbl">Satisfaction</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="float-card fc1">
+      <div class="fc-avatar a1">DR</div>
+      <div><div class="fc-name">Dr. Sarah Martin</div><div class="fc-spec">Cardiologue · Paris 8e</div><div class="fc-stars">★★★★★ 4.9 (312)</div></div>
+    </div>
+    <div class="float-card fc2">
+      <div class="fc-ico green">✓</div>
+      <div><div class="fc-name">RDV confirmé</div><div class="fc-spec">Demain à 14h30</div></div>
+    </div>
+    <div class="float-card fc3">
+      <div class="fc-ico blue">★</div>
+      <div><div class="fc-name">+1 200 avis</div><div class="fc-spec">déposés cette semaine</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALITES -->
+<section class="section" id="specialites">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Parcourir par domaine</div>
+      <h2>Toutes les spécialités médicales</h2>
+      <p>Trouvez rapidement le bon spécialiste pour chaque besoin de santé</p>
+    </div>
+    <div class="spec-grid" id="specGrid"></div>
+  </div>
+</section>
+
+<!-- MEDECINS -->
+<section class="section bg-light" id="medecins">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Les mieux notés</div>
+      <h2>Médecins &amp; Spécialistes</h2>
+      <p>Sélectionnés pour leur expertise et leurs excellents avis patients</p>
+    </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="fbtn active" data-filter="all">Tous</button>
+      <button class="fbtn" data-filter="generaliste">Généraliste</button>
+      <button class="fbtn" data-filter="cardiologue">Cardiologue</button>
+      <button class="fbtn" data-filter="dermatologue">Dermatologue</button>
+      <button class="fbtn" data-filter="pediatre">Pédiatre</button>
+      <button class="fbtn" data-filter="psychiatre">Psychiatre</button>
+    </div>
+    <div class="doctors-grid" id="doctorsGrid"></div>
+    <div class="sec-cta"><a href="#" class="btn-outline">Voir tous les médecins →</a></div>
+  </div>
+</section>
+
+<!-- AUXILIAIRES & SERVICES (NEW) -->
+<section class="section reveal" id="auxiliaries">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Écosystème étendu</div>
+      <h2>Services <span class="text-teal">Auxiliaires</span> & Opérateurs</h2>
+      <p>Une prise en charge complète, au-delà de la simple consultation</p>
+    </div>
+    <div class="aux-grid">
+      <div class="aux-card stagger-item">
+        <div class="aux-ico">🚑</div>
+        <h3>Ambulances & Transport</h3>
+        <p>Réservez un transport sanitaire certifié 24h/7j.</p>
+      </div>
+      <div class="aux-card stagger-item">
+        <div class="aux-ico">💉</div>
+        <h3>Soins à Domicile</h3>
+        <p>Infirmiers et aide-soignants pour vos soins quotidiens.</p>
+      </div>
+      <div class="aux-card stagger-item">
+        <div class="aux-ico">💊</div>
+        <h3>Pharmacies & Garde</h3>
+        <p>Localisez les pharmacies ouvertes et de garde.</p>
+      </div>
+      <div class="aux-card stagger-item">
+        <div class="aux-ico">🛡️</div>
+        <h3>Assurances Santé</h3>
+        <p>Gérez vos remboursements avec nos partenaires.</p>
+      </div>
+      <div class="aux-card stagger-item">
+        <div class="aux-ico">🚚</div>
+        <h3>Livraison Médicaments</h3>
+        <p>Recevez vos traitements à domicile en 1h. <span class="badge-beta">Bêta</span></p>
+        <a href="#" class="aux-link">En savoir plus →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INTERACTIVE MAP SECTION (NEW) -->
+<section class="section map-section" id="carte">
+  <div class="container">
+    <div class="sec-header text-center">
+      <div class="sec-badge">Proximité</div>
+      <h2>Trouver un professionnel <span class="text-teal">autour de vous</span></h2>
+      <p>Visualisez les cabinets médicaux et pharmacies de garde ouverts actuellement à proximité.</p>
+    </div>
+    <div class="map-container-wrapper">
+      <div id="mainMap" class="main-map"></div>
+      <div class="map-stats-overlay">
+        <div class="m-stat"><strong>24</strong><span>Médecins dispo</span></div>
+        <div class="m-stat"><strong>12</strong><span>Pharmacies</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="fonctionnement">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Simple &amp; rapide</div>
+      <h2>Comment ça marche ?</h2>
+      <p>Prendre soin de votre santé n'a jamais été aussi simple</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <div class="how-ico teal">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <h3>Recherchez</h3>
+        <p>Entrez votre spécialité, symptôme ou le nom d'un médecin et votre localisation.</p>
+      </div>
+      <div class="how-arrow">→</div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <div class="how-ico emerald">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>Comparez</h3>
+        <p>Consultez les avis vérifiés, les qualifications, les tarifs et les disponibilités.</p>
+      </div>
+      <div class="how-arrow">→</div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <div class="how-ico indigo">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>Réservez</h3>
+        <p>Prenez rendez-vous en ligne 24h/24, 7j/7 et recevez une confirmation immédiate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section" id="stats">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="sc-ico">👨‍⚕️</div>
+        <div class="sc-val" data-target="50000">0</div>
+        <div class="sc-lbl">Professionnels de santé</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-ico">⭐</div>
+        <div class="sc-val" data-target="2000000">0</div>
+        <div class="sc-lbl">Avis patients vérifiés</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-ico">📅</div>
+        <div class="sc-val" data-target="500000">0</div>
+        <div class="sc-lbl">Rendez-vous pris</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-ico">✅</div>
+        <div class="sc-val" data-target="98" data-suffix="%">0</div>
+        <div class="sc-lbl">Taux de satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AD BANNER (NEW) -->
+<div class="container">
+  <div class="ad-banner">
+    <div class="ad-content">
+      <span class="ad-label">Sponsorisé</span>
+      <h3>Mutuelle Innov' : Jusqu'à 150$ remboursés sur vos soins auxiliaires</h3>
+      <p>Offre exclusive pour les utilisateurs de Healthiverse. Valable jusqu'au 31 mai.</p>
+    </div>
+    <button class="ad-btn">En savoir plus</button>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="avis">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Ils nous font confiance</div>
+      <h2>Ce que disent nos patients</h2>
+      <p>Des milliers de patients partagent leur expérience chaque jour</p>
+    </div>
+    <div class="testi-wrap">
+      <div class="testi-track" id="testiTrack"></div>
+    </div>
+    <div class="testi-dots" id="testiDots"></div>
+  </div>
+</section>
+
+<!-- CITIES -->
+<section class="section bg-light" id="cliniques">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Partout en France</div>
+      <h2>Trouvez un médecin dans votre ville</h2>
+    </div>
+    <div class="cities-grid" id="citiesGrid"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-badge">Nos offres</div>
+      <h2>Abonnements Professionnels</h2>
+      <p>Choisissez le plan qui correspond à votre activité</p>
+    </div>
+    <div class="pricing-grid" id="pricingGrid"></div>
+  </div>
+</section>
+
+<!-- SUPPORT / INVEST -->
+<section class="support-section" id="support">
+  <div class="container">
+    <div class="support-grid">
+      <div class="support-card donate-card">
+        <div class="sup-ico">💖</div>
+        <h3>Soutenir Healthiverse</h3>
+        <p>Aidez-nous à rendre la santé accessible à tous. Chaque don compte pour améliorer notre plateforme.</p>
+        <a href="#" class="btn-donate" id="btnDonate">Faire un don</a>
+        <div class="sup-trust">🔒 Paiement sécurisé · Reçu fiscal disponible</div>
+      </div>
+      <div class="support-card invest-card">
+        <div class="sup-ico">📈</div>
+        <h3>Devenir investisseur</h3>
+        <p>Rejoignez notre aventure et investissez dans l'avenir de la santé numérique. Rendement attractif.</p>
+        <a href="#" class="btn-invest" id="btnInvest">Nous contacter</a>
+        <div class="sup-trust">📊 Dossier investisseur disponible sur demande</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUGGEST A DOMAIN (NEW) -->
+<section class="section suggest-section" id="suggest">
+  <div class="container">
+    <div class="suggest-box fade-in">
+      <div class="suggest-info">
+        <h2>Un domaine manque à l'appel ?</h2>
+        <p>Aidez-nous à faire grandir l'écosystème Healthiverse. Proposez une nouvelle catégorie (ex: Infirmier mobile, Vétérinaire...) et notre administration l'étudiera sous 48h.</p>
+      </div>
+      <form class="suggest-form" id="suggestForm">
+        <label for="suggestInput" class="sr-only">Nom du domaine à suggérer</label>
+        <input type="text" id="suggestInput" placeholder="Nom du domaine (ex: Infirmier mobile)..." required>
+        <button type="submit">Proposer le domaine</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- CTA PROS -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div class="sec-badge light">Pour les professionnels</div>
+      <h2>Vous êtes professionnel de santé ?</h2>
+      <p>Rejoignez Healthiverse et augmentez votre visibilité. Gérez vos rendez-vous et recevez des avis directement sur votre profil.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn-cta-white">Créer mon profil gratuitement</a>
+        <a href="#" class="btn-cta-ghost">En savoir plus →</a>
+      </div>
+      <div class="cta-features">
+        <span>✓ Profil 100% gratuit</span>
+        <span>✓ Agenda en ligne</span>
+        <span>✓ Rappels automatiques</span>
+      </div>
+    </div>
+    <div class="cta-right">
+      <div class="dash-card">
+        <div class="dash-header"><span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-dot"></span><span class="dash-title">Mon espace pro</span></div>
+        <div class="dash-stats">
+          <div class="ds"><div class="ds-n">127</div><div class="ds-l">Vues ce mois</div></div>
+          <div class="ds"><div class="ds-n">34</div><div class="ds-l">RDV pris</div></div>
+          <div class="ds"><div class="ds-n">4.8★</div><div class="ds-l">Note moyenne</div></div>
+        </div>
+        <div class="dash-cal">
+          <div class="cal-slot taken">9h00 – M. Dupont</div>
+          <div class="cal-slot free">10h00 – Disponible</div>
+          <div class="cal-slot taken">11h00 – Mme Bernard</div>
+          <div class="cal-slot free">14h00 – Disponible</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <div class="container">
+    <div class="nl-card">
+      <div class="nl-icon">📬</div>
+      <div class="nl-text">
+        <h3>Restez informé(e)</h3>
+        <p>Recevez les conseils santé et actualités médicales dans votre boîte mail.</p>
+      </div>
+      <form class="nl-form" id="nlForm">
+        <input type="email" id="nlEmail" placeholder="Votre adresse email" class="nl-input"/>
+        <button type="submit" class="nl-btn">S'abonner</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="logo-icon small"><svg width="18" height="18" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+          <span>Healthiverse</span>
+        </div>
+        <p>Votre guide santé de confiance. Trouvez les meilleurs professionnels de santé près de chez vous.</p>
+        <div class="socials">
+          <a href="#" class="soc-btn">f</a>
+          <a href="#" class="soc-btn">𝕏</a>
+          <a href="#" class="soc-btn">in</a>
+        </div>
+      </div>
+      <div class="f-col">
+        <h4>Support</h4>
+        <ul class="f-links">
+          <li><a href="contact.html">Centre d'aide</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="contact.html">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="f-col"><h4>Explorer</h4><ul><li><a href="#">Médecins généralistes</a></li><li><a href="#">Spécialistes</a></li><li><a href="#">Cliniques</a></li><li><a href="#">Pharmacies</a></li><li><a href="#">Urgences</a></li></ul></div>
+      <div class="f-col"><h4>Patients</h4><ul><li><a href="#">Prendre rendez-vous</a></li><li><a href="#">Laisser un avis</a></li><li><a href="#">Mon compte</a></li><li><a href="#">Aide &amp; FAQ</a></li><li><a href="#">Blog santé</a></li></ul></div>
+      <div class="f-col"><h4>Professionnels</h4><ul><li><a href="#">Créer mon profil</a></li><li><a href="#">Gérer mes avis</a></li><li><a href="#">Solutions premium</a></li><li><a href="#">API &amp; Intégration</a></li><li><a href="#">Contact commercial</a></li></ul></div>
+    </div>
+    <div class="footer-bot">
+      <p>© 2026 Healthiverse. Tous droits réservés.</p>
+      <div class="f-links">
+        <a href="#">Confidentialité</a><a href="#">CGU</a><a href="#">Mentions légales</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- EMERGENCY CONTACTS BUTTON -->
+<div class="emergency-fab" id="emergencyFab">
+  <button class="fab-btn" id="fabBtn">🚨</button>
+  <div class="fab-panel" id="fabPanel">
+    <h4>Numéros d'urgence</h4>
+    <a href="tel:15" class="fab-contact"><span class="fab-c-ico samu">15</span><span>SAMU</span><span class="fab-c-sub">Urgences médicales</span></a>
+    <a href="tel:18" class="fab-contact"><span class="fab-c-ico pomp">18</span><span>Pompiers</span><span class="fab-c-sub">Secours & incendies</span></a>
+    <a href="tel:17" class="fab-contact"><span class="fab-c-ico poli">17</span><span>Police</span><span class="fab-c-sub">Sécurité publique</span></a>
+    <a href="tel:112" class="fab-contact"><span class="fab-c-ico euro">112</span><span>Urgences UE</span><span class="fab-c-sub">Numéro européen</span></a>
+    <a href="tel:114" class="fab-contact"><span class="fab-c-ico sms">114</span><span>Urgences SMS</span><span class="fab-c-sub">Sourds & malentendants</span></a>
+    <a href="tel:0800840800" class="fab-contact"><span class="fab-c-ico chu">CHU</span><span>Hôpital le plus proche</span><span class="fab-c-sub">Centre hospitalier</span></a>
+    <a href="tel:3624" class="fab-contact"><span class="fab-c-ico med">📞</span><span>SOS Médecins</span><span class="fab-c-sub">Médecin de garde</span></a>
+    <a href="tel:0145395300" class="fab-contact"><span class="fab-c-ico tox">☠️</span><span>Centre antipoison</span><span class="fab-c-sub">Paris: 01 45 39 53 00</span></a>
+  </div>
+</div>
+
+<button class="scroll-top" id="scrollTop" aria-label="Retour en haut">↑</button>
+<script src="script.js"></script>
+</body>
+</html>

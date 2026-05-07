@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Healthiverse Pro - Profil Patient</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="patient.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- SIDEBAR (Identique au Dashboard) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+          <span>Healthiverse Pro</span>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li><a href="dashboard.html"><span class="nav-ico">📊</span> Vue d'ensemble</a></li>
+          <li><a href="#"><span class="nav-ico">📅</span> Agenda & RDV</a></li>
+          <li class="active"><a href="#"><span class="nav-ico">👥</span> Mes Patients</a></li>
+          <li><a href="#"><span class="nav-ico">⭐</span> Avis & Réputation</a></li>
+          <li><a href="#"><span class="nav-ico">💬</span> Messages</a></li>
+        </ul>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="dashboard.html" class="btn-back">← Retour au Dashboard</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="header-left">
+          <div class="breadcrumb">Mes Patients / <span>Jean Dupont</span></div>
+          <h1>Fiche Patient</h1>
+        </div>
+        <div class="header-right">
+          <button class="btn-outline">Imprimer dossier</button>
+          <button class="btn-primary">Nouvelle consultation</button>
+        </div>
+      </header>
+
+      <div class="patient-profile-grid">
+        <!-- LEFT COL: IDENTITY & ALERTS -->
+        <div class="profile-left">
+          <div class="card identity-card">
+            <div class="patient-avatar">JD</div>
+            <h2>Jean Dupont</h2>
+            <p class="patient-id">ID: #HT-9842 | 45 ans</p>
+            <div class="patient-tags">
+              <span class="p-tag">Groupe A+</span>
+              <span class="p-tag">Hypertension</span>
+            </div>
+            <div class="patient-contact">
+              <div class="c-item"><span>📧</span> j.dupont@email.com</div>
+              <div class="c-item"><span>📱</span> 06 12 34 56 78</div>
+              <div class="c-item"><span>🏠</span> 12 Rue de la Paix, Paris</div>
+            </div>
+          </div>
+
+          <div class="card alerts-card">
+            <h3>⚠️ Alertes & Allergies</h3>
+            <ul class="alert-list">
+              <li class="alert-red">Allergie à la Pénicilline</li>
+              <li class="alert-orange">Asthme modéré</li>
+            </ul>
+          </div>
+
+          <div class="card info-card">
+            <h3>Infos complémentaires</h3>
+            <div class="info-row"><span>Profession:</span> Ingénieur</div>
+            <div class="info-row"><span>Médecin traitant:</span> Dr. Morel</div>
+            <div class="info-row"><span>Dernier RDV:</span> 12 Avril 2026</div>
+          </div>
+        </div>
+
+        <!-- RIGHT COL: TIMELINE & DOCS -->
+        <div class="profile-right">
+          <!-- TIMELINE -->
+          <div class="card timeline-card">
+            <div class="card-header">
+              <h3>Historique médical</h3>
+              <select class="card-select"><option>Toutes les visites</option></select>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="time-point"></div>
+                <div class="time-content">
+                  <div class="time-header">
+                    <span class="time-date">12 Avril 2026</span>
+                    <span class="time-type">Consultation Suivi</span>
+                  </div>
+                  <p>Tension stable à 13/8. Renouvellement du traitement pour l'hypertension. Patient signale des maux de tête occasionnels.</p>
+                  <div class="time-footer">Prescription: Amlodipine 5mg</div>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="time-point"></div>
+                <div class="time-content">
+                  <div class="time-header">
+                    <span class="time-date">15 Janvier 2026</span>
+                    <span class="time-type">Urgence - Grippe</span>
+                  </div>
+                  <p>Forte fièvre, fatigue intense. Test COVID négatif. Repos préconisé 5 jours.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DOCUMENTS -->
+          <div class="card docs-card">
+            <div class="card-header">
+              <h3>Documents & Imagerie</h3>
+              <button class="btn-small">+ Ajouter</button>
+            </div>
+            <div class="docs-grid">
+              <div class="doc-file">
+                <div class="doc-ico">📄</div>
+                <div class="doc-info">
+                  <span class="doc-name">Ordonnance_Avril.pdf</span>
+                  <span class="doc-size">1.2 Mo | 12/04/26</span>
+                </div>
+              </div>
+              <div class="doc-file">
+                <div class="doc-ico">🩻</div>
+                <div class="doc-info">
+                  <span class="doc-name">Radio_Thorax.jpg</span>
+                  <span class="doc-size">4.5 Mo | 15/01/26</span>
+                </div>
+              </div>
+              <div class="doc-file">
+                <div class="doc-ico">📊</div>
+                <div class="doc-info">
+                  <span class="doc-name">Analyses_Sang.pdf</span>
+                  <span class="doc-size">800 Ko | 10/01/26</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+</html>
