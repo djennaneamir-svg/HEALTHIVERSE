@@ -135,6 +135,8 @@ ul{list-style:none}
 .s-sep{width:1px;height:32px;background:var(--brd);flex-shrink:0}
 .search-btn{background:var(--teal);color:#fff;border:none;padding:14px 32px;border-radius:12px;font-weight:700;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .3s}
 .search-btn:hover{background:var(--teal-d);transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,148,136,.3)}
+.btn-map-link{padding:14px 18px;background:var(--em);border-radius:12px}
+.btn-map-link:hover{background:var(--teal);box-shadow:0 4px 12px rgba(14,165,233,.3)}
 
 /* ADVANCED FILTERS */
 .advanced-filters{display:flex;gap:20px;align-items:center;margin-top:20px;padding:0 10px}

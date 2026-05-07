@@ -108,13 +108,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // === INTERACTIVE MAP (Leaflet) ===
+  let mainMap; // Move to scope accessible by search
   const mapElement = document.getElementById('mainMap');
   if (mapElement) {
-    const map = L.map('mainMap').setView([48.8566, 2.3522], 13); // Par défaut: Paris
+    mainMap = L.map('mainMap').setView([48.8566, 2.3522], 13); // Par défaut: Paris
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+    }).addTo(mainMap);
 
     // Points de démonstration (Médecins & Pharmacies)
     const demoLocations = [
@@ -125,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     demoLocations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lng]).addTo(map);
+      const marker = L.marker([loc.lat, loc.lng]).addTo(mainMap);
       marker.bindPopup(`<strong>${loc.type}</strong><br>${loc.name}<br><a href="#" style="color:var(--teal)">Prendre RDV</a>`);
     });
 
@@ -133,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
         const { latitude, longitude } = pos.coords;
-        map.setView([latitude, longitude], 14);
+        mainMap.setView([latitude, longitude], 14);
         L.marker([latitude, longitude], { icon: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize: [30, 30] }) })
-          .addTo(map)
+          .addTo(mainMap)
           .bindPopup("<b>Vous êtes ici</b>")
           .openPopup();
       });
@@ -500,15 +501,64 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === SEARCH BUTTON ===
   document.getElementById('searchBtn').addEventListener('click', () => {
+    handleSearch();
+  });
+
+  const viewOnMapBtn = document.getElementById('viewOnMapBtn');
+  if (viewOnMapBtn) {
+    viewOnMapBtn.addEventListener('click', () => {
+      handleSearch(true);
+    });
+  }
+
+  function handleSearch(directToMap = false) {
     const spec = document.getElementById('searchSpec').value;
     const loc = document.getElementById('searchLoc').value;
-    if (spec || loc) {
+    
+    if (spec || loc || directToMap) {
       const btn = document.getElementById('searchBtn');
+      const originalHtml = btn.innerHTML;
       btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Recherche...';
+      
       setTimeout(() => {
-        btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Rechercher`;
-        alert(`Recherche: ${spec} à ${loc || 'toute la France'}`);
-      }, 1500);
+        btn.innerHTML = originalHtml;
+        
+        // Scroll to map
+        const mapSection = document.getElementById('carte');
+        if (mapSection) {
+          mapSection.scrollIntoView({ behavior: 'smooth' });
+          
+          // Mock geocoding and map update
+          if (mainMap && loc) {
+            const cityCoords = {
+              'paris': [48.8566, 2.3522],
+              'lyon': [45.7640, 4.8357],
+              'marseille': [43.2965, 5.3698],
+              'bordeaux': [44.8378, -0.5792],
+              'alger': [36.7538, 3.0588],
+              'casablanca': [33.5731, -7.5898]
+            };
+            
+            const city = loc.toLowerCase();
+            let found = false;
+            for (let key in cityCoords) {
+              if (city.includes(key)) {
+                mainMap.setView(cityCoords[key], 13);
+                L.marker(cityCoords[key]).addTo(mainMap).bindPopup(`Recherche pour <strong>${spec || 'Santé'}</strong> à <strong>${loc}</strong>`).openPopup();
+                found = true;
+                break;
+              }
+            }
+            if (!found && spec) {
+                // If city not found but spec is there, just point to current view with a message
+                L.popup()
+                    .setLatLng(mainMap.getCenter())
+                    .setContent(`Affichage des résultats pour <strong>${spec}</strong> dans cette zone.`)
+                    .openOn(mainMap);
+            }
+          }
+        }
+      }, directToMap ? 100 : 800);
     }
-  });
+  }
 });
