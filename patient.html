@@ -148,5 +148,30 @@
     </main>
   </div>
 
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+      if (appointments.length > 0) {
+        const timeline = document.querySelector('.timeline');
+        
+        appointments.forEach(apt => {
+          const item = document.createElement('div');
+          item.className = 'timeline-item';
+          item.innerHTML = `
+            <div class="time-point" style="background: var(--teal);"></div>
+            <div class="time-content" style="border: 1px solid var(--teal);">
+              <div class="time-header">
+                <span class="time-date">${apt.date} - ${apt.time}</span>
+                <span class="time-type" style="background: var(--teal); color: white; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem;">Nouveau RDV</span>
+              </div>
+              <p>Rendez-vous planifié avec <strong>${apt.doctor}</strong> (${apt.specialty}).</p>
+              <div class="time-footer">Statut: ${apt.status}</div>
+            </div>
+          `;
+          timeline.insertBefore(item, timeline.firstChild);
+        });
+      }
+    });
+  </script>
 </body>
 </html>

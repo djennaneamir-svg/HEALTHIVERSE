@@ -200,9 +200,8 @@
       L.marker([48.8698, 2.3075]).addTo(map).bindPopup("Cabinet du Dr. Sarah Martin").openPopup();
 
       // Booking button logic
-      document.getElementById('btnBookNow').addEventListener('click', () => {
-        alert("Votre demande de rendez-vous a été envoyée ! Vous allez recevoir un SMS de confirmation.");
-      });
+      const btnBook = document.getElementById('btnBookNow');
+      let selectedSlot = null;
 
       // Slot selection
       document.querySelectorAll('.slot:not(.taken)').forEach(slot => {
@@ -210,8 +209,54 @@
           document.querySelectorAll('.slot').forEach(s => s.style.background = '');
           slot.style.background = 'var(--teal)';
           slot.style.color = '#fff';
+          selectedSlot = slot.textContent;
         });
       });
+
+      btnBook.addEventListener('click', () => {
+        if (!selectedSlot) {
+          alert('Veuillez choisir un créneau horaire.');
+          return;
+        }
+        
+        // Save to localStorage
+        const newAppointment = {
+          doctor: 'Dr. Sarah Martin',
+          specialty: 'Cardiologue',
+          date: '07 Mai 2026',
+          time: selectedSlot,
+          status: 'Confirmé'
+        };
+        
+        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments.push(newAppointment);
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+        
+        // Notification system
+        showToast('Rendez-vous confirmé ! Redirection vers votre tableau de bord...', 'success');
+        
+        setTimeout(() => {
+          window.location.href = 'patient.html';
+        }, 2000);
+      });
+      
+      function showToast(msg, type) {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+          position: fixed; bottom: 20px; right: 20px;
+          background: ${type === 'success' ? 'var(--teal)' : '#ef4444'};
+          color: white; padding: 16px 24px; border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+          z-index: 10000; font-weight: 600;
+          transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
+        `;
+        toast.textContent = msg;
+        document.body.appendChild(toast);
+        
+        setTimeout(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; }, 100);
+        setTimeout(() => { toast.style.transform = 'translateY(100px)'; toast.style.opacity = '0'; }, 3000);
+        setTimeout(() => { toast.remove(); }, 3500);
+      }
     });
   </script>
 </body>

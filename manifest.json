@@ -1,0 +1,16 @@
+{
+  "name": "Healthiverse",
+  "short_name": "Healthiverse",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#4f46e5",
+  "description": "Votre guide santé de confiance.",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCIgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTE0IDNDMTQgMyA2IDguNSA2IDE1LjVDNiAxOS42NCA5LjM2IDIzIDEzLjUgMjNDMTQgMjMgMTQuNSAyMyAxNC41IDIzQzE4LjY0IDIzIDIyIDE5LjY0IDIyIDE1LjVDMjIgOC41IDE0IDMgMTQgM1oiIGZpbGw9IiM0ZjQ2ZTUiLz48cGF0aCBkPSJNMTQgOFYxOE05IDEzaDEwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
