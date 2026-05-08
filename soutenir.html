@@ -80,13 +80,15 @@
           <p>Utilisez votre compte PayPal pour un soutien en un clic.</p>
           <button class="btn-donate">Payer via PayPal</button>
         </div>
-        <!-- USDT OPTION -->
-        <div class="impact-card crypto-card featured">
-          <div class="impact-ico">₿</div>
-          <h3>Soutien Crypto</h3>
-          <div class="impact-price">USDT / BTC / ETH</div>
-          <p>Soutenez-nous de manière décentralisée (TRC-20, ERC-20, Native).</p>
-          <button class="btn-donate-solid" onclick="openPaymentFlow('USDT')">Démarrer la transaction</button>
+        <!-- USDT OPTION (BLOCKED) -->
+        <div class="impact-card crypto-card featured" style="background: #f8fafc; border-color: #cbd5e1;">
+          <div class="impact-ico" style="filter: grayscale(1);">₿</div>
+          <h3>Soutien Crypto <span style="font-size:0.65rem; background:#ef4444; color:white; padding:2px 8px; border-radius:12px; vertical-align:middle; margin-left:6px; letter-spacing: 0.5px;">SUSPENDU</span></h3>
+          <div class="impact-price" style="color: var(--txt2);">USDT / BTC / ETH</div>
+          <div style="background: #fee2e2; border-left: 3px solid #ef4444; padding: 10px; border-radius: 6px; margin: 12px 0;">
+            <p style="font-size: 0.8rem; color: #b91c1c; font-weight: 600; margin: 0;">⚠️ Paiements en cryptomonnaies temporairement désactivés pour des raisons réglementaires.</p>
+          </div>
+          <button class="btn-donate-solid" style="background: #94a3b8; cursor: not-allowed; width: 100%; border: none;" disabled>Bientôt disponible</button>
         </div>
       </div>
 
