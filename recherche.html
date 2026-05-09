@@ -306,17 +306,68 @@
 
       // Map initialization
       const map = L.map('resultsMap', { scrollWheelZoom: false }).setView([36.7538, 3.0588], 13);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png').addTo(map);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(map);
 
       const cityCoords = {
-        'alger': [36.7538, 3.0588], 'casablanca': [33.5731, -7.5898], 'tunis': [36.8065, 10.1815],
-        'istanbul': [41.0082, 28.9784], 'dubai': [25.2048, 55.2708]
+        'alger': [36.7538, 3.0588], 
+        'casablanca': [33.5731, -7.5898], 
+        'tunis': [36.8065, 10.1815],
+        'istanbul': [41.0082, 28.9784], 
+        'dubai': [25.2048, 55.2708],
+        'riyad': [24.7136, 46.6753],
+        'le caire': [30.0444, 31.2357],
+        'dakar': [14.7167, -17.4677]
       };
+
+      async function fetchMapResults(lat, lng) {
+        const radius = 5000; // 5km
+        const osmQuery = `
+          [out:json][timeout:10];
+          (
+            node["amenity"~"doctors|clinic|pharmacy|hospital"](around:${radius},${lat},${lng});
+            way["amenity"~"doctors|clinic|pharmacy|hospital"](around:${radius},${lat},${lng});
+          );
+          out body;
+          >;
+          out skel qt;
+        `;
+        const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(osmQuery);
+        
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          data.elements.forEach(el => {
+            if (el.lat && el.lon) {
+              const name = el.tags.name || el.tags.amenity || "Professionnel de santé";
+              const type = el.tags.amenity === 'pharmacy' ? '💊' : '🩺';
+              L.marker([el.lat, el.lon]).addTo(map)
+                .bindPopup(`<b>${type} ${name}</b><br>${el.tags['addr:full'] || 'Adresse disponible sur profil'}`);
+            }
+          });
+        } catch (error) {
+          console.error("Erreur Overpass:", error);
+        }
+      }
 
       const key = loc.toLowerCase();
       if (cityCoords[key]) {
-        map.setView(cityCoords[key], 13);
-        L.marker(cityCoords[key]).addTo(map).bindPopup(`<b>${loc}</b>`).openPopup();
+        const coords = cityCoords[key];
+        map.setView(coords, 14);
+        fetchMapResults(coords[0], coords[1]);
+      } else if (loc) {
+        // Simple search via OSM Nominatim if city not in our list
+        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(loc)}`)
+          .then(r => r.json())
+          .then(data => {
+            if (data.length > 0) {
+              const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+              map.setView(coords, 14);
+              fetchMapResults(coords[0], coords[1]);
+            }
+          });
       }
 
       document.getElementById('resSearchBtn').addEventListener('click', () => {
