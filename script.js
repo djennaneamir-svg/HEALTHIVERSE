@@ -8,33 +8,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === REGIONAL DATA & AUTO-DETECTION ===
   const regionalData = {
-    'DZ': { lang: 'ar', flag: '🇩🇿', label: 'Algérie', emergency: [
+    'DZ': { flag: '🇩🇿', label: 'Algérie', emergency: [
       { label: 'Protection Civile', num: '14' },
       { label: 'Police', num: '17' },
       { label: 'SAMU', num: '3016' }
     ]},
-    'MA': { lang: 'ar', flag: '🇲🇦', label: 'Maroc', emergency: [
+    'MA': { flag: '🇲🇦', label: 'Maroc', emergency: [
       { label: 'Ambulance', num: '150' },
-      { label: 'Police', num: '190' },
+      { label: 'Police', num: '19' },
       { label: 'Gendarmerie', num: '177' }
     ]},
-    'TN': { lang: 'ar', flag: '🇹🇳', label: 'Tunisie', emergency: [
+    'TN': { flag: '🇹🇳', label: 'Tunisie', emergency: [
       { label: 'SAMU', num: '190' },
       { label: 'Protection Civile', num: '198' },
       { label: 'Police', num: '197' }
     ]},
-    'TR': { lang: 'tr', flag: '🇹🇷', label: 'Turquie', emergency: [
+    'TR': { flag: '🇹🇷', label: 'Turquie', emergency: [
       { label: 'Urgences', num: '112' },
       { label: 'Police', num: '155' }
+    ]},
+    'EG': { flag: '🇪🇬', label: 'Égypte', emergency: [
+      { label: 'Ambulance', num: '123' },
+      { label: 'Police', num: '122' },
+      { label: 'Pompiers', num: '180' }
+    ]},
+    'SA': { flag: '🇸🇦', label: 'Arabie Saoudite', emergency: [
+      { label: 'Ambulance', num: '997' },
+      { label: 'Police', num: '999' },
+      { label: 'Pompiers', num: '998' }
+    ]},
+    'AE': { flag: '🇦🇪', label: 'Émirats Arabes Unis', emergency: [
+      { label: 'Ambulance', num: '998' },
+      { label: 'Police', num: '999' },
+      { label: 'Pompiers', num: '997' }
+    ]},
+    'QA': { flag: '🇶🇦', label: 'Qatar', emergency: [
+      { label: 'Urgences', num: '999' }
     ]}
   };
 
   function applyRegion(cc) {
     const data = regionalData[cc] || regionalData['DZ'];
+    
+    // Update Top Bar
     const topUrgences = document.getElementById('emergencyNumbers');
     if (topUrgences) {
       const nums = data.emergency.map(e => `<strong>${e.label}:</strong> <a href="tel:${e.num}" style="color:inherit;text-decoration:none">${e.num}</a>`).join(' | ');
       topUrgences.innerHTML = `🚨 Urgences (${data.flag}): ${nums}`;
+    }
+
+    // Update FAB Panel
+    const fabPanel = document.getElementById('fabPanel');
+    if (fabPanel) {
+      let html = `<h4>Numéros d'urgence (${data.label})</h4>`;
+      data.emergency.forEach(e => {
+        html += `
+          <a href="tel:${e.num}" class="fab-contact">
+            <span class="fab-c-ico samu">${e.num}</span>
+            <span>${e.label}</span>
+            <span class="fab-c-sub">Appel immédiat</span>
+          </a>`;
+      });
+      fabPanel.innerHTML = html;
     }
   }
 
@@ -42,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch('https://ipapi.co/json/');
       const json = await res.json();
-      if (regionalData[json.country_code]) applyRegion(json.country_code);
+      applyRegion(json.country_code);
     } catch(e) { applyRegion('DZ'); }
   }
   detectLocation();
