@@ -219,6 +219,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (mapContainer) {
     const mainMap = L.map('carte', { scrollWheelZoom: false }).setView([36.7538, 3.0588], 13);
     L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png').addTo(mainMap);
+    
+    // Correction de l'affichage (évite les zones grises)
+    setTimeout(() => {
+      mainMap.invalidateSize();
+    }, 400);
   }
 
   // === FADE IN ===
