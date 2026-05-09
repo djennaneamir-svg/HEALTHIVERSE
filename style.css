@@ -170,8 +170,7 @@ body.dark-mode .mini-select{background:var(--card);border-color:var(--brd);color
 .f-bottom{padding:24px 0;border-top:1px solid var(--brd);display:flex;justify-content:space-between;font-size:.8rem;color:var(--txt2)}
 
 /* ANIMATIONS */
-.reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1); }
-.reveal.active { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 1; transform: none; } /* Disabled reveal because it caused visibility issues */
 
 .stagger-item { opacity: 0; transform: translateY(20px); }
 .active .stagger-item { animation: fadeInUp 0.5s forwards; }

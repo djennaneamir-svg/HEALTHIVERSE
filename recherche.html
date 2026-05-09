@@ -283,7 +283,8 @@
       const list = document.getElementById('resultsList');
       doctors.forEach((d, i) => {
         const item = document.createElement('div');
-        item.className = 'result-item reveal';
+        item.className = 'result-item fade-in';
+        item.style.transitionDelay = `${i * 100}ms`;
         item.innerHTML = `
           <div class="res-av-circle">${d.initials}</div>
           <div style="flex:1;">
@@ -375,6 +376,9 @@
         const l = document.getElementById('resSearchLoc').value;
         window.location.href = `recherche.html?spec=${encodeURIComponent(s)}&loc=${encodeURIComponent(l)}`;
       });
+      
+      // Trigger animations for the new items
+      if (typeof observeFadeIns === 'function') observeFadeIns();
     });
   </script>
 </body>

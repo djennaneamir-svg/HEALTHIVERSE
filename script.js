@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.fade-in:not(.visible)').forEach(el => obs.observe(el));
   }
   observeFadeIns();
+  window.observeFadeIns = observeFadeIns;
 
   // === COUNTERS ===
   const counterObs = new IntersectionObserver((entries) => {
