@@ -298,17 +298,21 @@ document.addEventListener('DOMContentLoaded', () => {
     card.className = 'spec-item fade-in';
     card.style.transitionDelay = `${i * 80}ms`;
     card.innerHTML = `<div class="sc-emoji">${s.emoji}</div><h3>${s.name}</h3><p>${s.desc}</p>`;
-    specGrid.appendChild(card);
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', () => {
+      window.location.href = `recherche.html?spec=${encodeURIComponent(s.name)}&loc=`;
+    });
+    if (specGrid) specGrid.appendChild(card);
   });
 
   // === DOCTORS ===
   const doctors = [
-    { name: 'Dr. Sarah Martin', spec: 'Cardiologue', city: 'Paris 8e', rating: 4.9, reviews: 312, filter: 'cardiologue', color: 'teal', initials: 'SM' },
-    { name: 'Dr. Thomas Petit', spec: 'Médecin généraliste', city: 'Lyon 3e', rating: 4.8, reviews: 245, filter: 'generaliste', color: 'emerald', initials: 'TP' },
-    { name: 'Dr. Claire Dubois', spec: 'Dermatologue', city: 'Marseille', rating: 4.9, reviews: 189, filter: 'dermatologue', color: 'indigo', initials: 'CD' },
-    { name: 'Dr. Marc Laurent', spec: 'Pédiatre', city: 'Bordeaux', rating: 4.7, reviews: 276, filter: 'pediatre', color: 'teal', initials: 'ML' },
-    { name: 'Dr. Sophie Bernard', spec: 'Psychiatre', city: 'Toulouse', rating: 4.8, reviews: 198, filter: 'psychiatre', color: 'indigo', initials: 'SB' },
-    { name: 'Dr. Lucas Moreau', spec: 'Cardiologue', city: 'Nantes', rating: 4.9, reviews: 321, filter: 'cardiologue', color: 'emerald', initials: 'LM' },
+    { name: 'Dr. Sarah Martin', spec: 'Cardiologue', city: 'Alger', rating: 4.9, reviews: 312, filter: 'cardiologue', color: 'teal', initials: 'SM' },
+    { name: 'Dr. Thomas Petit', spec: 'Médecin généraliste', city: 'Casablanca', rating: 4.8, reviews: 245, filter: 'generaliste', color: 'emerald', initials: 'TP' },
+    { name: 'Dr. Claire Dubois', spec: 'Dermatologue', city: 'Tunis', rating: 4.9, reviews: 189, filter: 'dermatologue', color: 'indigo', initials: 'CD' },
+    { name: 'Dr. Marc Laurent', spec: 'Pédiatre', city: 'Dakar', rating: 4.7, reviews: 276, filter: 'pediatre', color: 'teal', initials: 'ML' },
+    { name: 'Dr. Sophie Bernard', spec: 'Psychiatre', city: 'Dubaï', rating: 4.8, reviews: 198, filter: 'psychiatre', color: 'indigo', initials: 'SB' },
+    { name: 'Dr. Lucas Moreau', spec: 'Cardiologue', city: 'Istanbul', rating: 4.9, reviews: 321, filter: 'cardiologue', color: 'emerald', initials: 'LM' },
   ];
   const doctorsGrid = document.getElementById('doctorsGrid');
   function renderDoctors(filter) {
