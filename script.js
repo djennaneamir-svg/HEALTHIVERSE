@@ -150,46 +150,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === REGIONAL DATA & AUTO-DETECTION ===
   const regionalData = {
-    'FR': { lang: 'fr', flag: '🇫🇷', label: 'Français', emergency: [
-      { label: 'SAMU', num: '15', sub: 'Urgences médicales', ico: 'samu' },
-      { label: 'Pompiers', num: '18', sub: 'Secours & incendies', ico: 'pomp' },
-      { label: 'Police', num: '17', sub: 'Sécurité publique', ico: 'poli' },
-      { label: 'SOS Médecins', num: '3624', sub: 'Garde 24/7', ico: 'med' }
+    'DZ': { lang: 'ar', flag: '🇩🇿', label: 'Algérie', emergency: [
+      { label: 'Protection Civile', num: '14' },
+      { label: 'Police', num: '17' },
+      { label: 'SAMU', num: '3016' }
     ]},
-    'MA': { lang: 'ar', flag: '🇲🇦', label: 'العربية', emergency: [
-      { label: 'Ambulance', num: '150', sub: 'Protection Civile', ico: 'samu' },
-      { label: 'Police', num: '190', sub: 'Sûreté Nationale', ico: 'poli' },
-      { label: 'Gendarmerie', num: '177', sub: 'Gendarmerie Royale', ico: 'pomp' },
-      { label: 'SOS Médecins', num: '0522989898', sub: 'Urgences Casablanca', ico: 'med' }
+    'MA': { lang: 'ar', flag: '🇲🇦', label: 'Maroc', emergency: [
+      { label: 'Ambulance', num: '150' },
+      { label: 'Police', num: '190' },
+      { label: 'Gendarmerie', num: '177' }
     ]},
-    'US': { lang: 'en', flag: '🇺🇸', label: 'English', emergency: [
-      { label: 'Emergency', num: '911', sub: 'Police, Fire, Medical', ico: 'samu' },
-      { label: 'Poison Control', num: '18002221222', sub: 'Poisoning emergency', ico: 'tox' }
+    'TN': { lang: 'ar', flag: '🇹🇳', label: 'Tunisie', emergency: [
+      { label: 'SAMU', num: '190' },
+      { label: 'Protection Civile', num: '198' },
+      { label: 'Police', num: '197' }
     ]},
-    'ES': { lang: 'es', flag: '🇪🇸', label: 'Español', emergency: [
-      { label: 'Emergencias', num: '112', sub: 'General', ico: 'samu' },
-      { label: 'Policía', num: '091', sub: 'Nacional', ico: 'poli' },
-      { label: 'Ambulancia', num: '061', sub: 'Urgencias', ico: 'med' }
+    'TR': { lang: 'tr', flag: '🇹🇷', label: 'Turquie', emergency: [
+      { label: 'Urgences', num: '112' },
+      { label: 'Police', num: '155' }
+    ]},
+    'FR': { lang: 'fr', flag: '🇫🇷', label: 'France', emergency: [
+      { label: 'SAMU', num: '15' },
+      { label: 'Pompiers', num: '18' }
     ]}
   };
 
   function applyRegion(cc) {
     const data = regionalData[cc] || regionalData['FR'];
-    // Update Lang UI
-    langBtn.innerHTML = `🌍 ${data.flag} ${data.label} ▾`;
+    
     console.log(`Region applied: ${cc}, Default Lang: ${data.lang}`);
     
-    // Update Emergency FAB Panel
-    const fabPanel = document.getElementById('fabPanel');
-    if (fabPanel) {
-      const contactsHtml = data.emergency.map(e => `
-        <a href="tel:${e.num}" class="fab-contact">
-          <span class="fab-c-ico ${e.ico}">${e.num}</span>
-          <span>${e.label}</span>
-          <span class="fab-c-sub">${e.sub}</span>
-        </a>
-      `).join('');
-      fabPanel.innerHTML = `<h4>Contacts ${data.name || cc}</h4>` + contactsHtml;
+    // Update Emergency Top Bar Panel
+    const topUrgences = document.getElementById('emergencyNumbers');
+    if (topUrgences) {
+      const nums = data.emergency.map(e => `<strong>${e.label}:</strong> <a href="tel:${e.num}" style="color:inherit;text-decoration:none">${e.num}</a>`).join(' | ');
+      topUrgences.innerHTML = `🚨 Urgences (${data.flag}): ${nums}`;
     }
   }
 
@@ -553,8 +548,9 @@ document.addEventListener('DOMContentLoaded', () => {
               let found = false;
               for (let key in cityCoords) {
                 if (city.includes(key)) {
-                  mainMap.setView(cityCoords[key], 13);
-                  L.marker(cityCoords[key]).addTo(mainMap).bindPopup(`Recherche pour <strong>${spec || 'Santé'}</strong> à <strong>${loc}</strong>`).openPopup();
+                  const coords = cityCoords[key];
+                  mainMap.setView(coords, 14);
+                  fetchRealMapData(coords[0], coords[1]);
                   found = true;
                   break;
                 }
@@ -575,5 +571,75 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 800);
       }
     }
+  }
+
+  // === FETCH REAL MAP DATA (OVERPASS API) ===
+  async function fetchRealMapData(lat, lng) {
+    if(!mainMap) return;
+    
+    // Clear old demo markers
+    mainMap.eachLayer((layer) => {
+      if(layer instanceof L.Marker) {
+        mainMap.removeLayer(layer);
+      }
+    });
+
+    // We search for pharmacies and clinics in a 5km radius
+    const radius = 5000;
+    const query = `
+      [out:json][timeout:10];
+      (
+        node["amenity"="pharmacy"](around:${radius},${lat},${lng});
+        node["amenity"="clinic"](around:${radius},${lat},${lng});
+        node["amenity"="hospital"](around:${radius},${lat},${lng});
+        node["amenity"="doctors"](around:${radius},${lat},${lng});
+      );
+      out body 20;
+    `;
+    
+    try {
+      const response = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        body: query
+      });
+      const data = await response.json();
+      
+      let count = 0;
+      data.elements.forEach(element => {
+        if(element.lat && element.lon) {
+          const type = element.tags.amenity === 'pharmacy' ? 'Pharmacie' : 'Centre Médical';
+          const name = element.tags.name || `${type} à proximité`;
+          const marker = L.marker([element.lat, element.lon]).addTo(mainMap);
+          marker.bindPopup(`<strong>${type}</strong><br>${name}<br><a href="#" style="color:var(--teal);font-weight:bold;margin-top:8px;display:inline-block">Prendre RDV</a>`);
+          count++;
+        }
+      });
+
+      if(count > 0) {
+        showToast(`✔ ${count} professionnels de santé trouvés dans cette zone.`, 'success');
+      } else {
+        showToast(`Aucun professionnel répertorié dans ce rayon.`, 'error');
+      }
+    } catch(err) {
+      console.log('Erreur Overpass API:', err);
+    }
+  }
+
+  function showToast(msg, type) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed; bottom: 20px; right: 20px;
+      background: ${type === 'success' ? 'var(--teal)' : '#ef4444'};
+      color: white; padding: 16px 24px; border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      z-index: 10000; font-weight: 600;
+      transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
+    `;
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; }, 100);
+    setTimeout(() => { toast.style.transform = 'translateY(100px)'; toast.style.opacity = '0'; }, 3000);
+    setTimeout(() => { toast.remove(); }, 3500);
   }
 });
