@@ -530,12 +530,21 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (mainMap && loc) {
               const cityCoords = {
-                'paris': [48.8566, 2.3522],
-                'lyon': [45.7640, 4.8357],
-                'marseille': [43.2965, 5.3698],
-                'bordeaux': [44.8378, -0.5792],
                 'alger': [36.7538, 3.0588],
-                'casablanca': [33.5731, -7.5898]
+                'oran': [35.6987, -0.6308],
+                'constantine': [36.3650, 6.6147],
+                'casablanca': [33.5731, -7.5898],
+                'rabat': [34.0209, -6.8416],
+                'tunis': [36.8065, 10.1815],
+                'dakar': [14.7167, -17.4677],
+                'abidjan': [5.3600, -4.0083],
+                'caire': [30.0444, 31.2357],
+                'dubai': [25.2048, 55.2708],
+                'riyad': [24.7136, 46.6753],
+                'doha': [25.2854, 51.5310],
+                'istanbul': [41.0082, 28.9784],
+                'ankara': [39.9334, 32.8597],
+                'izmir': [38.4237, 27.1428]
               };
               
               const city = loc.toLowerCase();
