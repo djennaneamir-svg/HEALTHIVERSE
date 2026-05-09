@@ -47,19 +47,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function translatePage(lang) {
     const translations = {
-      'fr': { 'nav-spec': 'Spécialités', 'nav-contact': 'Contact', 'hero-title': 'Votre santé, sans frontières' },
-      'en': { 'nav-spec': 'Specialties', 'nav-contact': 'Contact', 'hero-title': 'Your health, without borders' },
-      'ar': { 'nav-spec': 'التخصصات', 'nav-contact': 'اتصل بنا', 'hero-title': 'صحتك، بلا حدود' },
-      'tr': { 'nav-spec': 'Uzmanlıklar', 'nav-contact': 'İletişim', 'hero-title': 'Sağlığınız, sınır tanımadan' }
+      'fr': {
+        'nav-spec': 'Spécialités', 'nav-contact': 'Contact', 'hero-title': 'Votre santé, sans frontières',
+        'hero-sub': 'Le premier réseau médical certifié en Afrique, au Moyen-Orient et en Turquie. Prenez rendez-vous en ligne 24h/24.',
+        'search-med': 'Médecin', 'search-clin': 'Clinique', 'search-phar': 'Pharmacie', 'search-btn': 'Rechercher',
+        'search-spec-p': 'Spécialité, médecin, symptôme…', 'search-loc-p': 'Ville ou Pays…',
+        'spec-h2': 'Toutes les spécialités médicales', 'spec-p': 'Trouvez rapidement le bon spécialiste pour chaque besoin de santé',
+        'doc-h2': 'Médecins & Spécialistes', 'doc-p': 'Sélectionnés pour leur expertise et leurs excellents avis patients',
+        'aux-h2': 'Services Auxiliaires & Opérateurs', 'aux-p': 'Une prise en charge complète, au-delà de la simple consultation',
+        'map-h2': 'Trouver un professionnel autour de vous', 'map-p': 'Visualisez les cabinets médicaux et pharmacies de garde ouverts actuellement à proximité.',
+        'how-h2': 'Comment ça marche ?', 'how-p': "Prendre soin de votre santé n'a jamais été aussi simple",
+        'stats-h-pro': 'Professionnels de santé', 'stats-h-avis': 'Avis patients vérifiés', 'stats-h-rdv': 'Rendez-vous pris', 'stats-h-sat': 'Taux de satisfaction',
+        'footer-desc': 'Votre guide santé de confiance. Trouvez les meilleurs professionnels de santé près de chez vous.'
+      },
+      'en': {
+        'nav-spec': 'Specialties', 'nav-contact': 'Contact', 'hero-title': 'Your health, without borders',
+        'hero-sub': 'The leading certified medical network in Africa, the Middle East, and Turkey. Book appointments online 24/7.',
+        'search-med': 'Doctor', 'search-clin': 'Clinic', 'search-phar': 'Pharmacy', 'search-btn': 'Search',
+        'search-spec-p': 'Specialty, doctor, symptom…', 'search-loc-p': 'City or Country…',
+        'spec-h2': 'All Medical Specialties', 'spec-p': 'Quickly find the right specialist for every health need',
+        'doc-h2': 'Doctors & Specialists', 'doc-p': 'Selected for their expertise and excellent patient reviews',
+        'aux-h2': 'Auxiliary Services & Operators', 'aux-p': 'Comprehensive care, beyond simple consultation',
+        'map-h2': 'Find a professional near you', 'map-p': 'Visualize medical offices and on-call pharmacies currently open nearby.',
+        'how-h2': 'How it works?', 'how-p': 'Taking care of your health has never been easier',
+        'stats-h-pro': 'Health Professionals', 'stats-h-avis': 'Verified Patient Reviews', 'stats-h-rdv': 'Appointments Booked', 'stats-h-sat': 'Satisfaction Rate',
+        'footer-desc': 'Your trusted health guide. Find the best health professionals near you.'
+      },
+      'ar': {
+        'nav-spec': 'التخصصات', 'nav-contact': 'اتصل بنا', 'hero-title': 'صحتك، بلا حدود',
+        'hero-sub': 'أول شبكة طبية معتمدة في أفريقيا والشرق الأوسط وتركيا. احجز موعدك عبر الإنترنت على مدار الساعة.',
+        'search-med': 'طبيب', 'search-clin': 'عيادة', 'search-phar': 'صيدلية', 'search-btn': 'بحث',
+        'search-spec-p': 'تخصص، طبيب، أعراض...', 'search-loc-p': 'مدينة أو بلد...',
+        'spec-h2': 'جميع التخصصات الطبية', 'spec-p': 'ابحث بسرعة عن المتخصص المناسب لكل احتياجاتك الصحية',
+        'doc-h2': 'الأطباء والمتخصصون', 'doc-p': 'تم اختيارهم لخبرتهم وآراء المرضى الممتازة',
+        'aux-h2': 'الخدمات المساعدة والمشغلون', 'aux-p': 'رعاية شاملة تتجاوز مجرد الاستشارة',
+        'map-h2': 'ابحث عن محترف بالقرب منك', 'map-p': 'شاهد العيادات الطبية والصيدليات المناوبة المفتوحة حاليًا بالقرب منك.',
+        'how-h2': 'كيف يعمل؟', 'how-p': 'الاعتناء بصحتك لم يكن أسهل من أي وقت مضى',
+        'stats-h-pro': 'متخصصو الصحة', 'stats-h-avis': 'آراء المرضى الموثقة', 'stats-h-rdv': 'المواعيد المحجوزة', 'stats-h-sat': 'معدل الرضا',
+        'footer-desc': 'دليلك الصحي الموثوق. ابحث عن أفضل المتخصصين الصحيين بالقرب منك.'
+      },
+      'tr': {
+        'nav-spec': 'Uzmanlıklar', 'nav-contact': 'İletişim', 'hero-title': 'Sağlığınız, sınır tanımadan',
+        'hero-sub': 'Afrika, Orta Doğu ve Türkiye\'deki ilk sertifikalı tıbbi ağ. 7/24 online randevu alın.',
+        'search-med': 'Doktor', 'search-clin': 'Klinik', 'search-phar': 'Eczane', 'search-btn': 'Ara',
+        'search-spec-p': 'Uzmanlık, doktor, semptom…', 'search-loc-p': 'Şehir veya Ülke…',
+        'spec-h2': 'Tüm Tıbbi Uzmanlıklar', 'spec-p': 'Her sağlık ihtiyacı için doğru uzmanı hızlıca bulun',
+        'doc-h2': 'Doktorlar ve Uzmanlar', 'doc-p': 'Uzmanlıkları ve mükemmel hasta yorumları için seçildi',
+        'aux-h2': 'Yardımcı Hizmetler ve Operatörler', 'aux-p': 'Basit konsültasyonun ötesinde kapsamlı bakım',
+        'map-h2': 'Yakınınızda bir profesyonel bulun', 'map-p': 'Yakınınızdaki açık tıbbi ofisleri ve nöbetçi eczaneleri görüntüleyin.',
+        'how-h2': 'Nasıl çalışır?', 'how-p': 'Sağlığınıza dikkat etmek hiç bu kadar kolay olmamıştı',
+        'stats-h-pro': 'Sağlık Profesyonelleri', 'stats-h-avis': 'Doğrulanmış Hasta Yorumları', 'stats-h-rdv': 'Alınan Randevular', 'stats-h-sat': 'Memnuniyet Oranı',
+        'footer-desc': 'Güvenilir sağlık rehberiniz. Yakınınızdaki en iyi sağlık profesyonellerini bulun.'
+      }
     };
     
     if (!translations[lang]) return;
 
+    // RTL handling
+    document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+
     // Apply translations to elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
-      if (translations[lang][key]) el.textContent = translations[lang][key];
+      if (translations[lang][key]) {
+        if (el.tagName === 'INPUT' && el.placeholder) {
+          // Special case for placeholders if needed
+        } else {
+          el.textContent = translations[lang][key];
+        }
+      }
     });
+
+    if (specInput && translations[lang]['search-spec-p']) specInput.placeholder = translations[lang]['search-spec-p'];
+    if (locInput && translations[lang]['search-loc-p']) locInput.placeholder = translations[lang]['search-loc-p'];
+
+    // Update dynamic grids
+    renderSpecialties(lang);
+    renderDoctors('all', lang);
   }
 
   // Initial load
@@ -210,19 +275,56 @@ document.addEventListener('DOMContentLoaded', () => {
   setupAutocomplete('searchLoc', 'autoDropdownLoc', allCities);
 
   // === SPECIALITES GRID ===
-  const specs = [
-    { emoji: '🫀', name: 'Cardiologie', desc: 'Cœur et vaisseaux' },
-    { emoji: '🧠', name: 'Neurologie', desc: 'Cerveau et nerfs' },
-    { emoji: '🦴', name: 'Orthopédie', desc: 'Os et articulations' },
-    { emoji: '👁️', name: 'Ophtalmologie', desc: 'Yeux et vision' },
-    { emoji: '🩺', name: 'Médecine générale', desc: 'Soins courants' },
-    { emoji: '🦷', name: 'Dentaire', desc: 'Dents et gencives' },
-    { emoji: '👶', name: 'Pédiatrie', desc: 'Enfants et nourrissons' },
-    { emoji: '🧬', name: 'Dermatologie', desc: 'Peau et allergies' },
-  ];
-  const specGrid = document.getElementById('specGrid');
-  if (specGrid) {
-    specs.forEach((s, i) => {
+  function renderSpecialties(lang = 'fr') {
+    const specGrid = document.getElementById('specGrid');
+    if (!specGrid) return;
+    specGrid.innerHTML = '';
+    
+    const specsDict = {
+      'fr': [
+        { emoji: '🫀', name: 'Cardiologie', desc: 'Cœur et vaisseaux' },
+        { emoji: '🧠', name: 'Neurologie', desc: 'Cerveau et nerfs' },
+        { emoji: '🦴', name: 'Orthopédie', desc: 'Os et articulations' },
+        { emoji: '👁️', name: 'Ophtalmologie', desc: 'Yeux et vision' },
+        { emoji: '🩺', name: 'Médecine générale', desc: 'Soins courants' },
+        { emoji: '🦷', name: 'Dentaire', desc: 'Dents et gencives' },
+        { emoji: '👶', name: 'Pédiatrie', desc: 'Enfants et nourrissons' },
+        { emoji: '🧬', name: 'Dermatologie', desc: 'Peau et allergies' }
+      ],
+      'en': [
+        { emoji: '🫀', name: 'Cardiology', desc: 'Heart and vessels' },
+        { emoji: '🧠', name: 'Neurology', desc: 'Brain and nerves' },
+        { emoji: '🦴', name: 'Orthopedics', desc: 'Bones and joints' },
+        { emoji: '👁️', name: 'Ophthalmology', desc: 'Eyes and vision' },
+        { emoji: '🩺', name: 'General Medicine', desc: 'Routine care' },
+        { emoji: '🦷', name: 'Dental', desc: 'Teeth and gums' },
+        { emoji: '👶', name: 'Pediatrics', desc: 'Children and infants' },
+        { emoji: '🧬', name: 'Dermatology', desc: 'Skin and allergies' }
+      ],
+      'ar': [
+        { emoji: '🫀', name: 'أمراض القلب', desc: 'القلب والأوعية الدموية' },
+        { emoji: '🧠', name: 'أعصاب', desc: 'الدماغ والأعصاب' },
+        { emoji: '🦴', name: 'جراحة العظام', desc: 'العظام والمفاصل' },
+        { emoji: '👁️', name: 'طب العيون', desc: 'العيون والرؤية' },
+        { emoji: '🩺', name: 'الطب العام', desc: 'الرعاية الروتينية' },
+        { emoji: '🦷', name: 'طب الأسنان', desc: 'الأسنان واللثة' },
+        { emoji: '👶', name: 'طب الأطفال', desc: 'الأطفال والرضع' },
+        { emoji: '🧬', name: 'طب الجلد', desc: 'الجلد والحساسية' }
+      ],
+      'tr': [
+        { emoji: '🫀', name: 'Kardiyoloji', desc: 'Kalp ve damarlar' },
+        { emoji: '🧠', name: 'Nöroloji', desc: 'Beyin ve sinirler' },
+        { emoji: '🦴', name: 'Ortopedi', desc: 'Kemikler ve eklemler' },
+        { emoji: '👁️', name: 'Göz Hastalıkları', desc: 'Gözler ve görme' },
+        { emoji: '🩺', name: 'Genel Tıp', desc: 'Rutin bakım' },
+        { emoji: '🦷', name: 'Diş Hekimliği', desc: 'Dişler ve diş etleri' },
+        { emoji: '👶', name: 'Pediatri', desc: 'Çocuklar ve bebekler' },
+        { emoji: '🧬', name: 'Dermatoloji', desc: 'Cilt ve alerjiler' }
+      ]
+    };
+
+    const currentSpecs = specsDict[lang] || specsDict['fr'];
+    currentSpecs.forEach((s, i) => {
       const card = document.createElement('div');
       card.className = 'spec-item fade-in';
       card.style.transitionDelay = `${i * 80}ms`;
@@ -233,6 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       specGrid.appendChild(card);
     });
+    observeFadeIns();
   }
 
   // === DOCTORS GRID ===
@@ -244,10 +347,12 @@ document.addEventListener('DOMContentLoaded', () => {
     { name: 'Dr. Sophie Bernard', spec: 'Psychiatre', city: 'Dubaï', rating: 4.8, reviews: 198, filter: 'psychiatre', color: 'indigo', initials: 'SB' },
     { name: 'Dr. Lucas Moreau', spec: 'Cardiologue', city: 'Istanbul', rating: 4.9, reviews: 321, filter: 'cardiologue', color: 'emerald', initials: 'LM' },
   ];
+  
   const doctorsGrid = document.getElementById('doctorsGrid');
-  function renderDoctors(filter) {
+  function renderDoctors(filter, lang = 'fr') {
     if (!doctorsGrid) return;
     doctorsGrid.innerHTML = '';
+    const btnText = { 'fr': 'Prendre rendez-vous', 'en': 'Book appointment', 'ar': 'حجز موعد', 'tr': 'Randevu al' };
     const list = filter === 'all' ? doctors : doctors.filter(d => d.filter === filter);
     list.forEach((d, i) => {
       const card = document.createElement('div');
@@ -259,12 +364,13 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="doc-name">${d.name}</div>
           <div class="doc-spec">${d.spec} · ${d.city}</div>
           <div class="doc-meta"><span class="doc-stars">★ ${d.rating}</span><span>${d.reviews} avis</span></div>
-          <a href="profil.html" class="doc-btn">Prendre rendez-vous</a>
+          <a href="profil.html" class="doc-btn">${btnText[lang] || btnText['fr']}</a>
         </div>`;
       doctorsGrid.appendChild(card);
     });
     observeFadeIns();
   }
+  renderSpecialties();
   renderDoctors('all');
 
   // === TESTIMONIALS ===
