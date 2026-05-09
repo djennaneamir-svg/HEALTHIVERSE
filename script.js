@@ -1,152 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
-
-  // === SCROLL PROGRESS BAR ===
-  const progressBar = document.createElement('div');
-  progressBar.className = 'scroll-progress';
-  document.body.appendChild(progressBar);
-
-  window.addEventListener('scroll', () => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
-    progressBar.style.width = scrolled + "%";
-  });
-
-  // === REVEAL ON SCROLL ===
-  const revealElements = document.querySelectorAll('.reveal');
-  const observerOptions = { threshold: 0.15 };
-
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('active');
-        const staggered = entry.target.querySelectorAll('.stagger-item');
-        staggered.forEach((item, index) => {
-          item.style.animationDelay = `${index * 0.1}s`;
-        });
-      }
-    });
-  }, observerOptions);
-
-  revealElements.forEach(el => revealObserver.observe(el));
-
   // === NAVBAR SCROLL ===
   const navbar = document.getElementById('navbar');
-  const scrollTop = document.getElementById('scrollTop');
   window.addEventListener('scroll', () => {
-    navbar.classList.toggle('scrolled', window.scrollY > 50);
-    scrollTop.classList.toggle('visible', window.scrollY > 500);
+    if (window.scrollY > 50) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
   });
-  scrollTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-  // === DARK MODE TOGGLE ===
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const body = document.body;
-  const isDark = localStorage.getItem('dark-mode') === 'true';
-  
-  if (isDark) {
-    body.classList.add('dark-mode');
-    darkModeToggle.textContent = '☀️';
-  }
-
-  darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    const enabled = body.classList.contains('dark-mode');
-    localStorage.setItem('dark-mode', enabled);
-    darkModeToggle.textContent = enabled ? '☀️' : '🌙';
-  });
-
-  // === GLOBAL DISCLAIMER (BETA PHASE) ===
-  document.addEventListener('click', (e) => {
-    const link = e.target.closest('a');
-    if (link && link.getAttribute('href') === '#') {
-      e.preventDefault();
-      showBetaModal();
-    }
-  });
-
-  function showBetaModal() {
-    const modal = document.createElement('div');
-    modal.className = 'beta-modal-overlay';
-    modal.innerHTML = `
-      <div class="beta-modal">
-        <div class="beta-ico">🚀</div>
-        <h2>Fonctionnalité en cours de déploiement</h2>
-        <p>Healthiverse est actuellement en <strong>Phase Bêta (v0.9)</strong>. Nos ingénieurs travaillent activement sur ce module qui sera disponible dans quelques jours.</p>
-        <button class="btn-close-modal">D'accord, j'ai compris</button>
-      </div>
-    `;
-    document.body.appendChild(modal);
-    setTimeout(() => modal.classList.add('show'), 10);
-
-    modal.querySelector('.btn-close-modal').addEventListener('click', () => {
-      modal.classList.remove('show');
-      setTimeout(() => modal.remove(), 300);
-    });
-  }
-
-  // === SUGGEST DOMAIN LOGIC ===
-  const suggestForm = document.getElementById('suggestForm');
-  if (suggestForm) {
-    suggestForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const domain = document.getElementById('suggestInput').value;
-      alert(`Merci ! Votre proposition pour le domaine "${domain}" a été envoyée à l'administration de Healthiverse. Nous l'étudierons sous 48h.`);
-      suggestForm.reset();
-    });
-  }
-
-  // === HAMBURGER ===
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  
-  if (hamburger) {
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('active');
-      hamburger.classList.toggle('active');
-    });
-  }
-
-  // === INTERACTIVE MAP (Leaflet) ===
-  let mainMap; // Move to scope accessible by search
-  const mapElement = document.getElementById('mainMap');
-  if (mapElement) {
-    // Initialize Map with a premium tile layer (CartoDB Voyager)
-    mainMap = L.map('mainMap').setView([36.7538, 3.0588], 5);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20
-    }).addTo(mainMap);
-
-    // Points de démonstration (Médecins & Pharmacies)
-    const demoLocations = [
-      { lat: 48.8584, lng: 2.3488, type: 'Médecin', name: 'Dr. Martin - Généraliste' },
-      { lat: 48.8610, lng: 2.3350, type: 'Pharmacie', name: 'Pharmacie du Louvre (24h/7j)' },
-      { lat: 48.8530, lng: 2.3680, type: 'Médecin', name: 'Dr. Sarah - Pédiatre' },
-      { lat: 48.8650, lng: 2.3550, type: 'Clinique', name: 'Centre Médical Central' }
-    ];
-
-    demoLocations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lng]).addTo(mainMap);
-      marker.bindPopup(`<strong>${loc.type}</strong><br>${loc.name}<br><a href="#" style="color:var(--teal)">Prendre RDV</a>`);
-    });
-
-    // Tentative de géolocalisation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        const { latitude, longitude } = pos.coords;
-        mainMap.setView([latitude, longitude], 14);
-        L.marker([latitude, longitude], { icon: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', iconSize: [30, 30] }) })
-          .addTo(mainMap)
-          .bindPopup("<b>Vous êtes ici</b>")
-          .openPopup();
-      });
-    }
-  }
-  // === LANG SELECTOR ===
-  const langBtn = document.getElementById('langBtn');
-  const langDropdown = document.getElementById('langDropdown');
 
   // === REGIONAL DATA & AUTO-DETECTION ===
   const regionalData = {
@@ -168,19 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     'TR': { lang: 'tr', flag: '🇹🇷', label: 'Turquie', emergency: [
       { label: 'Urgences', num: '112' },
       { label: 'Police', num: '155' }
-    ]},
-    'FR': { lang: 'fr', flag: '🇫🇷', label: 'France', emergency: [
-      { label: 'SAMU', num: '15' },
-      { label: 'Pompiers', num: '18' }
     ]}
   };
 
   function applyRegion(cc) {
     const data = regionalData[cc] || regionalData['DZ'];
-    
-    console.log(`Region applied: ${cc}, Default Lang: ${data.lang}`);
-    
-    // Update Emergency Top Bar Panel
     const topUrgences = document.getElementById('emergencyNumbers');
     if (topUrgences) {
       const nums = data.emergency.map(e => `<strong>${e.label}:</strong> <a href="tel:${e.num}" style="color:inherit;text-decoration:none">${e.num}</a>`).join(' | ');
@@ -197,91 +47,45 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   detectLocation();
 
-  langBtn.addEventListener('click', (e) => {
-
-    e.stopPropagation();
-    langDropdown.classList.toggle('show');
-  });
-  document.querySelectorAll('.lang-opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      document.querySelectorAll('.lang-opt').forEach(o => o.classList.remove('active'));
-      opt.classList.add('active');
-      langBtn.innerHTML = `🌍 ${opt.textContent.split(' ')[1]} ▾`;
-      langDropdown.classList.remove('show');
-      // Here you would normally trigger a translation function
-      console.log(`Language changed to: ${opt.dataset.lang}`);
-    });
-  });
-  document.addEventListener('click', () => langDropdown.classList.remove('show'));
-
-
-  // === SEARCH TABS ===
-  document.querySelectorAll('.stab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.stab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
-
-  // === SUGGESTION TAGS ===
-  document.querySelectorAll('.stag').forEach(tag => {
-    tag.addEventListener('click', () => {
-      document.getElementById('searchSpec').value = tag.textContent;
-      autoDropdown.style.display = 'none';
-    });
-  });
-
-  // === SEARCH AUTOCOMPLETE (ALL SPECIALTIES) ===
+  // === SEARCH AUTOCOMPLETE ===
   const allSpecialties = [
     "Acupuncteur", "Addictologue", "Allergologue", "Anesthésiste", "Angiologue", "Cardiologue", "Chirurgien-dentiste",
-    "Chirurgien infantile", "Chirurgien maxillo-facial", "Chirurgien orthopédiste", "Chirurgien plastique", "Chirurgien urologue",
-    "Chirurgien viscéral", "Dermatologue", "Diététicien", "Endocrinologue", "Gastro-entérologue", "Gériatre", "Gynécologue",
-    "Hématologue", "Homéopathe", "Infirmier", "Masseur-kinésithérapeute", "Médecin généraliste", "Médecin du sport",
-    "Médecin du travail", "Néphrologue", "Neurochirurgien", "Neurologue", "Nutritionniste", "Ophtalmologue", "ORL",
-    "Ostéopathe", "Pédiatre", "Pédicure-podologue", "Pneumologue", "Psychiatre", "Psychologue", "Radiologue",
-    "Rhumatologue", "Sage-femme", "Stomatologue", "Urologue"
-  ].sort((a, b) => a.localeCompare(b)); // Alphabetical sort
+    "Dermatologue", "Diététicien", "Endocrinologue", "Gastro-entérologue", "Gériatre", "Gynécologue",
+    "Infirmier", "Médecin généraliste", "Neurologue", "Nutritionniste", "Ophtalmologue", "ORL",
+    "Ostéopathe", "Pédiatre", "Psychiatre", "Psychologue", "Radiologue", "Rhumatologue", "Sage-femme"
+  ].sort((a, b) => a.localeCompare(b));
 
   const searchInput = document.getElementById('searchSpec');
   const autoDropdown = document.getElementById('autoDropdown');
 
-  function showList(filter = '') {
-    const val = filter.toLowerCase();
-    autoDropdown.innerHTML = '';
-    
-    const filtered = allSpecialties.filter(s => s.toLowerCase().includes(val));
-    if (filtered.length > 0) {
-      filtered.forEach(s => {
-        const item = document.createElement('div');
-        item.className = 'auto-item';
-        const index = s.toLowerCase().indexOf(val);
-        if (index >= 0) {
-          const match = s.substring(index, index + val.length);
-          item.innerHTML = `<span>${s.substring(0, index)}<b>${match}</b>${s.substring(index + val.length)}</span>`;
-        } else {
-          item.innerHTML = `<span>${s}</span>`;
-        }
-        item.addEventListener('click', () => {
-          searchInput.value = s;
-          autoDropdown.style.display = 'none';
+  if (searchInput && autoDropdown) {
+    searchInput.addEventListener('input', () => {
+      const val = searchInput.value.toLowerCase();
+      autoDropdown.innerHTML = '';
+      if (!val) { autoDropdown.style.display = 'none'; return; }
+      const filtered = allSpecialties.filter(s => s.toLowerCase().includes(val));
+      if (filtered.length > 0) {
+        filtered.forEach(s => {
+          const item = document.createElement('div');
+          item.className = 'auto-item';
+          item.textContent = s;
+          item.addEventListener('click', () => {
+            searchInput.value = s;
+            autoDropdown.style.display = 'none';
+          });
+          autoDropdown.appendChild(item);
         });
-        autoDropdown.appendChild(item);
-      });
-      autoDropdown.style.display = 'block';
-    } else {
-      autoDropdown.style.display = 'none';
-    }
+        autoDropdown.style.display = 'block';
+      } else {
+        autoDropdown.style.display = 'none';
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!searchInput.contains(e.target)) autoDropdown.style.display = 'none';
+    });
   }
 
-  searchInput.addEventListener('input', () => showList(searchInput.value));
-  searchInput.addEventListener('focus', () => showList(searchInput.value));
-
-  document.addEventListener('click', (e) => {
-    if (!searchInput.contains(e.target)) autoDropdown.style.display = 'none';
-  });
-
-
-  // === SPECIALITES ===
+  // === SPECIALITES GRID ===
   const specs = [
     { emoji: '🫀', name: 'Cardiologie', desc: 'Cœur et vaisseaux' },
     { emoji: '🧠', name: 'Neurologie', desc: 'Cerveau et nerfs' },
@@ -293,19 +97,21 @@ document.addEventListener('DOMContentLoaded', () => {
     { emoji: '🧬', name: 'Dermatologie', desc: 'Peau et allergies' },
   ];
   const specGrid = document.getElementById('specGrid');
-  specs.forEach((s, i) => {
-    const card = document.createElement('div');
-    card.className = 'spec-item fade-in';
-    card.style.transitionDelay = `${i * 80}ms`;
-    card.innerHTML = `<div class="sc-emoji">${s.emoji}</div><h3>${s.name}</h3><p>${s.desc}</p>`;
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', () => {
-      window.location.href = `recherche.html?spec=${encodeURIComponent(s.name)}&loc=`;
+  if (specGrid) {
+    specs.forEach((s, i) => {
+      const card = document.createElement('div');
+      card.className = 'spec-item fade-in';
+      card.style.transitionDelay = `${i * 80}ms`;
+      card.style.cursor = 'pointer';
+      card.innerHTML = `<div class="sc-emoji">${s.emoji}</div><h3>${s.name}</h3><p>${s.desc}</p>`;
+      card.addEventListener('click', () => {
+        window.location.href = `recherche.html?spec=${encodeURIComponent(s.name)}&loc=`;
+      });
+      specGrid.appendChild(card);
     });
-    if (specGrid) specGrid.appendChild(card);
-  });
+  }
 
-  // === DOCTORS ===
+  // === DOCTORS GRID ===
   const doctors = [
     { name: 'Dr. Sarah Martin', spec: 'Cardiologue', city: 'Alger', rating: 4.9, reviews: 312, filter: 'cardiologue', color: 'teal', initials: 'SM' },
     { name: 'Dr. Thomas Petit', spec: 'Médecin généraliste', city: 'Casablanca', rating: 4.8, reviews: 245, filter: 'generaliste', color: 'emerald', initials: 'TP' },
@@ -316,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
   const doctorsGrid = document.getElementById('doctorsGrid');
   function renderDoctors(filter) {
+    if (!doctorsGrid) return;
     doctorsGrid.innerHTML = '';
     const list = filter === 'all' ? doctors : doctors.filter(d => d.filter === filter);
     list.forEach((d, i) => {
@@ -323,14 +130,11 @@ document.addEventListener('DOMContentLoaded', () => {
       card.className = 'doctor-card fade-in';
       card.style.transitionDelay = `${i * 100}ms`;
       card.innerHTML = `
-        <div class="doc-top ${d.color}"><div class="fc-avatar doc-av a1">${d.initials}</div></div>
+        <div class="doc-top ${d.color}"><div class="fc-avatar doc-av">${d.initials}</div></div>
         <div class="doc-body">
           <div class="doc-name">${d.name}</div>
           <div class="doc-spec">${d.spec} · ${d.city}</div>
-          <div class="doc-meta">
-            <span class="doc-stars">★ ${d.rating}</span>
-            <span>${d.reviews} avis</span>
-          </div>
+          <div class="doc-meta"><span class="doc-stars">★ ${d.rating}</span><span>${d.reviews} avis</span></div>
           <a href="profil.html" class="doc-btn">Prendre rendez-vous</a>
         </div>`;
       doctorsGrid.appendChild(card);
@@ -339,144 +143,59 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   renderDoctors('all');
 
-  // === FILTER BUTTONS ===
-  document.querySelectorAll('.fbtn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderDoctors(btn.dataset.filter);
-    });
-  });
-
   // === TESTIMONIALS ===
   const testimonials = [
-    { name: 'Marie Leroy', role: 'Patiente', text: "Grâce à Healthiverse, j'ai trouvé un excellent cardiologue en 5 minutes. Les avis m'ont aidée à faire le bon choix. Je recommande vivement !", stars: 5, color: 'var(--teal)' },
-    { name: 'Jean-Pierre Garnier', role: 'Patient', text: "Interface claire et intuitive. J'ai pu comparer plusieurs spécialistes et prendre rendez-vous directement. Un vrai gain de temps !", stars: 5, color: 'var(--em)' },
-    { name: 'Amina Bousquet', role: 'Patiente', text: "Enfin un service qui permet de trouver des médecins de confiance avec des avis réels. Mon dermatologue est parfait !", stars: 5, color: 'var(--ind)' },
+    { name: 'Amine R.', role: 'Patient', text: "Grâce à Healthiverse, j'ai trouvé un spécialiste à Alger en quelques clics. Indispensable !", stars: 5, color: '#10b981' },
+    { name: 'Leila M.', role: 'Patiente', text: "Service impeccable, j'utilise la plateforme pour mes enfants à Casablanca.", stars: 5, color: '#6366f1' }
   ];
   const testiTrack = document.getElementById('testiTrack');
-  const testiDots = document.getElementById('testiDots');
-  testimonials.forEach((t, i) => {
-    const card = document.createElement('div');
-    card.className = 'testi-card';
-    card.innerHTML = `
-      <div class="testi-left">
-        <div class="testi-av" style="background:${t.color}">${t.name[0]}</div>
-        <div class="testi-stars">${'★'.repeat(t.stars)}</div>
-      </div>
-      <div class="testi-right">
-        <div class="testi-txt">"${t.text}"</div>
-        <div class="testi-name">${t.name}</div>
-        <div class="testi-role">${t.role}</div>
-      </div>`;
-    testiTrack.appendChild(card);
-    const dot = document.createElement('button');
-    dot.className = `testi-dot${i === 0 ? ' active' : ''}`;
-    dot.addEventListener('click', () => goToSlide(i));
-    testiDots.appendChild(dot);
-  });
-  let currentSlide = 0;
-  function goToSlide(n) {
-    currentSlide = n;
-    testiTrack.style.transform = `translateX(-${n * 100}%)`;
-    document.querySelectorAll('.testi-dot').forEach((d, i) => d.classList.toggle('active', i === n));
+  if (testiTrack) {
+    testimonials.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'testi-card';
+      card.innerHTML = `<div class="testi-txt">"${t.text}"</div><div class="testi-name">${t.name}</div>`;
+      testiTrack.appendChild(card);
+    });
   }
-  setInterval(() => goToSlide((currentSlide + 1) % testimonials.length), 5000);
 
   // === CITIES ===
   const cities = [
-    { emoji: '🇩🇿', name: 'Alger', count: '8 400+ médecins' },
-    { emoji: '🇲🇦', name: 'Casablanca', count: '7 200+ médecins' },
-    { emoji: '🇹🇳', name: 'Tunis', count: '3 800+ médecins' },
-    { emoji: '🇪🇬', name: 'Le Caire', count: '12 100+ médecins' },
-    { emoji: '🇹🇷', name: 'Istanbul', count: '15 400+ médecins' },
-    { emoji: '🇦🇪', name: 'Dubaï', count: '4 800+ médecins' },
-    { emoji: '🇸🇦', name: 'Riyad', count: '6 600+ médecins' },
-    { emoji: '🇶🇦', name: 'Doha', count: '2 200+ médecins' },
+    { emoji: '🇩🇿', name: 'Alger', count: '8 400+' },
+    { emoji: '🇲🇦', name: 'Casablanca', count: '7 200+' },
+    { emoji: '🇹🇳', name: 'Tunis', count: '3 800+' },
+    { emoji: '🇹🇷', name: 'Istanbul', count: '15 400+' }
   ];
   const citiesGrid = document.getElementById('citiesGrid');
-  cities.forEach((c, i) => {
-    const card = document.createElement('div');
-    card.className = 'city-card fade-in';
-    card.style.transitionDelay = `${i * 80}ms`;
-    card.innerHTML = `<div class="city-emoji">${c.emoji}</div><div><div class="city-name">${c.name}</div><div class="city-count">${c.count}</div></div>`;
-    citiesGrid.appendChild(card);
-  });
-
-  // === PRICING GRID ===
-  const plans = [
-    { name: 'Gratuit', price: '0', dur: '/mois', features: ['Profil public basique', 'Réception d\'avis', 'Réponse aux avis', '1 photo de profil'], btn: 'Commencer', type: 'ghost' },
-    { name: 'Pro', price: '29', dur: '/mois', features: ['Prise de RDV en ligne', 'Rappels SMS illimités', 'Profil prioritaire', 'Statistiques de visite', 'Support email'], btn: 'Choisir Pro', type: 'solid', featured: true },
-    { name: 'Expert', price: '59', dur: '/mois', features: ['Téléconsultation incluse', 'Multi-praticiens (jusqu\'à 3)', 'Gestion de cabinet', 'Campagnes email', 'Support 24/7'], btn: 'Choisir Expert', type: 'ghost' },
-    { name: 'Business', price: '99', dur: '/mois', features: ['Cliniques & Hôpitaux', 'API intégration', 'Nombre illimité d\'utilisateurs', 'Formation dédiée', 'Account Manager'], btn: 'Contacter vente', type: 'ghost' }
-  ];
-  const pricingGrid = document.getElementById('pricingGrid');
-  plans.forEach(p => {
-    const card = document.createElement('div');
-    card.className = `price-card fade-in${p.featured ? ' featured' : ''}`;
-    card.innerHTML = `
-      ${p.featured ? '<div class="p-badge">Populaire</div>' : ''}
-      <div class="price-header">
-        <h3>${p.name}</h3>
-        <div class="price-tag"><span class="p-val">${p.price}€</span><span class="p-dur">${p.dur}</span></div>
-      </div>
-      <ul class="price-list">
-        ${p.features.map(f => `<li><span>✓</span> ${f}</li>`).join('')}
-      </ul>
-      <a href="#" class="p-btn ${p.type}">${p.btn}</a>`;
-    pricingGrid.appendChild(card);
-  });
-
-  // === EMERGENCY FAB ===
-  const fabBtn = document.getElementById('fabBtn');
-  const fabPanel = document.getElementById('fabPanel');
-  fabBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    fabPanel.classList.toggle('show');
-  });
-  document.addEventListener('click', () => fabPanel.classList.remove('show'));
-  fabPanel.addEventListener('click', (e) => e.stopPropagation());
-
-  // === SUPPORT BUTTONS ===
-  document.getElementById('btnDonate').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Merci de votre intérêt pour soutenir Healthiverse ! La plateforme de don sécurisée va s\'ouvrir.');
-  });
-  document.getElementById('btnInvest').addEventListener('click', (e) => {
-    e.preventDefault();
-    alert('Merci ! Notre équipe de développement commercial vous contactera sous 24h avec notre dossier investisseur.');
-  });
-
-
-  // === COUNTER ANIMATION ===
-  function formatNum(n) {
-    if (n >= 1000000) return (n / 1000000).toFixed(0) + 'M';
-    if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
-    return n.toString();
-  }
-  function animateCounters(entries, observer) {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      const target = parseInt(el.dataset.target);
-      const suffix = el.dataset.suffix || '';
-      const duration = 2000;
-      const start = performance.now();
-      function update(now) {
-        const progress = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = Math.floor(eased * target);
-        el.textContent = formatNum(current) + suffix;
-        if (progress < 1) requestAnimationFrame(update);
-      }
-      requestAnimationFrame(update);
-      observer.unobserve(el);
+  if (citiesGrid) {
+    cities.forEach(c => {
+      const card = document.createElement('div');
+      card.className = 'city-card fade-in';
+      card.innerHTML = `<div class="city-emoji">${c.emoji}</div><div class="city-name">${c.name}</div><div class="city-count">${c.count} docteurs</div>`;
+      citiesGrid.appendChild(card);
     });
   }
-  const counterObs = new IntersectionObserver(animateCounters, { threshold: 0.5 });
-  document.querySelectorAll('.h-num, .sc-val').forEach(el => counterObs.observe(el));
 
-  // === FADE IN OBSERVER ===
+  // === SEARCH LOGIC ===
+  function handleSearch() {
+    const spec = document.getElementById('searchSpec')?.value || '';
+    const loc = document.getElementById('searchLoc')?.value || '';
+    const btn = document.getElementById('searchBtn');
+    if (btn) btn.innerHTML = 'Chargement...';
+    setTimeout(() => {
+      window.location.href = `recherche.html?spec=${encodeURIComponent(spec)}&loc=${encodeURIComponent(loc)}`;
+    }, 500);
+  }
+  const searchBtn = document.getElementById('searchBtn');
+  if (searchBtn) searchBtn.addEventListener('click', handleSearch);
+
+  // === MAP (Leaflet) ===
+  const mapContainer = document.getElementById('carte');
+  if (mapContainer) {
+    const mainMap = L.map('carte', { scrollWheelZoom: false }).setView([36.7538, 3.0588], 13);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png').addTo(mainMap);
+  }
+
+  // === FADE IN ===
   function observeFadeIns() {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
@@ -485,183 +204,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   observeFadeIns();
 
-  // === NEWSLETTER FORM ===
-  const nlForm = document.getElementById('nlForm');
-  nlForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = document.getElementById('nlEmail');
-    if (email.value) {
-      const btn = nlForm.querySelector('.nl-btn');
-      btn.textContent = '✓ Inscrit !';
-      btn.style.background = 'var(--indigo)';
-      btn.style.color = '#fff';
-      email.value = '';
-      setTimeout(() => { btn.textContent = "S'abonner"; btn.style.background = '#fff'; btn.style.color = 'var(--indigo)'; }, 3000);
-    }
-  });
-
-  // === SEARCH BUTTON ===
-  document.getElementById('searchBtn').addEventListener('click', () => {
-    handleSearch();
-  });
-
-  const viewOnMapBtn = document.getElementById('viewOnMapBtn');
-  if (viewOnMapBtn) {
-    viewOnMapBtn.addEventListener('click', () => {
-      handleSearch(true);
-    });
-  }
-
-  function handleSearch(directToMap = false) {
-    const spec = document.getElementById('searchSpec').value;
-    const loc = document.getElementById('searchLoc').value;
-    
-    if (spec || loc || directToMap) {
-      if (directToMap) {
-        // STAY ON PAGE AND GO TO MAP
-        const btn = document.getElementById('viewOnMapBtn');
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span>';
-        
-        setTimeout(() => {
-          btn.innerHTML = originalHtml;
-          const mapSection = document.getElementById('carte');
-          if (mapSection) {
-            mapSection.scrollIntoView({ behavior: 'smooth' });
-            
-            if (mainMap && loc) {
-              const cityCoords = {
-                'alger': [36.7538, 3.0588],
-                'oran': [35.6987, -0.6308],
-                'constantine': [36.3650, 6.6147],
-                'casablanca': [33.5731, -7.5898],
-                'rabat': [34.0209, -6.8416],
-                'tunis': [36.8065, 10.1815],
-                'dakar': [14.7167, -17.4677],
-                'abidjan': [5.3600, -4.0083],
-                'caire': [30.0444, 31.2357],
-                'dubai': [25.2048, 55.2708],
-                'riyad': [24.7136, 46.6753],
-                'doha': [25.2854, 51.5310],
-                'istanbul': [41.0082, 28.9784],
-                'ankara': [39.9334, 32.8597],
-                'izmir': [38.4237, 27.1428]
-              };
-              
-              const city = loc.toLowerCase();
-              let found = false;
-              for (let key in cityCoords) {
-                if (city.includes(key)) {
-                  const coords = cityCoords[key];
-                  mainMap.setView(coords, 14);
-                  fetchRealMapData(coords[0], coords[1]);
-                  found = true;
-                  break;
-                }
-              }
-              if (!found && spec) {
-                  L.popup().setLatLng(mainMap.getCenter()).setContent(`Résultats pour <strong>${spec}</strong>.`).openOn(mainMap);
-              }
-            }
-          }
-        }, 300);
-      } else {
-        // REDIRECT TO RESULTS PAGE
-        const btn = document.getElementById('searchBtn');
-        btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Affichage...';
-        
-        setTimeout(() => {
-          const mapEl = document.getElementById('carte');
-          if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
-          if (mainMap) {
-            const city = loc.toLowerCase();
-            let found = false;
-            for (let key in cityCoords) {
-              if (city.includes(key)) {
-                const coords = cityCoords[key];
-                mainMap.setView(coords, 14);
-                fetchRealMapData(coords[0], coords[1]);
-                found = true;
-                break;
-              }
-            }
-            if (!found && spec) {
-              L.popup().setLatLng(mainMap.getCenter()).setContent(`Recherche de <strong>${spec}</strong> à <strong>${loc || 'proximité'}</strong>...`).openOn(mainMap);
-            }
-          }
-          btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Rechercher`;
-        }, 800);
-      }
-    }
-  }
-
-  // === FETCH REAL MAP DATA (OVERPASS API) ===
-  async function fetchRealMapData(lat, lng) {
-    if(!mainMap) return;
-    
-    // Clear old demo markers
-    mainMap.eachLayer((layer) => {
-      if(layer instanceof L.Marker) {
-        mainMap.removeLayer(layer);
-      }
-    });
-
-    // We search for pharmacies and clinics in a 5km radius
-    const radius = 5000;
-    const query = `
-      [out:json][timeout:10];
-      (
-        node["amenity"="pharmacy"](around:${radius},${lat},${lng});
-        node["amenity"="clinic"](around:${radius},${lat},${lng});
-        node["amenity"="hospital"](around:${radius},${lat},${lng});
-        node["amenity"="doctors"](around:${radius},${lat},${lng});
-      );
-      out body 20;
-    `;
-    
-    try {
-      const response = await fetch('https://overpass-api.de/api/interpreter', {
-        method: 'POST',
-        body: query
-      });
-      const data = await response.json();
-      
+  // === COUNTERS ===
+  const counterObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      const target = parseInt(el.dataset.target);
       let count = 0;
-      data.elements.forEach(element => {
-        if(element.lat && element.lon) {
-          const type = element.tags.amenity === 'pharmacy' ? 'Pharmacie' : 'Centre Médical';
-          const name = element.tags.name || `${type} à proximité`;
-          const marker = L.marker([element.lat, element.lon]).addTo(mainMap);
-          marker.bindPopup(`<strong>${type}</strong><br>${name}<br><a href="#" style="color:var(--teal);font-weight:bold;margin-top:8px;display:inline-block">Prendre RDV</a>`);
-          count++;
-        }
-      });
-
-      if(count > 0) {
-        showToast(`✔ ${count} professionnels de santé trouvés dans cette zone.`, 'success');
-      } else {
-        showToast(`Aucun professionnel répertorié dans ce rayon.`, 'error');
-      }
-    } catch(err) {
-      console.log('Erreur Overpass API:', err);
-    }
-  }
-
-  function showToast(msg, type) {
-    const toast = document.createElement('div');
-    toast.style.cssText = `
-      position: fixed; bottom: 20px; right: 20px;
-      background: ${type === 'success' ? 'var(--teal)' : '#ef4444'};
-      color: white; padding: 16px 24px; border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      z-index: 10000; font-weight: 600;
-      transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
-    `;
-    toast.textContent = msg;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; }, 100);
-    setTimeout(() => { toast.style.transform = 'translateY(100px)'; toast.style.opacity = '0'; }, 3000);
-    setTimeout(() => { toast.remove(); }, 3500);
-  }
+      const step = target / 50;
+      const timer = setInterval(() => {
+        count += step;
+        if (count >= target) { el.textContent = target.toLocaleString() + (el.dataset.suffix || ''); clearInterval(timer); }
+        else { el.textContent = Math.floor(count).toLocaleString() + (el.dataset.suffix || ''); }
+      }, 30);
+      counterObs.unobserve(el);
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.h-num').forEach(el => counterObs.observe(el));
 });
