@@ -6,6 +6,69 @@ document.addEventListener('DOMContentLoaded', () => {
     else navbar.classList.remove('scrolled');
   });
 
+  // === LANGUAGE SELECTOR ===
+  const langBtn = document.getElementById('langBtn');
+  const langDropdown = document.getElementById('langDropdown');
+  const langOpts = document.querySelectorAll('.lang-opt');
+
+  if (langBtn && langDropdown) {
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langDropdown.classList.toggle('show');
+    });
+
+    langOpts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const lang = opt.dataset.lang;
+        const text = opt.textContent;
+        const code = lang.toUpperCase();
+        const flag = text.split(' ')[0];
+        
+        // Update Button
+        langBtn.innerHTML = `🌍 ${code} ▾`;
+        
+        // Update Active State
+        langOpts.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        
+        // Close Dropdown
+        langDropdown.classList.remove('show');
+        
+        // Save Preference
+        localStorage.setItem('healthiverse-lang', lang);
+        
+        // Trigger Translation (Optional for now, but good to have)
+        translatePage(lang);
+      });
+    });
+
+    document.addEventListener('click', () => langDropdown.classList.remove('show'));
+  }
+
+  function translatePage(lang) {
+    const translations = {
+      'fr': { 'nav-spec': 'Spécialités', 'nav-contact': 'Contact', 'hero-title': 'Votre santé, sans frontières' },
+      'en': { 'nav-spec': 'Specialties', 'nav-contact': 'Contact', 'hero-title': 'Your health, without borders' },
+      'ar': { 'nav-spec': 'التخصصات', 'nav-contact': 'اتصل بنا', 'hero-title': 'صحتك، بلا حدود' },
+      'tr': { 'nav-spec': 'Uzmanlıklar', 'nav-contact': 'İletişim', 'hero-title': 'Sağlığınız, sınır tanımadan' }
+    };
+    
+    if (!translations[lang]) return;
+
+    // Apply translations to elements with data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (translations[lang][key]) el.textContent = translations[lang][key];
+    });
+  }
+
+  // Initial load
+  const savedLang = localStorage.getItem('healthiverse-lang');
+  if (savedLang) {
+    const opt = document.querySelector(`.lang-opt[data-lang="${savedLang}"]`);
+    if (opt) opt.click();
+  }
+
   // === REGIONAL DATA & AUTO-DETECTION ===
   const regionalData = {
     'DZ': { flag: '🇩🇿', label: 'Algérie', emergency: [
