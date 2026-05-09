@@ -111,10 +111,12 @@ document.addEventListener('DOMContentLoaded', () => {
   let mainMap; // Move to scope accessible by search
   const mapElement = document.getElementById('mainMap');
   if (mapElement) {
-    mainMap = L.map('mainMap').setView([48.8566, 2.3522], 13); // Par défaut: Paris
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
+    // Initialize Map with a premium tile layer (CartoDB Voyager)
+    mainMap = L.map('mainMap').setView([36.7538, 3.0588], 5);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 20
     }).addTo(mainMap);
 
     // Points de démonstration (Médecins & Pharmacies)

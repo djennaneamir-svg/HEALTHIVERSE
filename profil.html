@@ -248,7 +248,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       // Map initialization
       const map = L.map('miniMap').setView([48.8698, 2.3075], 15);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; CARTO',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(map);
       L.marker([48.8698, 2.3075]).addTo(map).bindPopup("Cabinet du Dr. Sarah Martin").openPopup();
 
       // Booking button logic
