@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Introuvable - Healthiverse</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body { background: var(--bg); display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; font-family: 'Inter', sans-serif; }
+    .error-container { max-width: 500px; padding: 40px; }
+    .error-code { font-size: 8rem; font-weight: 900; color: var(--teal); line-height: 1; margin-bottom: 20px; font-family: 'Plus Jakarta Sans', sans-serif; text-shadow: 0 10px 30px rgba(13,148,136,0.2); }
+    .error-title { font-size: 2rem; font-weight: 800; color: var(--txt); margin-bottom: 16px; font-family: 'Plus Jakarta Sans', sans-serif;}
+    .error-desc { color: var(--txt2); margin-bottom: 32px; font-size: 1.1rem; line-height: 1.6; }
+    .btn-home { display: inline-block; padding: 16px 32px; background: var(--teal); color: white; border-radius: 12px; font-weight: 700; text-decoration: none; transition: all 0.3s; box-shadow: 0 4px 15px rgba(13,148,136,0.3); }
+    .btn-home:hover { background: var(--teal-d); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(13,148,136,0.4); }
+    
+    .floating-pill { position: absolute; background: white; padding: 10px 20px; border-radius: 30px; box-shadow: var(--shadow); font-weight: 600; color: var(--teal); display: flex; align-items: center; gap: 8px; animation: float 6s ease-in-out infinite; }
+    .p1 { top: 20%; left: 15%; animation-delay: 0s; }
+    .p2 { top: 30%; right: 15%; animation-delay: 2s; }
+    .p3 { bottom: 25%; left: 20%; animation-delay: 4s; }
+    
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+  <script>
+    if(localStorage.getItem('dark-mode') === 'true') {
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Décorations flottantes -->
+  <div class="floating-pill p1">💊 Prescription</div>
+  <div class="floating-pill p2">🩺 Consultation</div>
+  <div class="floating-pill p3">🩹 Urgence</div>
+
+  <div class="error-container fade-in">
+    <div class="error-code">404</div>
+    <div class="error-title">Oups ! Ce n'est pas la bonne salle d'attente.</div>
+    <div class="error-desc">La page que vous recherchez semble introuvable ou a été déplacée. Ne vous inquiétez pas, nos médecins le sont toujours !</div>
+    <a href="index.html" class="btn-home">Retour à l'accueil</a>
+  </div>
+
+</body>
+</html>

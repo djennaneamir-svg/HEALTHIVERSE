@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mon Espace Patient - Healthiverse</title>
+  
+  <!-- OPEN GRAPH / SOCIAL MEDIA -->
+  <meta property="og:title" content="Mon Espace Patient | Healthiverse"/>
+  <meta property="og:type" content="website"/>
+  
+  <!-- FAVICON -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyOCAyOCIgZmlsbD0ibm9uZSI+PHBhdGggZD0iTTE0IDNDMTQgMyA2IDguNSA2IDE1LjVDNiAxOS42NCA5LjM2IDIzIDEzLjUgMjNDMTQgMjMgMTQuNSAyMyAxNC41IDIzQzE4LjY0IDIzIDIyIDE5LjY0IDIyIDE1LjVDMjIgOC41IDE0IDMgMTQgM1oiIGZpbGw9IiM0ZjQ2ZTUiLz48cGF0aCBkPSJNMTQgOFYxOE05IDEzaDEwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+"/>
+  
+  <!-- THEME SCRIPT -->
+  <script>
+    if(localStorage.getItem('dark-mode') === 'true') {
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Patient specific styles that override dashboard */
+    .patient-header-bg {
+      background: linear-gradient(135deg, var(--teal), var(--teal-d));
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .patient-header-bg h1 { color: white; margin-bottom: 8px; font-family: 'Plus Jakarta Sans', sans-serif;}
+    .patient-header-bg p { opacity: 0.9; }
+    
+    .appointment-card {
+      background: var(--card);
+      border: 1px solid var(--brd);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .appointment-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+      border-color: var(--teal);
+    }
+    .apt-date {
+      background: #f0fdfa;
+      color: var(--teal-d);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-align: center;
+      min-width: 100px;
+    }
+    .dark-mode .apt-date { background: #115e59; color: #ccfbf1; }
+    .apt-date strong { display: block; font-size: 1.2rem; font-weight: 800; }
+    .apt-info { flex: 1; margin: 0 24px; }
+    .apt-doc { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .apt-spec { color: var(--txt2); font-size: 0.9rem; margin-bottom: 8px; }
+    .apt-status { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: #dcfce7; color: #166534; }
+    .dark-mode .apt-status { background: #14532d; color: #bbf7d0; }
+    .apt-actions button {
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--brd);
+      background: transparent;
+      color: var(--txt);
+      transition: all 0.2s;
+    }
+    .apt-actions button.btn-cancel:hover { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
+    
+    .empty-state { text-align: center; padding: 40px; color: var(--txt2); }
+  </style>
+</head>
+<body>
+
+  <div class="dashboard-container">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo" style="text-decoration: none;">
+          <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+          <span>Healthiverse</span>
+        </a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active"><a href="#"><span class="nav-ico">📅</span> Mes Rendez-vous</a></li>
+          <li><a href="#"><span class="nav-ico">📁</span> Mes Documents</a></li>
+          <li><a href="#"><span class="nav-ico">🩺</span> Mon Équipe Médicale</a></li>
+          <li><a href="#"><span class="nav-ico">⚙️</span> Paramètres</a></li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-av" style="background: #e2e8f0; color: #475569;">JD</div>
+          <div class="user-text">
+            <span class="user-name">Jean Dupont</span>
+            <span class="user-plan">Patient</span>
+          </div>
+        </div>
+        <a href="index.html" class="btn-logout" onclick="localStorage.removeItem('userAuth')">Déconnexion</a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <div class="patient-header-bg">
+        <div>
+          <h1>Bonjour, Jean</h1>
+          <p>Voici le résumé de votre suivi médical.</p>
+        </div>
+        <a href="recherche.html" class="btn-primary" style="background: white; color: var(--teal);">Prendre un nouveau RDV</a>
+      </div>
+
+      <section>
+        <h2 style="margin-bottom: 20px; font-size: 1.4rem;">Prochains rendez-vous</h2>
+        
+        <div id="appointmentsList">
+          <div class="empty-state" id="emptyState" style="display: none;">
+            <div style="font-size: 3rem; margin-bottom: 16px;">🗓️</div>
+            <h3>Aucun rendez-vous prévu</h3>
+            <p>Vous n'avez pas de consultations médicales à venir.</p>
+            <br>
+            <a href="recherche.html" class="btn-primary">Trouver un médecin</a>
+          </div>
+          <!-- Appointments injected by JS -->
+        </div>
+      </section>
+
+      <section style="margin-top: 40px;">
+        <h2 style="margin-bottom: 20px; font-size: 1.4rem;">Historique passé</h2>
+        <div class="appointment-card" style="opacity: 0.7;">
+          <div class="apt-date">
+            <span>12 Avril</span>
+            <strong>2026</strong>
+          </div>
+          <div class="apt-info">
+            <div class="apt-doc">Dr. Thomas Petit</div>
+            <div class="apt-spec">Médecin généraliste - Paris</div>
+            <div style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; background: #f1f5f9; color: #475569;">Terminé</div>
+          </div>
+          <div class="apt-actions">
+            <button>Prendre à nouveau RDV</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Vérifier si connecté
+      if(localStorage.getItem('userAuth') !== 'true' && localStorage.getItem('userType') !== 'patient') {
+         // Dans un vrai cas on redirige : window.location.href = 'login.html';
+      }
+
+      const listContainer = document.getElementById('appointmentsList');
+      const emptyState = document.getElementById('emptyState');
+      
+      let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+      
+      if (appointments.length === 0) {
+        emptyState.style.display = 'block';
+      } else {
+        appointments.forEach((apt, index) => {
+          // Parse date (e.g. "07 Mai 2026")
+          let day = "07";
+          let month = "Mai";
+          let time = apt.time || "09:00";
+          
+          if(apt.date) {
+            const parts = apt.date.split(' ');
+            if(parts.length >= 2) {
+              day = parts[0];
+              month = parts[1];
+            }
+          }
+
+          const card = document.createElement('div');
+          card.className = 'appointment-card fade-in';
+          card.innerHTML = `
+            <div class="apt-date">
+              <span>${month}</span>
+              <strong>${day}</strong>
+              <span style="font-size:0.8rem; margin-top:4px; display:block;">${time}</span>
+            </div>
+            <div class="apt-info">
+              <div class="apt-doc">${apt.doctor}</div>
+              <div class="apt-spec">${apt.specialty}</div>
+              <div class="apt-status">✓ ${apt.status || 'Confirmé'}</div>
+            </div>
+            <div class="apt-actions">
+              <button class="btn-cancel" onclick="cancelApt(${index}, this)">Annuler</button>
+            </div>
+          `;
+          listContainer.appendChild(card);
+        });
+      }
+    });
+
+    function cancelApt(index, btn) {
+      if(confirm("Êtes-vous sûr de vouloir annuler ce rendez-vous ?")) {
+        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
+        appointments.splice(index, 1);
+        localStorage.setItem('appointments', JSON.stringify(appointments));
+        
+        const card = btn.closest('.appointment-card');
+        card.style.opacity = '0';
+        setTimeout(() => {
+          card.remove();
+          if(appointments.length === 0) {
+            document.getElementById('emptyState').style.display = 'block';
+          }
+        }, 300);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -58,7 +58,7 @@ document.querySelectorAll('.auth-form').forEach(form => {
       // Simuler l'authentification
       localStorage.setItem('userAuth', 'true');
       localStorage.setItem('userType', isPro ? 'pro' : 'patient');
-      window.location.href = isPro ? "dashboard.html" : "index.html";
+      window.location.href = isPro ? "dashboard.html" : "mon-compte.html";
     }, 1500);
   });
 });

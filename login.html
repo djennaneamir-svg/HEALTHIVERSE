@@ -55,11 +55,10 @@
       const pass = document.getElementById('pass').value;
       const error = document.getElementById('loginError');
 
-      // Simulation simple (user / user123)
       if (email === 'user@healthiverse.com' && pass === 'user123') {
         localStorage.setItem('userAuth', 'true');
         localStorage.setItem('userType', 'patient');
-        window.location.href = 'index.html'; // Redirige vers l'accueil une fois connecté
+        window.location.href = 'mon-compte.html'; // Redirige vers le tableau de bord patient
       } else if (email === 'pro@healthiverse.com' && pass === 'pro123') {
         localStorage.setItem('userAuth', 'true');
         localStorage.setItem('userType', 'pro');
