@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function applyRegion(cc) {
-    const data = regionalData[cc] || regionalData['FR'];
+    const data = regionalData[cc] || regionalData['DZ'];
     
     console.log(`Region applied: ${cc}, Default Lang: ${data.lang}`);
     
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('https://ipapi.co/json/');
       const json = await res.json();
       if (regionalData[json.country_code]) applyRegion(json.country_code);
-    } catch(e) { applyRegion('FR'); }
+    } catch(e) { applyRegion('DZ'); }
   }
   detectLocation();
 
@@ -385,14 +385,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // === CITIES ===
   const cities = [
-    { emoji: '🗼', name: 'Paris', count: '12 400+ médecins' },
-    { emoji: '🦁', name: 'Lyon', count: '5 200+ médecins' },
-    { emoji: '⛵', name: 'Marseille', count: '4 800+ médecins' },
-    { emoji: '🍷', name: 'Bordeaux', count: '3 100+ médecins' },
-    { emoji: '🏰', name: 'Toulouse', count: '3 400+ médecins' },
-    { emoji: '🌊', name: 'Nice', count: '2 800+ médecins' },
-    { emoji: '🎭', name: 'Nantes', count: '2 600+ médecins' },
-    { emoji: '⛰️', name: 'Strasbourg', count: '2 200+ médecins' },
+    { emoji: '🇩🇿', name: 'Alger', count: '8 400+ médecins' },
+    { emoji: '🇲🇦', name: 'Casablanca', count: '7 200+ médecins' },
+    { emoji: '🇹🇳', name: 'Tunis', count: '3 800+ médecins' },
+    { emoji: '🇪🇬', name: 'Le Caire', count: '12 100+ médecins' },
+    { emoji: '🇹🇷', name: 'Istanbul', count: '15 400+ médecins' },
+    { emoji: '🇦🇪', name: 'Dubaï', count: '4 800+ médecins' },
+    { emoji: '🇸🇦', name: 'Riyad', count: '6 600+ médecins' },
+    { emoji: '🇶🇦', name: 'Doha', count: '2 200+ médecins' },
   ];
   const citiesGrid = document.getElementById('citiesGrid');
   cities.forEach((c, i) => {

@@ -136,7 +136,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const spec = params.get('spec') || 'Spécialiste';
-      const loc = params.get('loc') || 'France';
+      const loc = params.get('loc') || 'Alger';
       
       document.getElementById('resultsTitle').innerHTML = `Résultats pour <strong>${spec}</strong> à <strong>${loc}</strong>`;
       
