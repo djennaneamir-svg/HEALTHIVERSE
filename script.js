@@ -50,40 +50,66 @@ document.addEventListener('DOMContentLoaded', () => {
   // === SEARCH AUTOCOMPLETE ===
   const allSpecialties = [
     "Acupuncteur", "Addictologue", "Allergologue", "Anesthésiste", "Angiologue", "Cardiologue", "Chirurgien-dentiste",
-    "Dermatologue", "Diététicien", "Endocrinologue", "Gastro-entérologue", "Gériatre", "Gynécologue",
-    "Infirmier", "Médecin généraliste", "Neurologue", "Nutritionniste", "Ophtalmologue", "ORL",
-    "Ostéopathe", "Pédiatre", "Psychiatre", "Psychologue", "Radiologue", "Rhumatologue", "Sage-femme"
+    "Chirurgien-plastique", "Chirurgien-vasculaire", "Dermatologue", "Diététicien", "Endocrinologue", "Gastro-entérologue", 
+    "Gériatre", "Gynécologue", "Hématologue", "Hépatologue", "Infirmier", "Kinésithérapeute", "Médecin généraliste", 
+    "Neurologue", "Nutritionniste", "Ophtalmologue", "ORL", "Orthodontiste", "Orthophoniste", "Orthoptiste",
+    "Ostéopathe", "Pédiatre", "Pédicure-podologue", "Pneumologue", "Psychiatre", "Psychologue", "Radiologue", 
+    "Rhumatologue", "Sage-femme", "Sophrologue", "Stomatologue", "Urologue"
   ].sort((a, b) => a.localeCompare(b));
 
-  const searchInput = document.getElementById('searchSpec');
-  const autoDropdown = document.getElementById('autoDropdown');
+  const allCities = [
+    // Afrique
+    "Alger", "Oran", "Constantine", "Casablanca", "Rabat", "Marrakech", "Tunis", "Sousse", "Dakar", "Abidjan", 
+    "Le Caire", "Alexandrie", "Lagos", "Nairobi", "Johannesburg", "Addis-Abeba", "Accra", "Luanda", "Khartoum", 
+    "Bamako", "Niamey", "Nouakchott", "Tripoli", "Kinshasa", "Brazzaville", "Libreville", "Yaoundé", "Douala",
+    // Moyen-Orient
+    "Dubaï", "Abou Dabi", "Riyad", "Djeddah", "Doha", "Manama", "Mascate", "Koweït City", "Beyrouth", "Amman", 
+    "Bagdad", "Téhéran", "Tel Aviv", "Jérusalem",
+    // Turquie
+    "Istanbul", "Ankara", "Izmir", "Bursa", "Antalya", "Adana", "Gaziantep", "Konya", "Kayseri"
+  ].sort((a, b) => a.localeCompare(b));
 
-  if (searchInput && autoDropdown) {
-    searchInput.addEventListener('input', () => {
-      const val = searchInput.value.toLowerCase();
-      autoDropdown.innerHTML = '';
-      if (!val) { autoDropdown.style.display = 'none'; return; }
-      const filtered = allSpecialties.filter(s => s.toLowerCase().includes(val));
+  function setupAutocomplete(inputId, dropdownId, dataList) {
+    const input = document.getElementById(inputId);
+    const dropdown = document.getElementById(dropdownId);
+    if (!input || !dropdown) return;
+
+    function renderDropdown(filter = "") {
+      const filtered = filter ? dataList.filter(item => item.toLowerCase().includes(filter.toLowerCase())) : dataList;
+      dropdown.innerHTML = "";
       if (filtered.length > 0) {
-        filtered.forEach(s => {
-          const item = document.createElement('div');
-          item.className = 'auto-item';
-          item.textContent = s;
-          item.addEventListener('click', () => {
-            searchInput.value = s;
-            autoDropdown.style.display = 'none';
+        filtered.forEach(item => {
+          const div = document.createElement("div");
+          div.className = "auto-item";
+          div.textContent = item;
+          div.addEventListener("click", () => {
+            input.value = item;
+            dropdown.style.display = "none";
           });
-          autoDropdown.appendChild(item);
+          dropdown.appendChild(div);
         });
-        autoDropdown.style.display = 'block';
+        dropdown.style.display = "block";
       } else {
-        autoDropdown.style.display = 'none';
+        dropdown.style.display = "none";
+      }
+    }
+
+    input.addEventListener("focus", () => renderDropdown(input.value));
+    input.addEventListener("input", () => renderDropdown(input.value));
+    input.addEventListener("click", (e) => {
+      e.stopPropagation();
+      renderDropdown(input.value);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.style.display = "none";
       }
     });
-    document.addEventListener('click', (e) => {
-      if (!searchInput.contains(e.target)) autoDropdown.style.display = 'none';
-    });
   }
+
+  setupAutocomplete('searchSpec', 'autoDropdown', allSpecialties);
+  setupAutocomplete('searchLoc', 'autoDropdownLoc', allCities);
 
   // === SPECIALITES GRID ===
   const specs = [

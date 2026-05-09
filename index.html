@@ -119,7 +119,8 @@
         <div class="s-sep"></div>
         <div class="s-field" style="flex: 1;">
           <svg class="s-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <input type="text" id="searchLoc" placeholder="Ville ou Pays…" class="s-input" list="citiesList"/>
+          <input type="text" id="searchLoc" placeholder="Ville ou Pays…" class="s-input" autocomplete="off"/>
+          <div class="autocomplete-dropdown" id="autoDropdownLoc"></div>
         </div>
         <button class="search-btn" id="searchBtn" style="padding: 18px 48px; font-size: 1.1rem;">
           Rechercher
