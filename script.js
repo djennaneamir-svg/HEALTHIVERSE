@@ -568,10 +568,28 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         // REDIRECT TO RESULTS PAGE
         const btn = document.getElementById('searchBtn');
-        btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Recherche...';
+        btn.innerHTML = '<span style="animation:spin 1s linear infinite;display:inline-block">⟳</span> Affichage...';
         
         setTimeout(() => {
-          window.location.href = `recherche.html?spec=${encodeURIComponent(spec)}&loc=${encodeURIComponent(loc)}`;
+          const mapEl = document.getElementById('carte');
+          if (mapEl) mapEl.scrollIntoView({ behavior: 'smooth' });
+          if (mainMap) {
+            const city = loc.toLowerCase();
+            let found = false;
+            for (let key in cityCoords) {
+              if (city.includes(key)) {
+                const coords = cityCoords[key];
+                mainMap.setView(coords, 14);
+                fetchRealMapData(coords[0], coords[1]);
+                found = true;
+                break;
+              }
+            }
+            if (!found && spec) {
+              L.popup().setLatLng(mainMap.getCenter()).setContent(`Recherche de <strong>${spec}</strong> à <strong>${loc || 'proximité'}</strong>...`).openOn(mainMap);
+            }
+          }
+          btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Rechercher`;
         }, 800);
       }
     }
