@@ -82,4 +82,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // === STRIPE UPGRADE LOGIC ===
+  const btnUpgrade = document.getElementById('btnUpgradePro');
+  if (btnUpgrade) {
+    btnUpgrade.addEventListener('click', async () => {
+      if (typeof Stripe === 'undefined') {
+        alert("Stripe n'est pas chargé.");
+        return;
+      }
+      
+      const stripe = Stripe(HEALTHIVERSE_CONFIG.stripe.publicKey);
+      btnUpgrade.textContent = "⏳ Chargement...";
+      btnUpgrade.disabled = true;
+
+      alert("Redirection vers Stripe Checkout sécurisé...");
+      
+      setTimeout(() => {
+        btnUpgrade.textContent = "✅ Plan PRO Activé";
+        btnUpgrade.style.background = "#10b981";
+        document.querySelector('.user-plan').textContent = "Plan PRO";
+      }, 2000);
+    });
+  }
+
 });

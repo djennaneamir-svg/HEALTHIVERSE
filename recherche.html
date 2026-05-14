@@ -19,7 +19,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
   
   <style>
-    /* FULL WIDTH HERO SEARCH */
     .search-hero-full {
       background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
       padding: 160px 20px 80px;
@@ -30,140 +29,26 @@
       align-items: center;
       text-align: center;
     }
-
-    .search-hero-full .container-wide {
-      width: 100%;
-      max-width: 1200px;
-      position: relative;
-      z-index: 5;
-    }
-
-    .search-hero-full h1 {
-      color: #fff;
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 32px;
-    }
-
-    .search-card-full {
-      background: #fff;
-      border-radius: 24px;
-      padding: 12px;
-      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-      width: 100%;
-      margin-bottom: 40px;
-    }
-
-    .search-row-full {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-    }
-
-    /* FLOATING CARDS BELOW SEARCH */
-    .hero-float-row {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .float-item {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 12px 20px;
-      border-radius: 16px;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      animation: f-float 4s ease-in-out infinite;
-    }
-
-    @keyframes f-float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    #resultsMap {
-      height: 500px;
-      width: 100%;
-      border-bottom: 5px solid var(--teal);
-    }
-
-    .results-section {
-      padding: 60px 0;
-      background: #f8fafc;
-    }
-
-    .res-grid {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 40px;
-    }
-
-    .sidebar-filters {
-      background: #fff;
-      padding: 24px;
-      border-radius: 24px;
-      border: 1px solid #e2e8f0;
-      height: fit-content;
-      position: sticky;
-      top: 100px;
-    }
-
-    .result-item {
-      background: #fff;
-      border-radius: 24px;
-      padding: 24px;
-      display: flex;
-      gap: 24px;
-      margin-bottom: 20px;
-      border: 1px solid #e2e8f0;
-      transition: transform 0.3s;
-    }
-
-    .result-item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.05);
-      border-color: var(--teal);
-    }
-
-    .res-av-circle {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: var(--teal);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    /* DARK MODE */
+    .search-hero-full h1 { color: #fff; font-size: 2.5rem; font-weight: 800; margin-bottom: 32px; }
+    .search-card-full { background: #fff; border-radius: 24px; padding: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 1200px; margin-bottom: 40px; }
+    .search-row-full { display: flex; align-items: center; gap: 10px; width: 100%; }
+    .hero-float-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
+    .float-item { background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); padding: 12px 20px; border-radius: 16px; color: #fff; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; font-weight: 600; animation: f-float 4s ease-in-out infinite; }
+    @keyframes f-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    #resultsMap { height: 500px; width: 100%; border-bottom: 5px solid var(--teal); }
+    .results-section { padding: 60px 0; background: #f8fafc; }
+    .res-grid { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
+    .sidebar-filters { background: #fff; padding: 24px; border-radius: 24px; border: 1px solid #e2e8f0; height: fit-content; position: sticky; top: 100px; }
+    .result-item { background: #fff; border-radius: 24px; padding: 24px; display: flex; gap: 24px; margin-bottom: 20px; border: 1px solid #e2e8f0; transition: transform 0.3s; }
+    .result-item:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); border-color: var(--teal); }
+    .res-av-circle { width: 100px; height: 100px; border-radius: 50%; background: var(--teal); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; flex-shrink: 0; }
     body.dark-mode .results-section { background: #0f172a; }
-    body.dark-mode .sidebar-filters, 
-    body.dark-mode .result-item { background: #1e293b; border-color: #334155; }
-    
-    @media (max-width: 900px) {
-      .res-grid { grid-template-columns: 1fr; }
-      .sidebar-filters { display: none; }
-      .search-row-full { flex-direction: column; padding: 10px; }
-      .search-row-full .s-sep { display: none; }
-    }
+    body.dark-mode .sidebar-filters, body.dark-mode .result-item { background: #1e293b; border-color: #334155; }
+    @media (max-width: 900px) { .res-grid { grid-template-columns: 1fr; } .sidebar-filters { display: none; } .search-row-full { flex-direction: column; padding: 10px; } }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar scrolled" id="navbar">
     <div class="nav-container">
       <a href="index.html" class="nav-logo">
@@ -181,73 +66,44 @@
     </div>
   </nav>
 
-  <!-- FULL WIDTH SEARCH SECTION -->
   <section class="search-hero-full">
     <div class="container-wide">
       <h1 id="resultsTitle">Recherche de spécialistes</h1>
-      
       <div class="search-card-full">
         <div class="search-row-full">
           <div class="s-field" style="flex: 1.5;">
             <svg class="s-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
             <input type="text" id="resSearchSpec" placeholder="Quelle spécialité ?" class="s-input"/>
           </div>
-          <div class="s-sep"></div>
           <div class="s-field" style="flex: 1;">
             <svg class="s-ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
             <input type="text" id="resSearchLoc" placeholder="Quelle ville ?" class="s-input"/>
           </div>
-          <button class="search-btn" id="resSearchBtn" style="padding: 18px 40px;">
-            Trouver
-          </button>
+          <button class="search-btn" id="resSearchBtn" style="padding: 18px 40px;">Trouver</button>
         </div>
       </div>
-
-      <!-- FLOATING CARDS -->
       <div class="hero-float-row">
-        <div class="float-item">
-          <div style="background:#10b981; width:8px; height:8px; border-radius:50%;"></div>
-          5 400+ Docteurs en ligne
-        </div>
-        <div class="float-item" style="animation-delay: 1s;">
-          <span style="color:#fbbf24;">★</span>
-          4.9/5 Avis patients
-        </div>
-        <div class="float-item" style="animation-delay: 2s;">
-          <span>⚡</span>
-          RDV en moins de 24h
-        </div>
+        <div class="float-item">5 400+ Docteurs en ligne</div>
+        <div class="float-item">4.9/5 Avis patients</div>
+        <div class="float-item">RDV en moins de 24h</div>
       </div>
     </div>
   </section>
 
-  <!-- MAP AS SECOND PART -->
   <div id="resultsMap"></div>
 
-  <!-- RESULTS LIST -->
   <section class="results-section">
     <div class="container">
       <div class="res-grid">
-        
         <aside class="sidebar-filters">
           <h4 style="margin-bottom:20px; font-weight:800; font-size:0.9rem; color:#64748b; text-transform:uppercase;">Filtres avancés</h4>
-          <div style="margin-bottom:24px;">
-            <p style="font-weight:700; margin-bottom:12px; font-size:0.9rem;">Disponibilité</p>
+          <div style="margin-bottom:24px;"><p style="font-weight:700; margin-bottom:12px; font-size:0.9rem;">Disponibilité</p>
             <label class="check-item"><input type="checkbox"> Aujourd'hui</label>
-            <label class="check-item"><input type="checkbox"> Demain</label>
-          </div>
-          <div style="margin-bottom:24px;">
-            <p style="font-weight:700; margin-bottom:12px; font-size:0.9rem;">Langues</p>
-            <label class="check-item"><input type="checkbox" checked> Français</label>
-            <label class="check-item"><input type="checkbox"> Arabe</label>
           </div>
         </aside>
-
         <div id="resultsList">
           <div style="margin-bottom:30px;" id="resultsCount">Chargement des résultats...</div>
-          <!-- Results injected here -->
         </div>
-
       </div>
     </div>
   </section>
@@ -261,125 +117,11 @@
     </div>
   </footer>
 
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="backend-config.js"></script>
+  <script src="recherche.js"></script>
   <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      const spec = params.get('spec') || 'Spécialiste';
-      const loc = params.get('loc') || 'Alger';
-      
-      document.getElementById('resSearchSpec').value = spec;
-      document.getElementById('resSearchLoc').value = loc;
-      document.getElementById('resultsTitle').innerHTML = `${spec} à ${loc}`;
-
-      const doctors = [
-        { name: 'Dr. Sarah Martin', spec: spec, city: loc, rating: 4.9, reviews: 312, initials: 'SM' },
-        { name: 'Dr. Thomas Petit', spec: spec, city: loc, rating: 4.8, reviews: 245, initials: 'TP' },
-        { name: 'Dr. Claire Dubois', spec: spec, city: loc, rating: 4.9, reviews: 189, initials: 'CD' }
-      ];
-
-      document.getElementById('resultsCount').innerHTML = `<h3 style="font-weight:800; color:#1e293b;">${doctors.length} professionnels trouvés</h3>`;
-
-      const list = document.getElementById('resultsList');
-      doctors.forEach((d, i) => {
-        const item = document.createElement('div');
-        item.className = 'result-item fade-in';
-        item.style.transitionDelay = `${i * 100}ms`;
-        item.innerHTML = `
-          <div class="res-av-circle">${d.initials}</div>
-          <div style="flex:1;">
-            <div style="display:flex; justify-content:space-between; align-items:start;">
-              <div>
-                <div style="font-size:1.3rem; font-weight:800; color:#0f172a;">${d.name}</div>
-                <div style="color:var(--teal); font-weight:700;">${d.spec}</div>
-              </div>
-              <div style="font-weight:700; color:#b45309;">★ ${d.rating}</div>
-            </div>
-            <div style="color:#64748b; margin:10px 0;">📍 ${d.city} · Cabinet médical</div>
-            <div style="display:flex; gap:10px; margin-top:15px;">
-              <a href="profil.html" class="btn-res" style="background:var(--teal); color:#fff; flex:1; text-align:center; padding:12px; border-radius:12px; font-weight:700;">Prendre RDV</a>
-              <a href="profil.html" class="btn-res" style="border:2px solid var(--teal); color:var(--teal); padding:12px; border-radius:12px; font-weight:700;">Profil</a>
-            </div>
-          </div>
-        `;
-        list.appendChild(item);
-      });
-
-      // Map initialization
-      const map = L.map('resultsMap', { scrollWheelZoom: false }).setView([36.7538, 3.0588], 13);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(map);
-
-      const cityCoords = {
-        'alger': [36.7538, 3.0588], 
-        'casablanca': [33.5731, -7.5898], 
-        'tunis': [36.8065, 10.1815],
-        'istanbul': [41.0082, 28.9784], 
-        'dubai': [25.2048, 55.2708],
-        'riyad': [24.7136, 46.6753],
-        'le caire': [30.0444, 31.2357],
-        'dakar': [14.7167, -17.4677]
-      };
-
-      async function fetchMapResults(lat, lng) {
-        const radius = 5000; // 5km
-        const osmQuery = `
-          [out:json][timeout:10];
-          (
-            node["amenity"~"doctors|clinic|pharmacy|hospital"](around:${radius},${lat},${lng});
-            way["amenity"~"doctors|clinic|pharmacy|hospital"](around:${radius},${lat},${lng});
-          );
-          out body;
-          >;
-          out skel qt;
-        `;
-        const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(osmQuery);
-        
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          
-          data.elements.forEach(el => {
-            if (el.lat && el.lon) {
-              const name = el.tags.name || el.tags.amenity || "Professionnel de santé";
-              const type = el.tags.amenity === 'pharmacy' ? '💊' : '🩺';
-              L.marker([el.lat, el.lon]).addTo(map)
-                .bindPopup(`<b>${type} ${name}</b><br>${el.tags['addr:full'] || 'Adresse disponible sur profil'}`);
-            }
-          });
-        } catch (error) {
-          console.error("Erreur Overpass:", error);
-        }
-      }
-
-      const key = loc.toLowerCase();
-      if (cityCoords[key]) {
-        const coords = cityCoords[key];
-        map.setView(coords, 14);
-        fetchMapResults(coords[0], coords[1]);
-      } else if (loc) {
-        // Simple search via OSM Nominatim if city not in our list
-        fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(loc)}`)
-          .then(r => r.json())
-          .then(data => {
-            if (data.length > 0) {
-              const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-              map.setView(coords, 14);
-              fetchMapResults(coords[0], coords[1]);
-            }
-          });
-      }
-
-      document.getElementById('resSearchBtn').addEventListener('click', () => {
-        const s = document.getElementById('resSearchSpec').value;
-        const l = document.getElementById('resSearchLoc').value;
-        window.location.href = `recherche.html?spec=${encodeURIComponent(s)}&loc=${encodeURIComponent(l)}`;
-      });
-      
-      // Trigger animations for the new items
-      if (typeof observeFadeIns === 'function') observeFadeIns();
-    });
-  </script>
 </body>
 </html>

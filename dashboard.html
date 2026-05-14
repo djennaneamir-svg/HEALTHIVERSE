@@ -9,6 +9,8 @@
   <!-- Chart.js pour les graphiques premium -->
   <!-- Chart.js sécurisé (version fixée) -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <!-- Stripe SDK -->
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 
@@ -43,7 +45,8 @@
           <div class="user-av">DR</div>
           <div class="user-text">
             <span class="user-name">Dr. Sarah Martin</span>
-            <span class="user-plan">Plan PRO</span>
+            <span class="user-plan">Plan GRATUIT</span>
+            <button id="btnUpgradePro" style="background:var(--em); color:white; border:none; padding:4px 8px; border-radius:6px; font-size:0.7rem; cursor:pointer; margin-top:4px;">🚀 Passer en PRO</button>
           </div>
         </div>
         <a href="index.html" class="btn-logout">Déconnexion</a>

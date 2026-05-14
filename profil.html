@@ -238,82 +238,19 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-bot">
-        <p>© 2026 Healthiverse. Tous droits réservés.</p>
-        <div class="f-links"><a href="#">Confidentialité</a><a href="#">CGU</a></div>
+        <p>© 2026 Healthiverse. Afrique · Moyen-Orient · Turquie</p>
+        <div class="f-links"><a href="#">Confidentialité</a><a href="#">Mentions légales</a></div>
       </div>
     </div>
   </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Map initialization
-      const map = L.map('miniMap').setView([48.8698, 2.3075], 15);
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; CARTO',
-        subdomains: 'abcd',
-        maxZoom: 20
-      }).addTo(map);
-      L.marker([48.8698, 2.3075]).addTo(map).bindPopup("Cabinet du Dr. Sarah Martin").openPopup();
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="backend-config.js"></script>
 
-      // Booking button logic
-      const btnBook = document.getElementById('btnBookNow');
-      let selectedSlot = null;
-
-      // Slot selection
-      document.querySelectorAll('.slot:not(.taken)').forEach(slot => {
-        slot.addEventListener('click', () => {
-          document.querySelectorAll('.slot').forEach(s => s.style.background = '');
-          slot.style.background = 'var(--teal)';
-          slot.style.color = '#fff';
-          selectedSlot = slot.textContent;
-        });
-      });
-
-      btnBook.addEventListener('click', () => {
-        if (!selectedSlot) {
-          alert('Veuillez choisir un créneau horaire.');
-          return;
-        }
-        
-        // Save to localStorage
-        const newAppointment = {
-          doctor: 'Dr. Sarah Martin',
-          specialty: 'Cardiologue',
-          date: '07 Mai 2026',
-          time: selectedSlot,
-          status: 'Confirmé'
-        };
-        
-        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-        appointments.push(newAppointment);
-        localStorage.setItem('appointments', JSON.stringify(appointments));
-        
-        // Notification system
-        showToast('Rendez-vous confirmé ! Redirection vers votre tableau de bord...', 'success');
-        
-        setTimeout(() => {
-          window.location.href = 'mon-compte.html';
-        }, 2000);
-      });
-      
-      function showToast(msg, type) {
-        const toast = document.createElement('div');
-        toast.style.cssText = `
-          position: fixed; bottom: 20px; right: 20px;
-          background: ${type === 'success' ? 'var(--teal)' : '#ef4444'};
-          color: white; padding: 16px 24px; border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-          z-index: 10000; font-weight: 600;
-          transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
-        `;
-        toast.textContent = msg;
-        document.body.appendChild(toast);
-        
-        setTimeout(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; }, 100);
-        setTimeout(() => { toast.style.transform = 'translateY(100px)'; toast.style.opacity = '0'; }, 3000);
-        setTimeout(() => { toast.remove(); }, 3500);
-      }
-    });
-  </script>
+  <script src="profil.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

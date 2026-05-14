@@ -45,6 +45,11 @@ const HEALTHIVERSE_CONFIG = {
     inscriptionTemplateId:"REMPLACER_PAR_VOTRE_TEMPLATE_INSCRIPTION_ID"
   },
 
+  // ─── STRIPE CONFIG (PAIEMENTS) ─────────────────────────────
+  stripe: {
+    publicKey: "pk_test_REMPLACER_PAR_VOTRE_STRIPE_KEY"
+  },
+
   // ─── EMAIL ADMIN ───────────────────────────────────────────
   adminEmail: "djennane.amir@gmail.com"
 };
