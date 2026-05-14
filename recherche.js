@@ -7,21 +7,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   const db = firebase.firestore();
 
-  // 2. GET USER LOCATION
+  // 2. INIT MAP
+  const map = L.map('resultsMap', { scrollWheelZoom: false }).setView([36.7538, 3.0588], 13);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+
+  // 3. GET USER LOCATION
   let userCoords = null;
   try {
     const pos = await new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
     });
     userCoords = [pos.coords.latitude, pos.coords.longitude];
+    map.setView(userCoords, 13);
+    L.circle(userCoords, { radius: 500, color: 'var(--teal)', fillOpacity: 0.2 }).addTo(map)
+      .bindPopup("Votre position approximative");
   } catch (err) {
     console.warn("Browser geolocation failed, using IP-based location fallback.");
     const res = await fetch('https://ipapi.co/json/');
     const json = await res.json();
     userCoords = [json.latitude, json.longitude];
+    map.setView(userCoords, 13);
   }
 
-  // 3. LOAD DOCTORS FROM FIRESTORE
+  // 4. LOAD DOCTORS FROM FIRESTORE
   const params = new URLSearchParams(window.location.search);
   const specQuery = params.get('spec') || '';
   const locQuery = params.get('loc') || '';
@@ -34,8 +44,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     resultsList.innerHTML = '';
 
     let query = db.collection('professionnels');
-    
-    // Simple filter (Note: Firestore requires indexes for complex queries)
     const snapshot = await query.get();
     let doctors = [];
 
@@ -43,24 +51,26 @@ document.addEventListener('DOMContentLoaded', async () => {
       const data = doc.data();
       data.id = doc.id;
       
-      // Client-side filtering for demo simplicity (In production, use Algolia or GeoFirestore)
       const matchSpec = !specQuery || data.specialite?.toLowerCase().includes(specQuery.toLowerCase());
       const matchLoc = !locQuery || data.ville?.toLowerCase().includes(locQuery.toLowerCase());
 
       if (matchSpec && matchLoc) {
-        // Calculate distance if coords exist
         if (data.lat && data.lng && userCoords) {
           data.distance = calculateDistance(userCoords[0], userCoords[1], data.lat, data.lng);
         } else {
           data.distance = 9999;
         }
         doctors.push(data);
+
+        // Add marker to map
+        if (data.lat && data.lng) {
+          L.marker([data.lat, data.lng]).addTo(map)
+            .bindPopup(`<b>${data.fullName}</b><br>${data.specialite}<br><a href="profil.html?id=${doc.id}">Voir le profil</a>`);
+        }
       }
     });
 
-    // Sort by distance
     doctors.sort((a, b) => a.distance - b.distance);
-
     renderResults(doctors);
   }
 
@@ -98,19 +108,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  // Haversine formula
   function calculateDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371; // Radius of the earth in km
-    const dLat = deg2rad(lat2 - lat1);
-    const dLon = deg2rad(lon2 - lon1);
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
               Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
-
-  function deg2rad(deg) { return deg * (Math.PI / 180); }
 
   loadDoctors();
 });
