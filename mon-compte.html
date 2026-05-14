@@ -162,73 +162,13 @@
     </main>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Vérifier si connecté
-      if(localStorage.getItem('userAuth') !== 'true' && localStorage.getItem('userType') !== 'patient') {
-         // Dans un vrai cas on redirige : window.location.href = 'login.html';
-      }
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="backend-config.js"></script>
 
-      const listContainer = document.getElementById('appointmentsList');
-      const emptyState = document.getElementById('emptyState');
-      
-      let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-      
-      if (appointments.length === 0) {
-        emptyState.style.display = 'block';
-      } else {
-        appointments.forEach((apt, index) => {
-          // Parse date (e.g. "07 Mai 2026")
-          let day = "07";
-          let month = "Mai";
-          let time = apt.time || "09:00";
-          
-          if(apt.date) {
-            const parts = apt.date.split(' ');
-            if(parts.length >= 2) {
-              day = parts[0];
-              month = parts[1];
-            }
-          }
-
-          const card = document.createElement('div');
-          card.className = 'appointment-card fade-in';
-          card.innerHTML = `
-            <div class="apt-date">
-              <span>${month}</span>
-              <strong>${day}</strong>
-              <span style="font-size:0.8rem; margin-top:4px; display:block;">${time}</span>
-            </div>
-            <div class="apt-info">
-              <div class="apt-doc">${apt.doctor}</div>
-              <div class="apt-spec">${apt.specialty}</div>
-              <div class="apt-status">✓ ${apt.status || 'Confirmé'}</div>
-            </div>
-            <div class="apt-actions">
-              <button class="btn-cancel" onclick="cancelApt(${index}, this)">Annuler</button>
-            </div>
-          `;
-          listContainer.appendChild(card);
-        });
-      }
-    });
-
-    function cancelApt(index, btn) {
-      if(confirm("Êtes-vous sûr de vouloir annuler ce rendez-vous ?")) {
-        let appointments = JSON.parse(localStorage.getItem('appointments') || '[]');
-        appointments.splice(index, 1);
-        localStorage.setItem('appointments', JSON.stringify(appointments));
-        
-        const card = btn.closest('.appointment-card');
-        card.style.opacity = '0';
-        setTimeout(() => {
-          card.remove();
-          if(appointments.length === 0) {
-            document.getElementById('emptyState').style.display = 'block';
-          }
-        }, 300);
-      }
-    }
-  </script>
+  <script src="mon-compte.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
