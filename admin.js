@@ -1,9 +1,17 @@
 // ADMIN DASHBOARD LOGIC
 
-// Security Guard
-if (localStorage.getItem('adminAuth') !== 'true') {
-  window.location.href = 'login-admin.html';
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+  firebase.initializeApp(HEALTHIVERSE_CONFIG.firebase);
 }
+
+if (typeof firebase !== 'undefined') {
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user || localStorage.getItem('adminAuth') !== 'true') {
+      window.location.href = 'login-admin.html';
+    }
+  });
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
   initMiniCharts();

@@ -17,6 +17,27 @@ function initFirebase() {
   return firebase.firestore();
 }
 
+// ── Créer un compte Firebase Auth ───────────────────────────
+async function createFirebaseAuthUser(email, password, displayName) {
+  if (typeof firebase === 'undefined' || !firebase.auth) return null;
+  try {
+    const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
+    if (cred.user && displayName) {
+      await cred.user.updateProfile({ displayName: displayName });
+    }
+    return cred.user;
+  } catch (err) {
+    if (err.code === 'auth/email-already-in-use') {
+      throw new Error('⚠️ Un compte existe déjà avec cet email. Essayez de vous connecter.');
+    } else if (err.code === 'auth/weak-password') {
+      throw new Error('⚠️ Le mot de passe est trop faible. Utilisez au moins 6 caractères.');
+    } else if (err.code === 'auth/invalid-email') {
+      throw new Error('⚠️ Adresse email invalide.');
+    }
+    throw err;
+  }
+}
+
 // ── Initialise EmailJS ──────────────────────────────────────
 function initEmailJS() {
   if (typeof emailjs === 'undefined') return false;
@@ -172,26 +193,40 @@ document.addEventListener('DOMContentLoaded', () => {
         telephone: tel?.value.trim() || '',
       };
 
-      // 1️⃣ Sauvegarder dans Firestore (ou localStorage si non configuré)
-      let savedId = null;
-      if (db) savedId = await saveToFirestore(db, 'patients', userData);
-      if (!savedId) saveToLocalStorage('patient', userData);
+      try {
+        // 0️⃣ Créer un vrai compte Firebase Auth
+        const authUser = await createFirebaseAuthUser(
+          email.value.trim(), pass.value, userData.fullName
+        );
 
-      // 2️⃣ Notifier l'admin
-      await sendAdminNotification('patient', userData);
+        // 1️⃣ Sauvegarder dans Firestore (ou localStorage si non configuré)
+        let savedId = null;
+        if (db) {
+          if (authUser) userData.uid = authUser.uid;
+          savedId = await saveToFirestore(db, 'patients', userData);
+        }
+        if (!savedId) saveToLocalStorage('patient', userData);
 
-      // 3️⃣ Session locale
-      localStorage.setItem('userAuth', 'true');
-      localStorage.setItem('userType', 'patient');
-      localStorage.setItem('userName', userData.fullName);
-      localStorage.setItem('userEmail', userData.email);
+        // 2️⃣ Notifier l'admin
+        await sendAdminNotification('patient', userData);
 
-      // 4️⃣ Feedback + redirection
-      btn.textContent = '✅ Compte créé !';
-      btn.style.background = '#10b981';
-      showMsg('patient-msg', `✅ Bienvenue ${userData.prenom} ! Redirection vers votre espace...`, true);
+        // 3️⃣ Session locale
+        localStorage.setItem('userAuth', 'true');
+        localStorage.setItem('userType', 'patient');
+        localStorage.setItem('userName', userData.fullName);
+        localStorage.setItem('userEmail', userData.email);
 
-      setTimeout(() => { window.location.href = 'mon-compte.html'; }, 1500);
+        // 4️⃣ Feedback + redirection
+        btn.textContent = '✅ Compte créé !';
+        btn.style.background = '#10b981';
+        showMsg('patient-msg', `✅ Bienvenue ${userData.prenom} ! Redirection vers votre espace...`, true);
+
+        setTimeout(() => { window.location.href = 'mon-compte.html'; }, 1500);
+      } catch (regErr) {
+        showMsg('patient-msg', regErr.message || '❌ Erreur lors de la création du compte.', false);
+        btn.textContent = 'Créer mon compte patient';
+        btn.disabled = false;
+      }
     });
   }
 
@@ -251,24 +286,33 @@ document.addEventListener('DOMContentLoaded', () => {
         verified:   false
       };
 
-      // 1️⃣ Sauvegarder dans Firestore (ou localStorage si non configuré)
-      let savedId = null;
-      if (db) savedId = await saveToFirestore(db, 'professionnels', userData);
-      if (!savedId) saveToLocalStorage('professionnel', userData);
+      try {
+        // 0️⃣ Créer un vrai compte Firebase Auth
+        const authUser = await createFirebaseAuthUser(
+          email.value.trim(), pass.value, userData.fullName
+        );
 
-      // 2️⃣ Notifier l'admin
-      await sendAdminNotification('pro', userData);
+        // 1️⃣ Sauvegarder dans Firestore (ou localStorage si non configuré)
+        let savedId = null;
+        if (db) {
+          if (authUser) userData.uid = authUser.uid;
+          savedId = await saveToFirestore(db, 'professionnels', userData);
+        }
+        if (!savedId) saveToLocalStorage('professionnel', userData);
 
-      // 3️⃣ Session locale
-      localStorage.setItem('userAuth', 'true');
-      localStorage.setItem('userType', 'pro');
-      localStorage.setItem('userName', userData.fullName);
-      localStorage.setItem('userEmail', userData.email);
+        // 2️⃣ Notifier l'admin
+        await sendAdminNotification('pro', userData);
 
-      // 4️⃣ Feedback + redirection
-      btn.textContent = '✅ Demande soumise !';
-      btn.style.background = '#10b981';
-      showMsg('pro-msg', `✅ Demande envoyée ! Notre équipe va vérifier votre dossier. Redirection...`, true);
+        // 3️⃣ Session locale
+        localStorage.setItem('userAuth', 'true');
+        localStorage.setItem('userType', 'pro');
+        localStorage.setItem('userName', userData.fullName);
+        localStorage.setItem('userEmail', userData.email);
+
+        // 4️⃣ Feedback + redirection
+        btn.textContent = '✅ Demande soumise !';
+        btn.style.background = '#10b981';
+        showMsg('pro-msg', `✅ Demande envoyée ! Notre équipe va vérifier votre dossier. Redirection...`, true);
 
       setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
     });

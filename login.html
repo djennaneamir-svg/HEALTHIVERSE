@@ -14,10 +14,13 @@
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 8px; }
     input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--brd); background: var(--bg); color: var(--txt); outline: none; }
-    .btn-auth { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--teal); color: white; font-weight: 700; cursor: pointer; margin-top: 10px; }
+    .btn-auth { width: 100%; padding: 16px; border-radius: 12px; border: none; background: var(--teal); color: white; font-weight: 700; cursor: pointer; margin-top: 10px; transition: opacity 0.3s; }
+    .btn-auth:disabled { opacity: 0.6; cursor: not-allowed; }
     .auth-footer { text-align: center; margin-top: 24px; font-size: 0.85rem; color: var(--txt2); }
     .auth-footer a { color: var(--teal); font-weight: 700; text-decoration: none; }
-    .error-msg { color: #ef4444; font-size: 0.85rem; margin-top: 10px; text-align: center; display: none; }
+    .msg-box { font-size: 0.85rem; margin-top: 12px; text-align: center; padding: 10px; border-radius: 10px; display: none; }
+    .msg-box.error { display: block; background: #fee2e2; color: #991b1b; border-left: 3px solid #ef4444; }
+    .msg-box.success { display: block; background: #d1fae5; color: #065f46; border-left: 3px solid #10b981; }
   </style>
 </head>
 <body>
@@ -38,8 +41,8 @@
         <label>Mot de passe</label>
         <input type="password" id="pass" placeholder="••••••••" required>
       </div>
-      <button type="submit" class="btn-auth">Se connecter</button>
-      <div id="loginError" class="error-msg">Identifiants invalides.</div>
+      <button type="submit" class="btn-auth" id="loginBtn">Se connecter</button>
+      <div id="loginMsg" class="msg-box"></div>
     </form>
 
     <div class="auth-footer">
@@ -48,24 +51,89 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const email = document.getElementById('email').value;
-      const pass = document.getElementById('pass').value;
-      const error = document.getElementById('loginError');
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="backend-config.js"></script>
 
-      if (email === 'user@healthiverse.com' && pass === 'user123') {
-        localStorage.setItem('userAuth', 'true');
-        localStorage.setItem('userType', 'patient');
-        window.location.href = 'mon-compte.html'; // Redirige vers le tableau de bord patient
-      } else if (email === 'pro@healthiverse.com' && pass === 'pro123') {
-        localStorage.setItem('userAuth', 'true');
-        localStorage.setItem('userType', 'pro');
-        window.location.href = 'dashboard.html';
+  <script>
+    // Init Firebase
+    if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+      firebase.initializeApp(HEALTHIVERSE_CONFIG.firebase);
+    }
+
+    const msgBox = document.getElementById('loginMsg');
+
+    function showMsg(text, type) {
+      msgBox.textContent = text;
+      msgBox.className = 'msg-box ' + type;
+    }
+
+    // If already logged in, redirect
+    if (typeof firebase !== 'undefined') {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          // Check user type from Firestore
+          firebase.firestore().collection('patients').where('email', '==', user.email).get()
+            .then(snap => {
+              if (!snap.empty) {
+                window.location.href = 'mon-compte.html';
+              } else {
+                window.location.href = 'dashboard.html';
+              }
+            });
+        }
+      });
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pass = document.getElementById('pass').value;
+      const btn = document.getElementById('loginBtn');
+
+      btn.textContent = '⏳ Connexion...';
+      btn.disabled = true;
+      msgBox.className = 'msg-box';
+
+      // Use Firebase Authentication
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        try {
+          const cred = await firebase.auth().signInWithEmailAndPassword(email, pass);
+          showMsg('✅ Connexion réussie ! Redirection...', 'success');
+
+          // Determine user type from Firestore
+          const db = firebase.firestore();
+          const patientSnap = await db.collection('patients').where('email', '==', email).get();
+
+          // Store session info
+          localStorage.setItem('userAuth', 'true');
+          localStorage.setItem('userEmail', email);
+          localStorage.setItem('userName', cred.user.displayName || email);
+
+          if (!patientSnap.empty) {
+            localStorage.setItem('userType', 'patient');
+            setTimeout(() => { window.location.href = 'mon-compte.html'; }, 800);
+          } else {
+            localStorage.setItem('userType', 'pro');
+            setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+          }
+        } catch (err) {
+          let msg = 'Identifiants invalides.';
+          if (err.code === 'auth/user-not-found') msg = 'Aucun compte trouvé avec cet email.';
+          else if (err.code === 'auth/wrong-password') msg = 'Mot de passe incorrect.';
+          else if (err.code === 'auth/too-many-requests') msg = 'Trop de tentatives. Réessayez plus tard.';
+          else if (err.code === 'auth/invalid-email') msg = 'Adresse email invalide.';
+          showMsg(msg, 'error');
+          btn.textContent = 'Se connecter';
+          btn.disabled = false;
+        }
       } else {
-        error.style.display = 'block';
-        setTimeout(() => error.style.display = 'none', 3000);
+        // Firebase not configured yet — show helpful message
+        showMsg('⚠️ Firebase Auth non configuré. Consultez backend-config.js pour activer la connexion.', 'error');
+        btn.textContent = 'Se connecter';
+        btn.disabled = false;
       }
     });
   </script>

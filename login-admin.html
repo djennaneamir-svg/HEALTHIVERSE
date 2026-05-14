@@ -12,9 +12,14 @@
     .logo-m { font-size: 2rem; margin-bottom: 24px; }
     h2 { margin-bottom: 8px; font-family: 'Plus Jakarta Sans', sans-serif; }
     p { color: #94a3b8; font-size: 0.9rem; margin-bottom: 32px; }
-    input { width: 100%; padding: 16px; margin-bottom: 20px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none; }
-    button { width: 100%; padding: 16px; border-radius: 12px; border: none; background: #0d9488; color: #fff; font-weight: 700; cursor: pointer; }
-    .error-msg { color: #ef4444; font-size: 0.85rem; margin-top: 16px; display: none; }
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: #94a3b8; }
+    input { width: 100%; padding: 16px; margin-bottom: 8px; border-radius: 12px; border: 1px solid #334155; background: #0f172a; color: #fff; outline: none; }
+    button { width: 100%; padding: 16px; border-radius: 12px; border: none; background: #0d9488; color: #fff; font-weight: 700; cursor: pointer; transition: opacity 0.3s; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .msg-box { font-size: 0.85rem; margin-top: 16px; padding: 10px; border-radius: 10px; display: none; }
+    .msg-box.error { display: block; background: rgba(239,68,68,0.15); color: #fca5a5; border-left: 3px solid #ef4444; }
+    .msg-box.success { display: block; background: rgba(16,185,129,0.15); color: #6ee7b7; border-left: 3px solid #10b981; }
   </style>
 </head>
 <body>
@@ -22,27 +27,109 @@
   <div class="login-card">
     <div class="logo-m">🛡️</div>
     <h2>Administration</h2>
-    <p>Veuillez entrer votre mot de passe pour accéder au centre de commande.</p>
+    <p>Connectez-vous avec votre compte administrateur autorisé.</p>
     
-    <input type="password" id="adminPass" placeholder="Mot de passe">
-    <button onclick="checkAdminAuth()">Se connecter</button>
-    <div id="error" class="error-msg">Mot de passe incorrect.</div>
+    <form id="adminLoginForm">
+      <div class="form-group">
+        <label>Email administrateur</label>
+        <input type="email" id="adminEmail" placeholder="admin@healthiverse.com" required>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" id="adminPass" placeholder="••••••••" required>
+      </div>
+      <button type="submit" id="adminLoginBtn">Se connecter</button>
+    </form>
+    <div id="adminMsg" class="msg-box"></div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+  <script src="backend-config.js"></script>
+
   <script>
-    function checkAdminAuth() {
-      const pass = document.getElementById('adminPass').value;
-      const error = document.getElementById('error');
-      
-      // Simulation d'un mot de passe (admin2026)
-      if (pass === 'admin2026') {
-        localStorage.setItem('adminAuth', 'true');
-        window.location.href = 'admin.html';
-      } else {
-        error.style.display = 'block';
-        setTimeout(() => error.style.display = 'none', 3000);
-      }
+    // Init Firebase
+    if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+      firebase.initializeApp(HEALTHIVERSE_CONFIG.firebase);
     }
+
+    // Authorized admin emails — stored in Firestore collection 'admins'
+    // Fallback: check against the config adminEmail
+    const msgBox = document.getElementById('adminMsg');
+
+    function showMsg(text, type) {
+      msgBox.textContent = text;
+      msgBox.className = 'msg-box ' + type;
+    }
+
+    // If already logged in as admin, redirect
+    if (typeof firebase !== 'undefined') {
+      firebase.auth().onAuthStateChanged(async (user) => {
+        if (user) {
+          const isAdmin = await checkIsAdmin(user.email);
+          if (isAdmin) window.location.href = 'admin.html';
+        }
+      });
+    }
+
+    async function checkIsAdmin(email) {
+      // Check Firestore 'admins' collection first
+      if (typeof firebase !== 'undefined' && firebase.firestore) {
+        try {
+          const snap = await firebase.firestore().collection('admins').where('email', '==', email).get();
+          if (!snap.empty) return true;
+        } catch (e) { /* Firestore not configured yet */ }
+      }
+      // Fallback: check against the config adminEmail
+      return email === HEALTHIVERSE_CONFIG.adminEmail;
+    }
+
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPass').value;
+      const btn = document.getElementById('adminLoginBtn');
+
+      btn.textContent = '⏳ Vérification...';
+      btn.disabled = true;
+      msgBox.className = 'msg-box';
+
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        try {
+          // Authenticate with Firebase
+          await firebase.auth().signInWithEmailAndPassword(email, pass);
+
+          // Verify admin privileges
+          const isAdmin = await checkIsAdmin(email);
+          if (!isAdmin) {
+            await firebase.auth().signOut();
+            showMsg('⛔ Ce compte n\'a pas les droits administrateur.', 'error');
+            btn.textContent = 'Se connecter';
+            btn.disabled = false;
+            return;
+          }
+
+          showMsg('✅ Accès autorisé. Redirection...', 'success');
+          localStorage.setItem('adminAuth', 'true');
+          setTimeout(() => { window.location.href = 'admin.html'; }, 800);
+
+        } catch (err) {
+          let msg = 'Identifiants invalides.';
+          if (err.code === 'auth/user-not-found') msg = 'Aucun compte administrateur trouvé.';
+          else if (err.code === 'auth/wrong-password') msg = 'Mot de passe incorrect.';
+          else if (err.code === 'auth/too-many-requests') msg = '🔒 Trop de tentatives. Compte temporairement verrouillé.';
+          showMsg(msg, 'error');
+          btn.textContent = 'Se connecter';
+          btn.disabled = false;
+        }
+      } else {
+        showMsg('⚠️ Firebase Auth non configuré. Consultez backend-config.js.', 'error');
+        btn.textContent = 'Se connecter';
+        btn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>

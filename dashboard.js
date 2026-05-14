@@ -1,9 +1,17 @@
 // DASHBOARD PRO LOGIC
 
-// Security Guard
-if (localStorage.getItem('userAuth') !== 'true' || localStorage.getItem('userType') !== 'pro') {
-  window.location.href = 'login.html';
+if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+  firebase.initializeApp(HEALTHIVERSE_CONFIG.firebase);
 }
+
+if (typeof firebase !== 'undefined') {
+  firebase.auth().onAuthStateChanged(user => {
+    if (!user || localStorage.getItem('userType') !== 'pro') {
+      window.location.href = 'login.html';
+    }
+  });
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
