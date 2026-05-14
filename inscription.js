@@ -46,15 +46,21 @@ function initEmailJS() {
 }
 
 // ── Sauvegarde dans Firestore ───────────────────────────────
-async function saveToFirestore(db, collection, data) {
+async function saveToFirestore(db, collection, data, uid) {
   try {
-    const docRef = await db.collection(collection).add({
+    const docData = {
       ...data,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      status: 'pending_review'
-    });
-    console.log('✅ Firestore — ID:', docRef.id);
-    return docRef.id;
+      status: collection === 'professionnels' ? 'pending_review' : 'active'
+    };
+
+    if (uid) {
+      await db.collection(collection).doc(uid).set(docData);
+      return uid;
+    } else {
+      const docRef = await db.collection(collection).add(docData);
+      return docRef.id;
+    }
   } catch (err) {
     console.error('❌ Firestore error:', err);
     return null;
@@ -202,8 +208,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1️⃣ Sauvegarder dans Firestore (ou localStorage si non configuré)
         let savedId = null;
         if (db) {
-          if (authUser) userData.uid = authUser.uid;
-          savedId = await saveToFirestore(db, 'patients', userData);
+          const uid = authUser ? authUser.uid : null;
+          savedId = await saveToFirestore(db, 'patients', userData, uid);
         }
         if (!savedId) saveToLocalStorage('patient', userData);
 
@@ -295,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1️⃣ Sauvegarder dans Firestore (ou localStorage si non configuré)
         let savedId = null;
         if (db) {
-          if (authUser) userData.uid = authUser.uid;
-          savedId = await saveToFirestore(db, 'professionnels', userData);
+          const uid = authUser ? authUser.uid : null;
+          savedId = await saveToFirestore(db, 'professionnels', userData, uid);
         }
         if (!savedId) saveToLocalStorage('professionnel', userData);
 
@@ -314,7 +320,12 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.style.background = '#10b981';
         showMsg('pro-msg', `✅ Demande envoyée ! Notre équipe va vérifier votre dossier. Redirection...`, true);
 
-      setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+      } catch (err) {
+        showMsg('pro-msg', err.message || '❌ Erreur lors de la création.', false);
+        btn.textContent = 'Valider et choisir mon forfait';
+        btn.disabled = false;
+      }
     });
   }
 });
