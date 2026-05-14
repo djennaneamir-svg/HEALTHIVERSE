@@ -14,7 +14,7 @@
     <div class="register-card">
       <div class="register-header">
         <a href="index.html" class="logo">
-          <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+          <div class="logo-icon"><svg width="20" height="20" viewBox="0 0 28 28" fill="none"><path d="M14 3C14 3 6 8.5 6 15.5C6 19.64 9.36 23 14 23C18.64 23 22 19.64 22 15.5C22 8.5 14 3 14 3Z" fill="white" opacity="0.9"/><path d="M14 8V18M9 13H19" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
           <span>Healthiverse</span>
         </a>
         <h1>Rejoignez l'aventure</h1>
@@ -43,30 +43,35 @@
       <div id="form-patient" class="register-step">
         <button class="btn-back-step" onclick="goBack()">← Retour</button>
         <h2>Compte Patient</h2>
-        <form class="auth-form">
+        <form class="auth-form" id="patientForm" novalidate>
           <div class="form-row">
             <div class="form-group">
-              <label>Prénom</label>
-              <input type="text" placeholder="Ex: Jean">
+              <label for="p-prenom">Prénom</label>
+              <input type="text" id="p-prenom" name="prenom" placeholder="Ex: Jean" required>
             </div>
             <div class="form-group">
-              <label>Nom</label>
-              <input type="text" placeholder="Ex: Dupont">
+              <label for="p-nom">Nom</label>
+              <input type="text" id="p-nom" name="nom" placeholder="Ex: Dupont" required>
             </div>
           </div>
           <div class="form-group">
-            <label>Email</label>
-            <input type="email" placeholder="nom@exemple.com">
+            <label for="p-email">Email</label>
+            <input type="email" id="p-email" name="email" placeholder="nom@exemple.com" required>
           </div>
           <div class="form-group">
-            <label>Mot de passe</label>
-            <input type="password" placeholder="••••••••">
+            <label for="p-tel">Téléphone (optionnel)</label>
+            <input type="tel" id="p-tel" name="telephone" placeholder="+213 6XX XX XX XX">
+          </div>
+          <div class="form-group">
+            <label for="p-pass">Mot de passe</label>
+            <input type="password" id="p-pass" name="password" placeholder="Minimum 8 caractères" required minlength="8">
           </div>
           <div class="form-check">
             <input type="checkbox" id="terms-p">
-            <label for="terms-p">J'accepte les conditions d'utilisation</label>
+            <label for="terms-p">J'accepte les <a href="#" style="color:var(--teal)">conditions d'utilisation</a></label>
           </div>
           <button type="submit" class="btn-auth-submit">Créer mon compte patient</button>
+          <div id="patient-msg" style="display:none; margin-top:12px; padding:12px; border-radius:10px; font-size:0.9rem; text-align:center;"></div>
         </form>
       </div>
 
@@ -74,40 +79,61 @@
       <div id="form-pro" class="register-step">
         <button class="btn-back-step" onclick="goBack()">← Retour</button>
         <h2>Compte Professionnel</h2>
-        <form class="auth-form">
+        <form class="auth-form" id="proForm" novalidate>
           <div class="form-row">
             <div class="form-group">
-              <label>Prénom</label>
-              <input type="text" placeholder="Dr. Prénom">
+              <label for="pro-prenom">Prénom</label>
+              <input type="text" id="pro-prenom" name="prenom" placeholder="Dr. Prénom" required>
             </div>
             <div class="form-group">
-              <label>Nom</label>
-              <input type="text" placeholder="Nom">
+              <label for="pro-nom">Nom</label>
+              <input type="text" id="pro-nom" name="nom" placeholder="Nom" required>
             </div>
           </div>
           <div class="form-group">
-            <label>Spécialité</label>
-            <select>
+            <label for="pro-spec">Spécialité</label>
+            <select id="pro-spec" name="specialite" required>
+              <option value="" disabled selected>Choisissez votre spécialité</option>
               <option>Médecin généraliste</option>
               <option>Cardiologue</option>
               <option>Dermatologue</option>
+              <option>Gynécologue</option>
+              <option>Neurologue</option>
+              <option>Ophtalmologue</option>
+              <option>ORL</option>
               <option>Pédiatre</option>
+              <option>Psychiatre</option>
+              <option>Radiologue</option>
+              <option>Rhumatologue</option>
+              <option>Urologue</option>
+              <option>Kinésithérapeute</option>
+              <option>Infirmier(e)</option>
+              <option>Pharmacien(ne)</option>
               <option>Autre...</option>
             </select>
           </div>
           <div class="form-group">
-            <label>Numéro RPPS / Licence</label>
-            <input type="text" placeholder="11 chiffres (ex: 1010...)">
+            <label for="pro-rpps">Numéro RPPS / Licence professionnelle</label>
+            <input type="text" id="pro-rpps" name="rpps" placeholder="Ex: 10101234567" required>
           </div>
           <div class="form-group">
-            <label>Email professionnel</label>
-            <input type="email" placeholder="dr.nom@clinique.com">
+            <label for="pro-email">Email professionnel</label>
+            <input type="email" id="pro-email" name="email" placeholder="dr.nom@clinique.com" required>
           </div>
           <div class="form-group">
-            <label>Mot de passe</label>
-            <input type="password" placeholder="••••••••">
+            <label for="pro-tel">Téléphone du cabinet</label>
+            <input type="tel" id="pro-tel" name="telephone" placeholder="+213 6XX XX XX XX" required>
+          </div>
+          <div class="form-group">
+            <label for="pro-ville">Ville d'exercice</label>
+            <input type="text" id="pro-ville" name="ville" placeholder="Ex: Alger, Casablanca..." required>
+          </div>
+          <div class="form-group">
+            <label for="pro-pass">Mot de passe</label>
+            <input type="password" id="pro-pass" name="password" placeholder="Minimum 8 caractères" required minlength="8">
           </div>
           <button type="submit" class="btn-auth-submit">Valider et choisir mon forfait</button>
+          <div id="pro-msg" style="display:none; margin-top:12px; padding:12px; border-radius:10px; font-size:0.9rem; text-align:center;"></div>
         </form>
       </div>
 
@@ -117,6 +143,17 @@
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Configuration backend -->
+  <script src="backend-config.js"></script>
+
+  <!-- Logique d'inscription -->
   <script src="inscription.js"></script>
 </body>
 </html>

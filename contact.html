@@ -40,21 +40,31 @@
           <!-- FORM -->
           <div class="contact-form-box reveal">
             <h3>Envoyez-nous un message</h3>
-            <form id="contactForm" class="c-form">
+            <form id="contactForm" class="c-form" novalidate>
               <div class="f-row">
-                <input type="text" placeholder="Prénom" required>
-                <input type="text" placeholder="Nom" required>
+                <input type="text" id="c-prenom" placeholder="Prénom" required>
+                <input type="text" id="c-nom" placeholder="Nom" required>
               </div>
-              <input type="email" placeholder="Votre email" required>
-              <select required>
+              <input type="email" id="c-email" placeholder="Votre email" required>
+              <select id="c-sujet" required>
                 <option value="" disabled selected>Sujet de votre demande</option>
-                <option>Support Technique</option>
-                <option>Devenir Partenaire</option>
-                <option>Presse & Media</option>
-                <option>Autre</option>
+                <option value="Support Technique">Support Technique</option>
+                <option value="Devenir Partenaire">Devenir Partenaire</option>
+                <option value="Investissement">Investissement</option>
+                <option value="Presse & Media">Presse &amp; Media</option>
+                <option value="Signalement">Signalement</option>
+                <option value="Autre">Autre</option>
               </select>
-              <textarea placeholder="Comment pouvons-nous vous aider ?" rows="5" required></textarea>
-              <button type="submit" class="btn-send">Envoyer le message</button>
+              <textarea id="c-message" placeholder="Comment pouvons-nous vous aider ?" rows="5" required></textarea>
+              <button type="submit" class="btn-send" id="contactSubmitBtn">Envoyer le message</button>
+
+              <!-- Feedback -->
+              <div id="contact-success" style="display:none; margin-top:16px; padding:16px; background:#d1fae5; border-left:4px solid #10b981; border-radius:10px; color:#065f46; font-weight:600;">
+                ✅ Message envoyé ! Nous vous répondrons sous 24h à <strong id="confirm-email"></strong>.
+              </div>
+              <div id="contact-error" style="display:none; margin-top:16px; padding:16px; background:#fee2e2; border-left:4px solid #ef4444; border-radius:10px; color:#991b1b; font-weight:600;">
+                ❌ Erreur lors de l'envoi. Veuillez réessayer ou nous écrire directement à <a href="mailto:djennane.amir@gmail.com" style="color:#991b1b;">djennane.amir@gmail.com</a>
+              </div>
             </form>
           </div>
 
@@ -62,9 +72,10 @@
           <div class="contact-sidebar">
             <div class="info-card reveal">
               <h4>Nos coordonnées</h4>
-              <p>📍 XXXXX</p>
-              <p>📞 +213555215656</p>
-              <p>✉️ djennane.amir@gmail.com</p>
+              <p>📍 Algérie — Afrique du Nord</p>
+              <p>📞 <a href="tel:+213555215656">+213 555 21 56 56</a></p>
+              <p>✉️ <a href="mailto:djennane.amir@gmail.com">djennane.amir@gmail.com</a></p>
+              <p style="margin-top:12px; font-size:0.85rem; color:var(--txt2);">⏰ Réponse sous 24h (jours ouvrables)</p>
             </div>
 
             <div class="faq-mini reveal">
@@ -76,6 +87,10 @@
               <div class="faq-item">
                 <strong>Est-ce gratuit ?</strong>
                 <p>Oui, l'utilisation de Healthiverse pour trouver des médecins est 100% gratuite.</p>
+              </div>
+              <div class="faq-item">
+                <strong>Comment devenir partenaire ?</strong>
+                <p>Remplissez ce formulaire avec le sujet "Devenir Partenaire" ou écrivez-nous directement.</p>
               </div>
             </div>
           </div>
@@ -89,6 +104,79 @@
       <p>&copy; 2026 Healthiverse. Tous droits réservés.</p>
     </div>
   </footer>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Configuration backend -->
+  <script src="backend-config.js"></script>
+
+  <script>
+    // Init EmailJS
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init(HEALTHIVERSE_CONFIG.emailjs.publicKey);
+    }
+
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const prenom  = document.getElementById('c-prenom').value.trim();
+      const nom     = document.getElementById('c-nom').value.trim();
+      const email   = document.getElementById('c-email').value.trim();
+      const sujet   = document.getElementById('c-sujet').value;
+      const message = document.getElementById('c-message').value.trim();
+      const btn     = document.getElementById('contactSubmitBtn');
+      const errDiv  = document.getElementById('contact-error');
+      const okDiv   = document.getElementById('contact-success');
+
+      // Validation
+      if (!prenom || !nom || !email || !sujet || !message) {
+        [document.getElementById('c-prenom'), document.getElementById('c-nom'),
+         document.getElementById('c-email'), document.getElementById('c-sujet'),
+         document.getElementById('c-message')].forEach(el => {
+          if (!el.value.trim()) el.style.borderColor = '#ef4444';
+        });
+        return;
+      }
+
+      btn.textContent = 'Envoi en cours...';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+      errDiv.style.display = 'none';
+      okDiv.style.display  = 'none';
+
+      try {
+        if (typeof emailjs === 'undefined') throw new Error('EmailJS non configuré');
+
+        await emailjs.send(
+          HEALTHIVERSE_CONFIG.emailjs.serviceId,
+          HEALTHIVERSE_CONFIG.emailjs.contactTemplateId,
+          {
+            to_email: HEALTHIVERSE_CONFIG.adminEmail,
+            from_name: `${prenom} ${nom}`,
+            from_email: email,
+            sujet:   sujet,
+            message: message,
+            reply_to: email
+          }
+        );
+
+        // Succès
+        document.getElementById('confirm-email').textContent = email;
+        okDiv.style.display = 'block';
+        this.reset();
+        btn.textContent = '✅ Envoyé !';
+        btn.style.background = '#10b981';
+
+      } catch (err) {
+        console.error('Erreur envoi email:', err);
+        errDiv.style.display = 'block';
+        btn.textContent = 'Envoyer le message';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+      }
+    });
+  </script>
 
   <script src="script.js"></script>
 </body>
