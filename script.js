@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // === DARK MODE TOGGLE ===
+  const darkToggle = document.getElementById('darkModeToggle');
+  if (darkToggle) {
+    const applyDark = (isDark) => {
+      document.documentElement.classList.toggle('dark-mode', isDark);
+      darkToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('dark-mode', isDark);
+    };
+    applyDark(localStorage.getItem('dark-mode') === 'true');
+    darkToggle.addEventListener('click', () => {
+      applyDark(!document.documentElement.classList.contains('dark-mode'));
+    });
+  }
+
   // === NAVBAR SCROLL ===
   const navbar = document.getElementById('navbar');
   window.addEventListener('scroll', () => {
@@ -110,12 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Apply translations to elements with data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
-      if (translations[lang][key]) {
-        if (el.tagName === 'INPUT' && el.placeholder) {
-          // Special case for placeholders if needed
-        } else {
-          el.textContent = translations[lang][key];
-        }
+      if (!translations[lang]?.[key]) return;
+      // Don't replace inner HTML of hero-title (has animated spans)
+      if (el.classList.contains('hero-title')) return;
+      if (el.tagName === 'INPUT' && el.placeholder) {
+        // skip
+      } else {
+        el.textContent = translations[lang][key];
       }
     });
 
@@ -375,34 +390,89 @@ document.addEventListener('DOMContentLoaded', () => {
   renderSpecialties();
   renderDoctors('all');
 
-  // === TESTIMONIALS ===
+  // === FILTER BUTTONS ===
+  const filterBar = document.getElementById('filterBar');
+  if (filterBar) {
+    filterBar.querySelectorAll('.fbtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBar.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderDoctors(btn.dataset.filter);
+        observeFadeIns();
+      });
+    });
+  }
+
+  // === TESTIMONIALS CAROUSEL ===
   const testimonials = [
-    { name: 'Amine R.', role: 'Patient', text: "Grâce à Healthiverse, j'ai trouvé un spécialiste à Alger en quelques clics. Indispensable !", stars: 5, color: '#10b981' },
-    { name: 'Leila M.', role: 'Patiente', text: "Service impeccable, j'utilise la plateforme pour mes enfants à Casablanca.", stars: 5, color: '#6366f1' }
+    { name: 'Amine R.', role: 'Patient • Alger', text: "Grâce à Healthiverse, j'ai trouvé un cardiologue à Alger en quelques clics. Les avis patients sont vraiment fiables. Indispensable !", stars: 5, color: '#10b981', initials: 'AR' },
+    { name: 'Leila M.', role: 'Patiente • Casablanca', text: "Service impeccable, j'utilise la plateforme pour mes enfants. La prise de RDV en ligne m'a économisé tellement de temps !", stars: 5, color: '#6366f1', initials: 'LM' },
+    { name: 'Dr. Karim B.', role: 'Médecin Généraliste • Tunis', text: "En tant que professionnel, Healthiverse m'a permis de doubler ma patientèle en 3 mois. L'interface est très intuitive.", stars: 5, color: '#f59e0b', initials: 'KB' },
+    { name: 'Fatima Z.', role: 'Patiente • Istanbul', text: "J'ai trouvé un pédiatre francophone à Istanbul pour mon fils. Un service qui n'existait nulle part ailleurs !", stars: 5, color: '#ef4444', initials: 'FZ' }
   ];
   const testiTrack = document.getElementById('testiTrack');
-  if (testiTrack) {
-    testimonials.forEach(t => {
+  const testiDots = document.getElementById('testiDots');
+  let currentSlide = 0;
+
+  if (testiTrack && testimonials.length > 0) {
+    // Build slides
+    testimonials.forEach((t, i) => {
       const card = document.createElement('div');
       card.className = 'testi-card';
-      card.innerHTML = `<div class="testi-txt">"${t.text}"</div><div class="testi-name">${t.name}</div>`;
+      card.innerHTML = `
+        <div class="testi-left">
+          <div class="testi-av" style="background:${t.color}">${t.initials}</div>
+          <div class="testi-stars">${'★'.repeat(t.stars)}</div>
+        </div>
+        <div class="testi-right">
+          <div class="testi-txt">"${t.text}"</div>
+          <div class="testi-name">${t.name}</div>
+          <div class="testi-role">${t.role}</div>
+        </div>`;
       testiTrack.appendChild(card);
+
+      // Build dot
+      if (testiDots) {
+        const dot = document.createElement('button');
+        dot.className = 'testi-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Avis ${i + 1}`);
+        dot.addEventListener('click', () => goToSlide(i));
+        testiDots.appendChild(dot);
+      }
     });
+
+    function goToSlide(n) {
+      currentSlide = n;
+      testiTrack.style.transform = `translateX(-${n * 100}%)`;
+      document.querySelectorAll('.testi-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === n);
+      });
+    }
+
+    // Auto-play
+    setInterval(() => {
+      goToSlide((currentSlide + 1) % testimonials.length);
+    }, 5000);
   }
 
   // === CITIES ===
   const cities = [
-    { emoji: '🇩🇿', name: 'Alger', count: '8 400+' },
-    { emoji: '🇲🇦', name: 'Casablanca', count: '7 200+' },
-    { emoji: '🇹🇳', name: 'Tunis', count: '3 800+' },
-    { emoji: '🇹🇷', name: 'Istanbul', count: '15 400+' }
+    { emoji: '🇩🇿', name: 'Alger', count: '8 400+', flag: 'DZ' },
+    { emoji: '🇲🇦', name: 'Casablanca', count: '7 200+', flag: 'MA' },
+    { emoji: '🇹🇳', name: 'Tunis', count: '3 800+', flag: 'TN' },
+    { emoji: '🇹🇷', name: 'Istanbul', count: '15 400+', flag: 'TR' },
+    { emoji: '🇦🇪', name: 'Dubai', count: '6 100+', flag: 'AE' },
+    { emoji: '🇪🇬', name: 'Le Caire', count: '9 200+', flag: 'EG' },
+    { emoji: '🇸🇦', name: 'Riyad', count: '5 300+', flag: 'SA' },
+    { emoji: '🇸🇳', name: 'Dakar', count: '2 100+', flag: 'SN' }
   ];
   const citiesGrid = document.getElementById('citiesGrid');
   if (citiesGrid) {
     cities.forEach(c => {
       const card = document.createElement('div');
       card.className = 'city-card fade-in';
-      card.innerHTML = `<div class="city-emoji">${c.emoji}</div><div class="city-name">${c.name}</div><div class="city-count">${c.count} docteurs</div>`;
+      card.innerHTML = `<div class="city-emoji">${c.emoji}</div><div><div class="city-name">${c.name}</div><div class="city-count">${c.count} docteurs</div></div>`;
+      card.addEventListener('click', () => window.location.href = `recherche.html?loc=${encodeURIComponent(c.name)}`);
       citiesGrid.appendChild(card);
     });
   }
@@ -465,6 +535,77 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // === PRICING GRID ===
+  const plans = [
+    {
+      name: 'Débutant', price: 'Gratuit', duration: '',
+      features: [
+        { text: 'Profil basique visible', on: true },
+        { text: '5 RDV / mois', on: true },
+        { text: 'Avis patients', on: true },
+        { text: 'Statistiques de base', on: false },
+        { text: 'Badge Premium', on: false },
+        { text: 'Support prioritaire', on: false }
+      ],
+      btnClass: 'p-btn ghost', btnText: 'Commencer gratuitement', featured: false
+    },
+    {
+      name: 'Pro', price: '29', duration: '/mois',
+      features: [
+        { text: 'Profil complet + photos', on: true },
+        { text: 'RDV illimités', on: true },
+        { text: 'Avis patients + réponses', on: true },
+        { text: 'Statistiques avancées', on: true },
+        { text: 'Badge Premium', on: false },
+        { text: 'Support prioritaire', on: false }
+      ],
+      btnClass: 'p-btn solid', btnText: 'Choisir Pro', featured: true
+    },
+    {
+      name: 'Clinique', price: '79', duration: '/mois',
+      features: [
+        { text: 'Jusqu’à 10 médecins', on: true },
+        { text: 'RDV illimités', on: true },
+        { text: 'Gestion équipe', on: true },
+        { text: 'Statistiques avancées', on: true },
+        { text: 'Badge Clinique Certifiée', on: true },
+        { text: 'Support prioritaire 24/7', on: true }
+      ],
+      btnClass: 'p-btn ghost', btnText: 'Choisir Clinique', featured: false
+    },
+    {
+      name: 'Enterprise', price: 'Sur devis', duration: '',
+      features: [
+        { text: 'Médecins illimités', on: true },
+        { text: 'API dédiée', on: true },
+        { text: 'Reporting BI', on: true },
+        { text: 'SLA garanti 99.9%', on: true },
+        { text: 'Account manager dédié', on: true },
+        { text: 'Formation équipes incluse', on: true }
+      ],
+      btnClass: 'p-btn ghost', btnText: 'Nous contacter', featured: false
+    }
+  ];
+  const pricingGrid = document.getElementById('pricingGrid');
+  if (pricingGrid) {
+    plans.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'price-card fade-in' + (p.featured ? ' featured' : '');
+      card.innerHTML = `
+        ${p.featured ? '<div class="p-badge">Populaire</div>' : ''}
+        <div class="price-header">
+          <h3>${p.name}</h3>
+          <div class="price-tag">
+            <span class="p-val">${p.price}</span>
+            <span class="p-dur">${p.duration}</span>
+          </div>
+        </div>
+        <ul class="price-list">${p.features.map(f => `<li class="${f.on ? '' : 'off'}"><span>${f.on ? '✓' : '✕'}</span>${f.text}</li>`).join('')}</ul>
+        <a href="inscription.html" class="${p.btnClass}">${p.btnText}</a>`;
+      pricingGrid.appendChild(card);
+    });
+  }
+
   // === COUNTERS ===
   const counterObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -472,14 +613,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const el = entry.target;
       const target = parseInt(el.dataset.target);
       let count = 0;
-      const step = target / 50;
+      const step = target / 60;
       const timer = setInterval(() => {
         count += step;
-        if (count >= target) { el.textContent = target.toLocaleString() + (el.dataset.suffix || ''); clearInterval(timer); }
-        else { el.textContent = Math.floor(count).toLocaleString() + (el.dataset.suffix || ''); }
-      }, 30);
+        if (count >= target) { el.textContent = target.toLocaleString('fr-FR') + (el.dataset.suffix || ''); clearInterval(timer); }
+        else { el.textContent = Math.floor(count).toLocaleString('fr-FR') + (el.dataset.suffix || ''); }
+      }, 25);
       counterObs.unobserve(el);
     });
   }, { threshold: 0.5 });
-  document.querySelectorAll('.h-num').forEach(el => counterObs.observe(el));
+  // Fix: was observing .h-num (old class), now correctly targets .sc-val
+  document.querySelectorAll('.sc-val[data-target]').forEach(el => counterObs.observe(el));
 });
