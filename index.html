@@ -26,9 +26,8 @@
 
   <link rel="stylesheet" href="style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
-  <!-- LEAFLET MAPS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 </head>
 <body>
   <!-- SCROLLING BETA BANNER -->
@@ -101,7 +100,10 @@
     <div class="blob blob-3"></div>
   </div>
   <div class="hero-content">
-    <h1 class="hero-title" style="margin-bottom: 30px;" data-i18n="hero-title">Votre santé, sans frontières</h1>
+    <h1 class="hero-title" style="margin-bottom: 30px;" data-i18n="hero-title">
+      <span>Votre santé,</span>
+      <span class="hero-gradient">sans frontières</span>
+    </h1>
     <p class="hero-sub" style="max-width: 800px; margin: 0 auto 40px;" data-i18n="hero-sub">Le premier réseau médical certifié en Afrique, au Moyen-Orient et en Turquie. Prenez rendez-vous en ligne 24h/24.</p>
     
     <div class="search-card" style="max-width: 1100px; width: 100%; margin: 0 auto;">
@@ -148,10 +150,9 @@
 
 
 <!-- SPECIALITES -->
-<section class="section" id="specialites">
+<section class="section reveal" id="specialites">
   <div class="container">
     <div class="sec-header">
-
       <h2 data-i18n="spec-h2">Toutes les spécialités médicales</h2>
       <p data-i18n="spec-p">Trouvez rapidement le bon spécialiste pour chaque besoin de santé</p>
     </div>
@@ -160,14 +161,13 @@
 </section>
 
 <!-- MEDECINS -->
-<section class="section bg-light" id="medecins">
+<section class="section bg-light reveal" id="medecins">
   <div class="container">
     <div class="sec-header">
-
       <h2 data-i18n="doc-h2">Médecins &amp; Spécialistes</h2>
       <p data-i18n="doc-p">Sélectionnés pour leur expertise et leurs excellents avis patients</p>
     </div>
-    <div class="filter-bar" id="filterBar">
+    <div class="filter-bar stagger-item" id="filterBar">
       <button class="fbtn active" data-filter="all">Tous</button>
       <button class="fbtn" data-filter="generaliste">Généraliste</button>
       <button class="fbtn" data-filter="cardiologue">Cardiologue</button>
@@ -175,63 +175,42 @@
       <button class="fbtn" data-filter="pediatre">Pédiatre</button>
       <button class="fbtn" data-filter="psychiatre">Psychiatre</button>
     </div>
-    <div class="doctors-grid" id="doctorsGrid"></div>
-    <div class="sec-cta"><a href="#" class="btn-outline">Voir tous les médecins →</a></div>
+    <div class="doctors-grid stagger-item" id="doctorsGrid"></div>
+    <div class="sec-cta stagger-item"><a href="#" class="btn-outline">Voir tous les médecins →</a></div>
   </div>
 </section>
 
-<!-- AUXILIAIRES & SERVICES (NEW) -->
+<!-- AUXILIARIES & SERVICES -->
 <section class="section reveal" id="auxiliaries">
   <div class="container">
     <div class="sec-header">
-
-      <h2 data-i18n="aux-h2">Services <span class="text-teal">Auxiliaires</span> & Opérateurs</h2>
-      <p data-i18n="aux-p">Une prise en charge complète, au-delà de la simple consultation</p>
+      <h2 data-i18n="aux-h2">Écosystème de <span class="text-teal">Santé Auxiliaire</span></h2>
+      <p data-i18n="aux-p">Tous les acteurs de la santé réunis pour une prise en charge à 360°.</p>
     </div>
     <div class="aux-grid">
-      <div class="aux-card stagger-item">
-        <div class="aux-ico">🚑</div>
-        <h3>Ambulances & Transport</h3>
-        <p>Réservez un transport sanitaire certifié 24h/7j.</p>
-      </div>
-      <div class="aux-card stagger-item">
-        <div class="aux-ico">💉</div>
-        <h3>Soins à Domicile</h3>
-        <p>Infirmiers et aide-soignants pour vos soins quotidiens.</p>
-      </div>
-      <div class="aux-card stagger-item">
-        <div class="aux-ico">💊</div>
+      <div class="aux-card fade-in card-shine">
+        <div class="aux-ico-box pharma">💊</div>
         <h3>Pharmacies & Garde</h3>
-        <p>Localisez les pharmacies ouvertes et de garde.</p>
+        <p>Localisez les pharmacies ouvertes 24h/7j et vérifiez la disponibilité des stocks.</p>
+        <a href="recherche.html?type=pharmacie" class="aux-link">Voir les pharmacies →</a>
       </div>
-      <div class="aux-card stagger-item">
-        <div class="aux-ico">🛡️</div>
-        <h3>Assurances Santé</h3>
-        <p>Gérez vos remboursements avec nos partenaires.</p>
+      <div class="aux-card fade-in card-shine">
+        <div class="aux-ico-box ambulance">🚑</div>
+        <h3>Ambulances & SOS</h3>
+        <p>Transport médicalisé urgent ou programmé avec suivi GPS en temps réel.</p>
+        <a href="recherche.html?type=ambulance" class="aux-link">Commander →</a>
       </div>
-      <div class="aux-card stagger-item">
-        <div class="aux-ico">🚚</div>
-        <h3>Livraison Médicaments</h3>
-        <p>Recevez vos traitements à domicile en 1h. </p>
-        <a href="#" class="aux-link">En savoir plus →</a>
+      <div class="aux-card fade-in card-shine">
+        <div class="aux-ico-box supplier">📦</div>
+        <h3>Fournisseurs Pro</h3>
+        <p>Équipements médicaux, consommables et mobilier pour professionnels et particuliers.</p>
+        <a href="recherche.html?type=fournisseur" class="aux-link">Catalogue →</a>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- INTERACTIVE MAP SECTION (NEW) -->
-<section class="section map-section" id="carte">
-  <div class="container">
-    <div class="sec-header text-center">
-
-      <h2 data-i18n="map-h2">Trouver un professionnel <span class="text-teal">autour de vous</span></h2>
-      <p data-i18n="map-p">Visualisez les cabinets médicaux et pharmacies de garde ouverts actuellement à proximité.</p>
-    </div>
-    <div class="map-container-wrapper">
-      <div id="carte" class="main-map"></div>
-      <div class="map-stats-overlay">
-        <div class="m-stat"><strong>24</strong><span>Médecins dispo</span></div>
-        <div class="m-stat"><strong>12</strong><span>Pharmacies</span></div>
+      <div class="aux-card fade-in card-shine">
+        <div class="aux-ico-box homecare">🏠</div>
+        <h3>Soins à Domicile</h3>
+        <p>Infirmiers, kinésithérapeutes et aide-soignants qualifiés se déplacent chez vous.</p>
+        <a href="recherche.html?type=domicile" class="aux-link">Réserver →</a>
       </div>
     </div>
   </div>
@@ -483,19 +462,26 @@
   </div>
 </footer>
 
-<!-- EMERGENCY CONTACTS BUTTON -->
-<div class="emergency-fab" id="emergencyFab">
-  <button class="fab-btn" id="fabBtn">🚨</button>
-  <div class="fab-panel" id="fabPanel">
-    <h4>Numéros d'urgence</h4>
-    <a href="tel:15" class="fab-contact"><span class="fab-c-ico samu">15</span><span>SAMU</span><span class="fab-c-sub">Urgences médicales</span></a>
-    <a href="tel:18" class="fab-contact"><span class="fab-c-ico pomp">18</span><span>Pompiers</span><span class="fab-c-sub">Secours & incendies</span></a>
-    <a href="tel:17" class="fab-contact"><span class="fab-c-ico poli">17</span><span>Police</span><span class="fab-c-sub">Sécurité publique</span></a>
-    <a href="tel:112" class="fab-contact"><span class="fab-c-ico euro">112</span><span>Urgences UE</span><span class="fab-c-sub">Numéro européen</span></a>
-    <a href="tel:114" class="fab-contact"><span class="fab-c-ico sms">114</span><span>Urgences SMS</span><span class="fab-c-sub">Sourds & malentendants</span></a>
-    <a href="tel:0800840800" class="fab-contact"><span class="fab-c-ico chu">CHU</span><span>Hôpital le plus proche</span><span class="fab-c-sub">Centre hospitalier</span></a>
-    <a href="tel:3624" class="fab-contact"><span class="fab-c-ico med">📞</span><span>SOS Médecins</span><span class="fab-c-sub">Médecin de garde</span></a>
-    <a href="tel:3016" class="fab-contact"><span class="fab-c-ico tox">☠️</span><span>Urgences Médicales</span><span class="fab-c-sub">Algérie: 3016</span></a>
+<!-- FLOATING ACTION BUTTONS -->
+<div class="floating-actions">
+  <!-- CONTACT FAB -->
+  <div class="action-fab contact-fab" id="contactFab">
+    <button class="fab-btn-circle contact" onclick="window.location.href='contact.html'" aria-label="Contact">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+      <span class="fab-label">Contact</span>
+    </button>
+  </div>
+
+  <!-- EMERGENCY FAB -->
+  <div class="action-fab emergency-fab" id="emergencyFab">
+    <button class="fab-btn-circle emergency" id="fabBtn" aria-label="Urgences">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <span class="fab-label">Urgences</span>
+    </button>
+    <div class="fab-panel" id="fabPanel">
+      <h4>Numéros d'urgence</h4>
+      <!-- Dynamically filled by script.js -->
+    </div>
   </div>
 </div>
 

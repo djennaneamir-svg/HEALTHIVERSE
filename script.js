@@ -193,8 +193,10 @@ document.addEventListener('DOMContentLoaded', () => {
         html += `
           <a href="tel:${e.num}" class="fab-contact">
             <span class="fab-c-ico samu">${e.num}</span>
-            <span>${e.label}</span>
-            <span class="fab-c-sub">Appel immédiat</span>
+            <div class="fab-info">
+              <span>${e.label}</span>
+              <span class="fab-c-sub">Appel immédiat</span>
+            </div>
           </a>`;
       });
       fabPanel.innerHTML = html;
@@ -418,27 +420,50 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.getElementById('searchBtn');
   if (searchBtn) searchBtn.addEventListener('click', handleSearch);
 
-  // === MAP (Leaflet) ===
-  const mapContainer = document.getElementById('carte');
-  if (mapContainer) {
-    const mainMap = L.map('carte', { scrollWheelZoom: false }).setView([36.7538, 3.0588], 13);
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/voyager/{z}/{x}/{y}{r}.png').addTo(mainMap);
-    
-    // Correction de l'affichage (évite les zones grises)
-    setTimeout(() => {
-      mainMap.invalidateSize();
-    }, 400);
+  // === EMERGENCY FAB TOGGLE ===
+  const fabBtn = document.getElementById('fabBtn');
+  const fabPanel = document.getElementById('fabPanel');
+  if (fabBtn && fabPanel) {
+    fabBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fabPanel.classList.toggle('show');
+    });
+    document.addEventListener('click', (e) => {
+      if (!fabPanel.contains(e.target) && !fabBtn.contains(e.target)) {
+        fabPanel.classList.remove('show');
+      }
+    });
   }
 
-  // === FADE IN ===
+  // === FADE IN / REVEAL ===
   function observeFadeIns() {
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.fade-in:not(.visible)').forEach(el => obs.observe(el));
+      entries.forEach(e => { 
+        if (e.isIntersecting) { 
+          e.target.classList.add('active'); 
+          obs.unobserve(e.target); 
+        } 
+      });
+    }, { threshold: 0.15 });
+    
+    document.querySelectorAll('.reveal, .fade-in').forEach(el => obs.observe(el));
   }
   observeFadeIns();
-  window.observeFadeIns = observeFadeIns;
+
+  // === HERO PARALLAX ===
+  const hero = document.getElementById('hero');
+  if (hero) {
+    const blobs = hero.querySelectorAll('.blob');
+    hero.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 40;
+      const y = (e.clientY / window.innerHeight - 0.5) * 40;
+      
+      blobs.forEach((blob, i) => {
+        const factor = (i + 1) * 0.5;
+        blob.style.transform = `translate(${x * factor}px, ${y * factor}px)`;
+      });
+    });
+  }
 
   // === COUNTERS ===
   const counterObs = new IntersectionObserver((entries) => {

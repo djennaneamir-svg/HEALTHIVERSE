@@ -28,90 +28,103 @@
     </div>
   </section>
 
-  <!-- IMPACT CARDS -->
+  <!-- IMPACT CARDS (DONATIONS) -->
   <section class="impact-section">
     <div class="container">
+      <div class="section-title">
+        <h2>Faire un <span class="text-pink">Don Individuel</span></h2>
+        <p>Chaque geste, même petit, contribue à maintenir Healthiverse libre et gratuit.</p>
+      </div>
       <div class="impact-grid">
         <div class="impact-card">
           <div class="impact-ico">☕</div>
-          <h3>Un café pour l'équipe</h3>
+          <h3>Café Solidaire</h3>
           <div class="impact-price">$5</div>
-          <p>Aidez-nous à rester éveillés pour corriger les bugs et améliorer l'interface.</p>
-          <button class="btn-donate">Choisir ce don</button>
+          <p>Soutenez le développement quotidien et la correction des bugs.</p>
+          <button class="btn-donate">Donner 5$</button>
         </div>
         <div class="impact-card featured">
           <div class="impact-ico">🚀</div>
-          <h3>Propulser l'IA</h3>
-          <div class="impact-price">$20</div>
-          <p>Financez 1 heure de calcul pour notre futur assistant d'orientation médicale.</p>
-          <button class="btn-donate-solid">Choisir ce don</button>
+          <h3>Propulseur IA</h3>
+          <div class="impact-price">$25</div>
+          <p>Contribuez aux frais d'infrastructure de notre assistant médical intelligent.</p>
+          <button class="btn-donate-solid">Donner 25$</button>
         </div>
         <div class="impact-card">
           <div class="impact-ico">🌍</div>
-          <h3>Serveur Solidaire</h3>
-          <div class="impact-price">$50</div>
-          <p>Garantissez l'accès à Healthiverse pour une région entière pendant un mois.</p>
-          <button class="btn-donate">Choisir ce don</button>
+          <h3>Accès Régional</h3>
+          <div class="impact-price">$100</div>
+          <p>Garantissez la stabilité des services pour une région entière pendant un mois.</p>
+          <button class="btn-donate">Donner 100$</button>
         </div>
-        <!-- RANDOM / CUSTOM DONATION -->
-        <div class="impact-card random-card">
-          <div class="impact-ico">🎁</div>
-          <h3>Montant Libre</h3>
-          <div class="custom-input-box">
-            <span class="currency-pre">$</span>
-            <input type="number" id="customAmount" placeholder="0.00">
+      </div>
+    </div>
+  </section>
+
+  <!-- SPONSOR SECTION (NEW) -->
+  <section class="sponsor-section">
+    <div class="container">
+      <div class="section-title">
+        <h2>Devenir <span class="text-indigo">Sponsor Officiel</span></h2>
+        <p>Associez votre marque à l'innovation santé et bénéficiez d'une visibilité premium auprès de millions d'utilisateurs.</p>
+      </div>
+      
+      <div class="sponsor-grid">
+        <!-- BRONZE -->
+        <div class="sponsor-tier bronze">
+          <div class="tier-head">
+            <span class="tier-badge">Bronze</span>
+            <h3>Partenaire Local</h3>
+            <div class="tier-price">$500<span>/mois</span></div>
           </div>
-          <p>Choisissez le montant que vous souhaitez offrir au projet.</p>
-          <button class="btn-donate-solid" onclick="processCustomDonation()">Soutenir maintenant</button>
+          <ul class="tier-features">
+            <li>✅ Logo sur la page régionale</li>
+            <li>✅ Badge "Sponsor" sur votre profil</li>
+            <li>✅ Support prioritaire 24h/7j</li>
+          </ul>
+          <button class="btn-sponsor-outline">Choisir Bronze</button>
         </div>
-        <!-- CARD PAYMENT -->
-        <div class="impact-card">
-          <div class="impact-ico">💳</div>
-          <h3>Carte Bancaire</h3>
-          <div class="impact-price">Visa / Master</div>
-          <p>Don ponctuel ou mensuel via notre partenaire sécurisé Stripe.</p>
-          <button class="btn-donate-solid">Soutenir par Carte</button>
-        </div>
-        <!-- PAYPAL -->
-        <div class="impact-card">
-          <div class="impact-ico">🅿️</div>
-          <h3>PayPal</h3>
-          <div class="impact-price">Rapide</div>
-          <p>Utilisez votre compte PayPal pour un soutien en un clic.</p>
-          <button class="btn-donate">Payer via PayPal</button>
-        </div>
-        <!-- USDT OPTION (BLOCKED) -->
-        <div class="impact-card crypto-card featured" style="background: #f8fafc; border-color: #cbd5e1;">
-          <div class="impact-ico" style="filter: grayscale(1);">₿</div>
-          <h3>Soutien Crypto <span style="font-size:0.65rem; background:#ef4444; color:white; padding:2px 8px; border-radius:12px; vertical-align:middle; margin-left:6px; letter-spacing: 0.5px;">SUSPENDU</span></h3>
-          <div class="impact-price" style="color: var(--txt2);">USDT / BTC / ETH</div>
-          <div style="background: #fee2e2; border-left: 3px solid #ef4444; padding: 10px; border-radius: 6px; margin: 12px 0;">
-            <p style="font-size: 0.8rem; color: #b91c1c; font-weight: 600; margin: 0;">⚠️ Paiements en cryptomonnaies temporairement désactivés pour des raisons réglementaires.</p>
+        
+        <!-- SILVER -->
+        <div class="sponsor-tier silver featured">
+          <div class="tier-head">
+            <span class="tier-badge">Silver</span>
+            <h3>Partenaire Croissance</h3>
+            <div class="tier-price">$1,500<span>/mois</span></div>
           </div>
-          <button class="btn-donate-solid" style="background: #94a3b8; cursor: not-allowed; width: 100%; border: none;" disabled>Bientôt disponible</button>
+          <ul class="tier-features">
+            <li>✅ Logo sur la page d'accueil</li>
+            <li>✅ 3 Profils Premium inclus</li>
+            <li>✅ Statistiques d'audience avancées</li>
+            <li>✅ Mise en avant dans la newsletter</li>
+          </ul>
+          <button class="btn-sponsor-solid">Choisir Silver</button>
+        </div>
+        
+        <!-- GOLD -->
+        <div class="sponsor-tier gold">
+          <div class="tier-head">
+            <span class="tier-badge">Gold</span>
+            <h3>Partenaire Stratégique</h3>
+            <div class="tier-price">Sur Devis</div>
+          </div>
+          <ul class="tier-features">
+            <li>✅ Intégration API personnalisée</li>
+            <li>✅ Campagnes publicitaires dédiées</li>
+            <li>✅ Accès exclusif aux données marché</li>
+            <li>✅ Co-branding d'outils santé</li>
+          </ul>
+          <button class="btn-sponsor-outline">Nous contacter</button>
         </div>
       </div>
 
-      <!-- TRANSACTION MODAL (SIMULATED) -->
-      <div id="paymentModal" class="payment-modal-overlay" style="display:none">
-        <div class="payment-modal">
-          <div class="pm-head">
-            <h3 id="pmTitle">Transaction USDT</h3>
-            <button class="close-pm" onclick="closePaymentFlow()">×</button>
-          </div>
-          <div class="pm-body">
-            <div class="qr-placeholder">
-              <!-- Placeholder pour QR Code -->
-              <svg width="150" height="150" viewBox="0 0 100 100" fill="var(--teal)"><rect width="10" height="10" x="10" y="10"/><rect width="10" height="10" x="30" y="10"/><rect width="10" height="10" x="10" y="30"/><rect width="10" height="10" x="30" y="30"/><rect width="10" height="10" x="60" y="10"/><rect width="10" height="10" x="80" y="10"/><rect width="10" height="10" x="60" y="30"/><rect width="10" height="10" x="80" y="30"/><rect width="10" height="10" x="10" y="60"/><rect width="10" height="10" x="30" y="60"/><rect width="10" height="10" x="10" y="80"/><rect width="10" height="10" x="30" y="80"/></svg>
-            </div>
-            <p class="pm-instr">Veuillez envoyer votre don à l'adresse ci-dessous :</p>
-            <div class="pm-address-box">
-              <code id="pmAddr">T7xR9...y2zPqL5vA8sK9mN3xQ1zW8vR</code>
-              <button onclick="copyWallet('T7xR9...y2zPqL5vA8sK9mN3xQ1zW8vR', this)">Copier</button>
-            </div>
-            <div class="pm-network">Réseau : <strong id="pmNet">TRC-20</strong></div>
-            <p class="pm-status">⌛ En attente de détection sur la blockchain...</p>
-          </div>
+      <div class="sponsor-logos">
+        <p>Ils nous font déjà confiance :</p>
+        <div class="logo-track">
+          <div class="s-logo">Clinique Innov'</div>
+          <div class="s-logo">PharmaPlus</div>
+          <div class="s-logo">MedTech Africa</div>
+          <div class="s-logo">AssurHealth</div>
         </div>
       </div>
     </div>
@@ -121,20 +134,11 @@
   <section class="transparency">
     <div class="container">
       <div class="goal-box">
-        <h3>Objectif : Serveur haute performance</h3>
+        <h3>État des financements 2026</h3>
         <div class="progress-container">
-          <div class="progress-bar" style="width: 65%"></div>
+          <div class="progress-bar" style="width: 72%"></div>
         </div>
-        <p class="progress-text"><strong>$650</strong> collectés sur un objectif de <strong>$1 000</strong></p>
-      </div>
-
-      <div class="donors-wall">
-        <h3>Derniers donateurs 💖</h3>
-        <div class="donors-list">
-          <div class="donor-item"><strong>Sarah M.</strong> a donné 10€ - "Bravo pour ce projet !"</div>
-          <div class="donor-item"><strong>Anonyme</strong> a donné 50€ - "Indispensable aujourd'hui."</div>
-          <div class="donor-item"><strong>Dr. Lefebvre</strong> a donné 20€ - "Utile pour mes patients."</div>
-        </div>
+        <p class="progress-text"><strong>$14,400</strong> collectés sur un objectif annuel de <strong>$20,000</strong></p>
       </div>
     </div>
   </section>
