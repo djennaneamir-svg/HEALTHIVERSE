@@ -29,13 +29,14 @@ const HEALTHIVERSE_CONFIG = {
 
   // ─── FIREBASE CONFIG ───────────────────────────────────────
   firebase: {
-    apiKey:            "REMPLACER_PAR_VOTRE_API_KEY",
-    authDomain:        "REMPLACER.firebaseapp.com",
-    projectId:         "REMPLACER_PAR_VOTRE_PROJECT_ID",
-    storageBucket:     "REMPLACER.appspot.com",
-    messagingSenderId: "REMPLACER_PAR_VOTRE_SENDER_ID",
-    appId:             "REMPLACER_PAR_VOTRE_APP_ID"
+    apiKey:            "AIzaSyC47tJbuiaQrLd9hDJUu8PliOo1oA026fc",
+    authDomain:        "healthiverse-296e7.firebaseapp.com",
+    projectId:         "healthiverse-296e7",
+    storageBucket:     "healthiverse-296e7.firebasestorage.app",
+    messagingSenderId: "143990006223",
+    appId:             "1:143990006223:web:9a9b3629286f8769dbf2ba"
   },
+
 
   // ─── EMAILJS CONFIG ────────────────────────────────────────
   emailjs: {
